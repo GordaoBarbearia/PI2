@@ -6,13 +6,20 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JTextField;
+
+import com.sun.corba.se.pept.transport.Connection;
+
 import java.awt.event.ActionListener;
+import java.beans.Statement;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.text.ParseException;
 import java.awt.event.ActionEvent;
 
 public class FrmPrincipal {
 
 	private JFrame frmGordoBarbearia;
-	private JTextField textField;
+	static JTextField txtConsultaCpf;
 
 	/**
 	 * Launch the application.
@@ -71,12 +78,26 @@ public class FrmPrincipal {
 		btnGerarReltorios.setBounds(279, 124, 145, 58);
 		frmGordoBarbearia.getContentPane().add(btnGerarReltorios);
 		
-		textField = new JTextField();
-		textField.setBounds(11, 81, 113, 20);
-		frmGordoBarbearia.getContentPane().add(textField);
-		textField.setColumns(10);
+		txtConsultaCpf = new JTextField();
+		txtConsultaCpf.setBounds(11, 81, 113, 20);
+		frmGordoBarbearia.getContentPane().add(txtConsultaCpf);
+		txtConsultaCpf.setColumns(10);
 		
 		JButton btnConsultar = new JButton("Consultar");
+		btnConsultar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				Test test = new Test();
+				
+				try {
+					test.conecta();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		});
 		btnConsultar.setBounds(134, 80, 89, 23);
 		frmGordoBarbearia.getContentPane().add(btnConsultar);
 	}

@@ -29,7 +29,7 @@ import javax.swing.DefaultComboBoxModel;
 
 public class FrmAgendamento {
 
-	private JFrame formPrincipal;
+	static JFrame formPrincipal;
 	private JScrollPane scroll;
 	private JTable tabelaPrincipal;
 	private JMenuBar menuBarPrincipal;
@@ -44,7 +44,13 @@ public class FrmAgendamento {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args, JTextField txtCpf) {
+		
+		FrmPrincipal frmPrincipal = new FrmPrincipal();
+		
+		
+		
+		txtCpf.setText(frmPrincipal.txtConsultaCpf.getText());
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -76,7 +82,7 @@ public class FrmAgendamento {
 		// Criando Componentes
 		formPrincipal = new JFrame();
 		formPrincipal.setTitle("Barbearia O Gord\u00E3o");
-		formPrincipal.setBounds(100, 100, 1212, 591);
+		formPrincipal.setBounds(100, 100, 960, 582);
 		formPrincipal.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		formPrincipal.getContentPane().setLayout(null);
 		
@@ -122,7 +128,7 @@ public class FrmAgendamento {
 	
 		
 		scroll = new JScrollPane(tabelaPrincipal);
-		scroll.setBounds(402, 184, 430, 337);
+		scroll.setBounds(402, 184, 532, 337);
 		formPrincipal.getContentPane().add(scroll);
 		
 		
@@ -182,7 +188,7 @@ public class FrmAgendamento {
 		
 		JLabel lblFundo = new JLabel("");
 		lblFundo.setIcon(new ImageIcon(FrmAgendamento.class.getResource("/image/Fundo_MarcaDagua_G.fw.png")));
-		lblFundo.setBounds(0, -4, 845, 532);
+		lblFundo.setBounds(0, -4, 999, 532);
 		formPrincipal.getContentPane().add(lblFundo);
 		
 		JLabel lblLogo = new JLabel("");
