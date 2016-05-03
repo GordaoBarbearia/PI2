@@ -1,7 +1,7 @@
 package formularios;
 
 import java.awt.EventQueue;
-
+import java.awt.TextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -10,13 +10,12 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
-
 import DAO.DaoClientes;
 import objetos.Cliente;
+import objetos.Funcoes;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-
 import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
@@ -29,7 +28,7 @@ public class FrmCadastroCliente {
 	private JTextField txtNome;
 	private JFormattedTextField txtCpf;
 	private JTextField txtTelefone;
-	private JTable tabelaNome;	
+	private JTable tabelaNome;
 	JScrollPane scrollPane;
 
 	/**
@@ -84,20 +83,28 @@ public class FrmCadastroCliente {
 				String cpfCli = txtCpf.getText();
 				String telefoneCli = txtTelefone.getText();
 
-				Cliente cliente = new Cliente(cpfCli, nomeCli, telefoneCli);
-				DaoClientes daoClientes = new DaoClientes();
+				Funcoes funcoes = new Funcoes();
+				boolean salvar = false;
+				boolean validarCampos = funcoes.validarCampos(txtNome, txtCpf, txtTelefone);
 
-				boolean salvar = daoClientes.salvarCliente(cliente);
+				if (validarCampos) {
+					Cliente cliente = new Cliente(cpfCli, nomeCli, telefoneCli);
+					DaoClientes daoClientes = new DaoClientes();
+					salvar = daoClientes.salvarCliente(cliente);
 
-				if (salvar) {
-					JOptionPane.showMessageDialog(null, "Cadastrado com sucesso", "Gordão Barbearia",
-							JOptionPane.INFORMATION_MESSAGE);
+					if (salvar) {
+						JOptionPane.showMessageDialog(null, "Cadastrado com sucesso", "Gordão Barbearia",
+								JOptionPane.INFORMATION_MESSAGE);
+						funcoes.limparCampos(txtNome, txtCpf, txtTelefone);
+					} else {
+						JOptionPane.showMessageDialog(null, "Erro ao efetuaro o cadastro", "Gordão Barbearia",
+								JOptionPane.INFORMATION_MESSAGE);
+					}
 				} else {
-					JOptionPane.showMessageDialog(null, "Erro ao efetuaro o cadastro", "Gordão Barbearia",
-							JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "PREENCHA TODOS OS CAMPOS", "Gordão Barbearia",
+							JOptionPane.ERROR_MESSAGE);
 				}
 				atualizarTableCliente(tabelaNome);
-
 			}
 		});
 		btnsalvar.setBounds(12, 320, 93, 23);
@@ -106,21 +113,17 @@ public class FrmCadastroCliente {
 		JButton btnCancelarNovo = new JButton("Novo");
 		btnCancelarNovo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
+				Funcoes funcoes = new Funcoes();
 				if (btnCancelarNovo.getText().equals("Novo")) {
 					btnCancelarNovo.setText("Cancelar");
 					btnsalvar.setEnabled(true);
-					txtCpf.setEnabled(true);
-					txtNome.setEnabled(true);
-					txtTelefone.setEnabled(true);
+					funcoes.desbloquearCampos(txtNome, txtCpf, txtTelefone);
 					txtCpf.requestFocus();
 				} else {
 					btnCancelarNovo.setText("Novo");
 					btnsalvar.setEnabled(false);
-					txtCpf.setEnabled(false);
-					txtNome.setEnabled(false);
-					txtTelefone.setEnabled(false);
-
+					funcoes.bloquearCampos(txtNome, txtCpf, txtTelefone);
+					funcoes.limparCampos(txtNome, txtCpf, txtTelefone);
 				}
 
 			}
@@ -191,13 +194,13 @@ public class FrmCadastroCliente {
 		lblFundo.setIcon(new ImageIcon(FrmCadastroCliente.class.getResource("/image/Fundo_MarcaDagua_G.fw.png")));
 		lblFundo.setBounds(0, -2, 567, 366);
 		formCadCli.getContentPane().add(lblFundo);
-		
+
 		atualizarTableCliente(tabelaNome);
 
 	}
 
-	static void atualizarTableCliente(JTable tableNome){
-		DaoClientes daoClientes = new DaoClientes();		
+	static void atualizarTableCliente(JTable tableNome) {
+		DaoClientes daoClientes = new DaoClientes();
 		try {
 			daoClientes.atualizarTabelas(tableNome);
 		} catch (Exception e) {
@@ -205,5 +208,5 @@ public class FrmCadastroCliente {
 			e.printStackTrace();
 		}
 	}
-	
+
 }
