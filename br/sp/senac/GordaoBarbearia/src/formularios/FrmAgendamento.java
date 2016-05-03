@@ -4,6 +4,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import java.text.ParseException;
+import java.util.ArrayList;
+
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
@@ -13,6 +15,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import com.toedter.calendar.JCalendar;
+
+import DAO.DaoClientes;
+
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
@@ -26,6 +31,7 @@ import java.awt.Component;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFormattedTextField;
 
 public class FrmAgendamento {
 
@@ -39,7 +45,7 @@ public class FrmAgendamento {
 	private JTextField txtCliente;
 	private JTextField txtHorarioInicio;
 	private JTextField txtHorarioFim;
-	private JTextField txtCpf;
+	private JFormattedTextField txtCpf;
 	FrmPrincipal frmPrincipal = new FrmPrincipal();
 
 	/**
@@ -109,7 +115,8 @@ public class FrmAgendamento {
 		comboBox.setBounds(145, 176, 101, 20);
 		formPrincipal.getContentPane().add(comboBox);
 		
-		txtCpf = new JTextField();
+		MaskFormatter maskCpf = new MaskFormatter("###.###.###-##");
+		txtCpf = new JFormattedTextField(maskCpf);
 		txtCpf.setText(frmPrincipal.consultaCpf.toString());
 		txtCpf.setColumns(10);
 		txtCpf.setBounds(6, 122, 108, 20);
@@ -120,6 +127,45 @@ public class FrmAgendamento {
 		formPrincipal.getContentPane().add(lblCpf);
 		
 		JButton btnConsultarCpf = new JButton("Consultar");
+		btnConsultarCpf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				txtCliente.setText(null);
+				// Chamando a classe de interação com o banco de dados
+				DaoClientes daoClientes = new DaoClientes();
+
+				// pegando o valor do campo txtConsultaCpf
+				String consultaCpf = (txtCpf.getText().replaceAll("[./-]", ""));
+
+				// chamando o metodo de pesquisa da classe daoClientes, passando
+				// o cpf como parametross
+				// e atribuindo o resultado Boleano a variavel "pesquisaCliente"
+				ArrayList<String> pesquisaCliente = daoClientes.pesquisarCliente(consultaCpf);
+
+				// se o resultado da pesquisa for verdadeiro, apresento a
+				// mensagem que o cliente já possui cadastro, se não, informa
+				// que não possui cadastro para aquele cliente
+				if (pesquisaCliente.size()>0) {
+					
+					txtCliente.setText(pesquisaCliente.get(1).toString());
+					int id = Integer.parseInt(pesquisaCliente.get(0).toString());
+					
+					System.out.println(id + " aquiiiiiiiiiiiiiiiiiii");
+				} else {
+					int confirmacao = JOptionPane.showConfirmDialog(null, "Cliente não cadastrado, deseja cadastra-lo?",
+							"Gordão Barbearia", JOptionPane.YES_NO_OPTION);
+
+					if (confirmacao == JOptionPane.YES_OPTION) {
+						FrmCadastroCliente frmCadastroCliente = new FrmCadastroCliente();
+						frmCadastroCliente.formCadCli.setVisible(true);
+					}
+				}
+
+			}
+
+				
+			
+		});
 		btnConsultarCpf.setBounds(124, 121, 89, 23);
 		formPrincipal.getContentPane().add(btnConsultarCpf);
 	
@@ -134,6 +180,7 @@ public class FrmAgendamento {
 		formPrincipal.getContentPane().add(calendar);
 		
 		txtCliente = new JTextField();
+		txtCliente.setEditable(false);
 		txtCliente.setBounds(8, 176, 108, 20);
 		formPrincipal.getContentPane().add(txtCliente);
 		txtCliente.setColumns(10);
