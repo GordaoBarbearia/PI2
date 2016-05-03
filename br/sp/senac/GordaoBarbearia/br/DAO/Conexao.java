@@ -10,10 +10,10 @@ import javax.swing.JOptionPane;
  * Classe para abrir ou fechar a conexão com o banco de dados
  */
 public class Conexao {
-	private Connection conexao;
+	private static Connection conexao;
 
 	// metodo que retornar a conexão
-	public Connection abreConexao() throws Exception {
+	public static Connection abreConexao() throws Exception {
 		
 		// String para pegar o caminho da pasta raiz do projeto.
 		String caminho = System.getProperty("user.dir");	
@@ -28,7 +28,7 @@ public class Conexao {
 	}
 
 	//metodo para fechar uma conexão
-	public void fechaConexao() {
+	public static void fechaConexao() {
 			try {
 			conexao.close();
 			//JOptionPane.showMessageDialog(null, "banco fechado");

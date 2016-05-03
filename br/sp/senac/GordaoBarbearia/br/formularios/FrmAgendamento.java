@@ -24,6 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
@@ -41,7 +42,6 @@ public class FrmAgendamento {
 	private JMenuBar menuBarPrincipal;
 	private JMenu mnCadastros;
 	private JMenuItem mntmClientes;
-	private JMenuItem mntmFuncionrios;
 	private JTextField txtCliente;
 	private JTextField txtHorarioInicio;
 	private JTextField txtHorarioFim;
@@ -52,7 +52,7 @@ public class FrmAgendamento {
 	 * Launch the application.
 	 */
 	public static void main(String[] args, JTextField txtCpf) {
-		
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -68,7 +68,7 @@ public class FrmAgendamento {
 	/**
 	 * Create the application. TESTE
 	 * 
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	public FrmAgendamento() throws ParseException {
 		initialize();
@@ -76,206 +76,258 @@ public class FrmAgendamento {
 
 	/**
 	 * Initialize the contents of the frame.
-	 * @throws ParseException 
+	 * 
+	 * @throws ParseException
 	 */
 	private void initialize() throws ParseException {
-		
-		//---------------------------------------------------------------------------------------
+
+		// ---------------------------------------------------------------------------------------
 		// Criando Componentes
 		formPrincipal = new JFrame();
 		formPrincipal.setTitle("Barbearia O Gord\u00E3o");
 		formPrincipal.setBounds(100, 100, 960, 582);
 		formPrincipal.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		formPrincipal.getContentPane().setLayout(null);
-		
+
 		tabelaPrincipal = new JTable(0, 2);
 		tabelaPrincipal.setBounds(407, 111, 243, 250);
 		tabelaPrincipal.setSurrendersFocusOnKeystroke(true);
-		tabelaPrincipal.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "DATA", "HORA", "FUNCIONÁRIO","CLIENTE" }) {
-			public boolean isCellEditable(int row, int col) {
-				return false;
-			}
+		tabelaPrincipal.setModel(
+				new DefaultTableModel(new Object[][] {}, new String[] { "DATA", "HORA", "FUNCIONÁRIO", "CLIENTE" }) {
+					public boolean isCellEditable(int row, int col) {
+						return false;
+					}
 
-		});
+				});
 
 		formPrincipal.getContentPane().add(tabelaPrincipal);
-		
-		//Bloqueia a rendenização das tabelas
+
+		// Bloqueia a rendenização das tabelas
 		tabelaPrincipal.getTableHeader().setResizingAllowed(false);
-		//Bloqueia a reordenação das tabelas
+		// Bloqueia a reordenação das tabelas
 		tabelaPrincipal.getTableHeader().setReorderingAllowed(false);
-		
+
 		tabelaPrincipal.getColumnModel().getColumn(0).setPreferredWidth(70);
 		tabelaPrincipal.getColumnModel().getColumn(1).setPreferredWidth(70);
 		tabelaPrincipal.getColumnModel().getColumn(2).setPreferredWidth(120);
 		tabelaPrincipal.getColumnModel().getColumn(3).setPreferredWidth(70);
-		
+
 		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"", "Chaves", "Henrique", "Cesar"}));
+		comboBox.setModel(new DefaultComboBoxModel(new String[] { "", "Chaves", "Henrique", "Cesar" }));
 		comboBox.setBounds(145, 176, 101, 20);
 		formPrincipal.getContentPane().add(comboBox);
-		
+
 		MaskFormatter maskCpf = new MaskFormatter("###.###.###-##");
 		txtCpf = new JFormattedTextField(maskCpf);
+		txtCpf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					txtCliente.setText(null);
+					// Chamando a classe de interação com o banco de dados
+					DaoClientes daoClientes = new DaoClientes();
+
+					// pegando o valor do campo txtConsultaCpf
+					String consultaCpf = (txtCpf.getText().replaceAll("[./-]", ""));
+
+					// chamando o metodo de pesquisa da classe daoClientes,
+					// passando
+					// o cpf como parametross
+					// e atribuindo o resultado Boleano a variavel
+					// "pesquisaCliente"
+					ArrayList<String> pesquisaCliente;
+
+					pesquisaCliente = daoClientes.pesquisarCliente(consultaCpf);
+
+					// se o resultado da pesquisa for verdadeiro, apresento a
+					// mensagem que o cliente já possui cadastro, se não,
+					// informa
+					// que não possui cadastro para aquele cliente
+					if (pesquisaCliente.size() > 0) {
+
+						txtCliente.setText(pesquisaCliente.get(1).toString());
+						int id = Integer.parseInt(pesquisaCliente.get(0).toString());
+
+						System.out.println(id + " aquiiiiiiiiiiiiiiiiiii");
+					} else {
+						int confirmacao = JOptionPane.showConfirmDialog(null,
+								"Cliente não cadastrado, deseja cadastra-lo?", "Gordão Barbearia",
+								JOptionPane.YES_NO_OPTION);
+
+						if (confirmacao == JOptionPane.YES_OPTION) {
+							FrmCadastroCliente frmCadastroCliente = new FrmCadastroCliente();
+							frmCadastroCliente.formCadCli.setVisible(true);
+						} else {
+							txtCpf.setText(null);
+						}
+					}
+				} catch (SQLException | ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		txtCpf.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent arg0) {
+
+			}
+		});
 		txtCpf.setText(frmPrincipal.consultaCpf.toString());
 		txtCpf.setColumns(10);
 		txtCpf.setBounds(6, 122, 108, 20);
 		formPrincipal.getContentPane().add(txtCpf);
-		
+
 		JLabel lblCpf = new JLabel("CPF");
 		lblCpf.setBounds(6, 107, 46, 14);
 		formPrincipal.getContentPane().add(lblCpf);
-		
+
 		JButton btnConsultarCpf = new JButton("Consultar");
 		btnConsultarCpf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
-				txtCliente.setText(null);
-				// Chamando a classe de interação com o banco de dados
-				DaoClientes daoClientes = new DaoClientes();
+				try {
+					txtCliente.setText(null);
+					// Chamando a classe de interação com o banco de dados
+					DaoClientes daoClientes = new DaoClientes();
 
-				// pegando o valor do campo txtConsultaCpf
-				String consultaCpf = (txtCpf.getText().replaceAll("[./-]", ""));
+					// pegando o valor do campo txtConsultaCpf
+					String consultaCpf = (txtCpf.getText().replaceAll("[./-]", ""));
 
-				// chamando o metodo de pesquisa da classe daoClientes, passando
-				// o cpf como parametross
-				// e atribuindo o resultado Boleano a variavel "pesquisaCliente"
-				ArrayList<String> pesquisaCliente = daoClientes.pesquisarCliente(consultaCpf);
+					// chamando o metodo de pesquisa da classe daoClientes,
+					// passando
+					// o cpf como parametross
+					// e atribuindo o resultado Boleano a variavel
+					// "pesquisaCliente"
+					ArrayList<String> pesquisaCliente;
 
-				// se o resultado da pesquisa for verdadeiro, apresento a
-				// mensagem que o cliente já possui cadastro, se não, informa
-				// que não possui cadastro para aquele cliente
-				if (pesquisaCliente.size()>0) {
-					
-					txtCliente.setText(pesquisaCliente.get(1).toString());
-					int id = Integer.parseInt(pesquisaCliente.get(0).toString());
-					
-					System.out.println(id + " aquiiiiiiiiiiiiiiiiiii");
-				} else {
-					int confirmacao = JOptionPane.showConfirmDialog(null, "Cliente não cadastrado, deseja cadastra-lo?",
-							"Gordão Barbearia", JOptionPane.YES_NO_OPTION);
+					pesquisaCliente = daoClientes.pesquisarCliente(consultaCpf);
 
-					if (confirmacao == JOptionPane.YES_OPTION) {
-						FrmCadastroCliente frmCadastroCliente = new FrmCadastroCliente();
-						frmCadastroCliente.formCadCli.setVisible(true);
+					// se o resultado da pesquisa for verdadeiro, apresento a
+					// mensagem que o cliente já possui cadastro, se não,
+					// informa
+					// que não possui cadastro para aquele cliente
+					if (pesquisaCliente.size() > 0) {
+
+						txtCliente.setText(pesquisaCliente.get(1).toString());
+						int id = Integer.parseInt(pesquisaCliente.get(0).toString());
+
+						System.out.println(id + " aquiiiiiiiiiiiiiiiiiii");
+					} else {
+						int confirmacao = JOptionPane.showConfirmDialog(null,
+								"Cliente não cadastrado, deseja cadastra-lo?", "Gordão Barbearia",
+								JOptionPane.YES_NO_OPTION);
+
+						if (confirmacao == JOptionPane.YES_OPTION) {
+							FrmCadastroCliente frmCadastroCliente = new FrmCadastroCliente();
+							frmCadastroCliente.formCadCli.setVisible(true);
+						}
 					}
-				}
 
+				} catch (SQLException | ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
-				
-			
 		});
 		btnConsultarCpf.setBounds(124, 121, 89, 23);
 		formPrincipal.getContentPane().add(btnConsultarCpf);
-	
-		
+
 		scroll = new JScrollPane(tabelaPrincipal);
 		scroll.setBounds(402, 184, 532, 337);
 		formPrincipal.getContentPane().add(scroll);
-		
-		
+
 		JCalendar calendar = new JCalendar();
-		calendar.setBounds(6, 298, 370, 223);		
+		calendar.setBounds(6, 298, 370, 223);
 		formPrincipal.getContentPane().add(calendar);
-		
+
 		txtCliente = new JTextField();
 		txtCliente.setEditable(false);
 		txtCliente.setBounds(8, 176, 108, 20);
 		formPrincipal.getContentPane().add(txtCliente);
 		txtCliente.setColumns(10);
-		
+
 		txtHorarioInicio = new JTextField();
 		txtHorarioInicio.setColumns(10);
 		txtHorarioInicio.setBounds(8, 223, 70, 20);
 		formPrincipal.getContentPane().add(txtHorarioInicio);
-		
+
 		txtHorarioFim = new JTextField();
 		txtHorarioFim.setColumns(10);
 		txtHorarioFim.setBounds(145, 223, 70, 20);
 		formPrincipal.getContentPane().add(txtHorarioFim);
-		
+
 		JLabel lblHorrioSaida = new JLabel("Hor\u00E1rio fim");
 		lblHorrioSaida.setBounds(145, 208, 81, 14);
 		formPrincipal.getContentPane().add(lblHorrioSaida);
-		
+
 		JButton btnSalvar = new JButton("Salvar");
 		btnSalvar.setBounds(6, 264, 89, 23);
 		formPrincipal.getContentPane().add(btnSalvar);
-		
+
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.setBounds(105, 264, 89, 23);
 		formPrincipal.getContentPane().add(btnCancelar);
-		
+
 		JButton btnExcluir = new JButton("Excluir");
 		btnExcluir.setBounds(303, 264, 89, 23);
 		formPrincipal.getContentPane().add(btnExcluir);
-		
+
 		JButton bntEditar = new JButton("Editar");
 		bntEditar.setBounds(204, 264, 89, 23);
 		formPrincipal.getContentPane().add(bntEditar);
-		formPrincipal.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{txtCliente,  btnSalvar, btnCancelar, bntEditar}));
-		
+
 		JLabel lblCliente = new JLabel("Cliente");
 		lblCliente.setBounds(8, 161, 46, 14);
 		formPrincipal.getContentPane().add(lblCliente);
-		
+
 		JLabel lblHorrio = new JLabel("Hor\u00E1rio inicio");
 		lblHorrio.setBounds(8, 208, 87, 14);
 		formPrincipal.getContentPane().add(lblHorrio);
-		
+
 		MaskFormatter mask = new MaskFormatter("##:##");
-		
+
 		JLabel lblFuncionrio = new JLabel("Funcion\u00E1rio");
 		lblFuncionrio.setBounds(145, 161, 81, 14);
 		formPrincipal.getContentPane().add(lblFuncionrio);
-		
+
 		JLabel lblFundo = new JLabel("");
 		lblFundo.setIcon(new ImageIcon(FrmAgendamento.class.getResource("/image/Fundo_MarcaDagua_G.fw.png")));
-		lblFundo.setBounds(0, -4, 999, 532);
+		lblFundo.setBounds(0, -4, 944, 532);
 		formPrincipal.getContentPane().add(lblFundo);
-		
+
 		JLabel lblLogo = new JLabel("");
 		lblLogo.setIcon(new ImageIcon(FrmAgendamento.class.getResource("/image/Logo_entalhe_403x132.fw.png")));
 		lblLogo.setBounds(221, 3, 403, 132);
 		formPrincipal.getContentPane().add(lblLogo);
-		
+
 		menuBarPrincipal = new JMenuBar();
 		formPrincipal.setJMenuBar(menuBarPrincipal);
-		
+
 		mnCadastros = new JMenu("Cadastros");
 		menuBarPrincipal.add(mnCadastros);
-		
-		mntmFuncionrios = new JMenuItem("Funcion\u00E1rios");		
-		mntmFuncionrios.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				FrmCadastroFuncionario frmCadastroFuncionario = new FrmCadastroFuncionario();
-				
-				frmCadastroFuncionario.formCadFunc.setVisible(true);
-			}
-		});
-		mnCadastros.add(mntmFuncionrios);
-		
+
 		mntmClientes = new JMenuItem("Clientes");
 		mntmClientes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FrmCadastroCliente frmCadastroCliente = new FrmCadastroCliente();
-				
-				frmCadastroCliente.formCadCli.setVisible(true);
+				FrmCadastroCliente frmCadastroCliente;
+				try {
+					frmCadastroCliente = new FrmCadastroCliente();
+					frmCadastroCliente.formCadCli.setVisible(true);
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		mnCadastros.add(mntmClientes);
-		
-		JMenu mnAgendamento = new JMenu("Agendamento");
+
+		JMenu mnAgendamento = new JMenu("Relatorios");
 		menuBarPrincipal.add(mnAgendamento);
-		
-		JMenuItem mntmNovoAgendamento = new JMenuItem("Novo Agendamento");
+
+		JMenuItem mntmNovoAgendamento = new JMenuItem("Gerar relat\u00F3rio");
 		mnAgendamento.add(mntmNovoAgendamento);
-		
-		
-		
-		
-		
+		formPrincipal.setFocusTraversalPolicy(
+				new FocusTraversalOnArray(new Component[] { txtCpf, txtCliente, btnSalvar, btnCancelar, bntEditar }));
+
 	}
 }
