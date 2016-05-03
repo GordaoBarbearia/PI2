@@ -10,22 +10,14 @@ public class Test {
 	public ResultSet resultset;
 	public PreparedStatement prep;
 
-	public void conecta() throws Exception {
+	public Connection conectar() throws Exception {
 		Class.forName("org.sqlite.JDBC");
-		conexao = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\henri\\Desktop\\teste.db");
+		conexao = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\cquadros\\Desktop\\BD_GORDAO.db");
 		statement = conexao.createStatement();
 		conexao.setAutoCommit(false);
 		conexao.setAutoCommit(true);
-
-		String sql = "select * from tb_cliente";
-
-		resultset = statement.executeQuery(sql);
-
-		while (resultset.next()) {
-			
-			JOptionPane.showMessageDialog(null, resultset.getString(0));
-		}
-
+		
+		return conexao;
 	}
 
 	public void exec(String sql) throws Exception {

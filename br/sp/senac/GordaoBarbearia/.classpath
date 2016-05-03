@@ -4,6 +4,6 @@
 	<classpathentry kind="lib" path="Agenda.jar"/>
 	<classpathentry kind="lib" path="lib/jcalendar-1.3.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/henri/Dropbox/Chaves/Repos/PI2/br/sp/senac/GordaoBarbearia/lib/sqlite4java-392/sqlite4java.jar"/>
+	<classpathentry kind="lib" path="lib/sqlite-jdbc-3.8.11.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

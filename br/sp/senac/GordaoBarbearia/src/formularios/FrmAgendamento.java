@@ -40,17 +40,13 @@ public class FrmAgendamento {
 	private JTextField txtHorarioInicio;
 	private JTextField txtHorarioFim;
 	private JTextField txtCpf;
+	FrmPrincipal frmPrincipal = new FrmPrincipal();
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args, JTextField txtCpf) {
 		
-		FrmPrincipal frmPrincipal = new FrmPrincipal();
-		
-		
-		
-		txtCpf.setText(frmPrincipal.txtConsultaCpf.getText());
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -114,6 +110,7 @@ public class FrmAgendamento {
 		formPrincipal.getContentPane().add(comboBox);
 		
 		txtCpf = new JTextField();
+		txtCpf.setText(frmPrincipal.consultaCpf.toString());
 		txtCpf.setColumns(10);
 		txtCpf.setBounds(6, 122, 108, 20);
 		formPrincipal.getContentPane().add(txtCpf);
