@@ -292,7 +292,7 @@ public class FrmAgendamento {
 
 		JLabel lblFundo = new JLabel("");
 		lblFundo.setIcon(new ImageIcon(FrmAgendamento.class.getResource("/image/Fundo_MarcaDagua_G.fw.png")));
-		lblFundo.setBounds(0, -4, 944, 532);
+		lblFundo.setBounds(0, -4, 864, 532);
 		formPrincipal.getContentPane().add(lblFundo);
 
 		JLabel lblLogo = new JLabel("");

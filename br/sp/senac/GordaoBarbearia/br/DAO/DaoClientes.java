@@ -119,7 +119,7 @@ public class DaoClientes {
 		
 		while(result.next()){
 			
-			model.addRow(new String[]{result.getString(1),result.getString(2),result.getString(3),result.getString(4)});
+			model.addRow(new String[]{result.getString(1),result.getString(2),result.getString(4),result.getString(3)});
 		}
 				
 	}

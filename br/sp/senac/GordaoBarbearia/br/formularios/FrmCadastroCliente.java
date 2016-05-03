@@ -18,7 +18,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.Component;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JFormattedTextField;
 
@@ -74,43 +76,59 @@ public class FrmCadastroCliente {
 		formCadCli.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		formCadCli.getContentPane().setLayout(null);
 
+		JButton btnCancelarNovo = new JButton("Novo");
+
 		JButton btnsalvar = new JButton("Salvar");
 		btnsalvar.setEnabled(false);
 		btnsalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				try {
+					String nomeCli = txtNome.getText();
+					String cpfCli = txtCpf.getText().replaceAll("[./-]", "");
+					String telefoneCli = txtTelefone.getText();
 
-				String nomeCli = txtNome.getText();
-				String cpfCli = txtCpf.getText();
-				String telefoneCli = txtTelefone.getText();
-
-				Funcoes funcoes = new Funcoes();
-				boolean salvar = false;
-				boolean validarCampos = funcoes.validarCampos(txtNome, txtCpf, txtTelefone);
-
-				if (validarCampos) {
-					Cliente cliente = new Cliente(cpfCli, nomeCli, telefoneCli);
+					Funcoes funcoes = new Funcoes();
+					boolean salvar = false;
+					boolean validarCampos = funcoes.validarCampos(txtNome, txtCpf, txtTelefone);
 					DaoClientes daoClientes = new DaoClientes();
-					salvar = daoClientes.salvarCliente(cliente);
+					ArrayList<String> pesquisaCliente;
 
-					if (salvar) {
-						JOptionPane.showMessageDialog(null, "Cadastrado com sucesso", "Gordão Barbearia",
-								JOptionPane.INFORMATION_MESSAGE);
-						funcoes.limparCampos(txtNome, txtCpf, txtTelefone);
+					if (validarCampos) {
+
+						pesquisaCliente = daoClientes.pesquisarCliente(cpfCli);
+						Cliente cliente = new Cliente(cpfCli, nomeCli, telefoneCli);
+						if (pesquisaCliente.size() < 1) {
+							salvar = daoClientes.salvarCliente(cliente);
+							if (salvar) {
+								JOptionPane.showMessageDialog(null, "Cadastrado com sucesso", "Gordão Barbearia",
+										JOptionPane.INFORMATION_MESSAGE);
+								funcoes.limparCampos(txtNome, txtCpf, txtTelefone);
+								funcoes.bloquearCampos(txtNome, txtCpf, txtTelefone);
+								btnCancelarNovo.setText("Novo");
+								btnsalvar.setEnabled(false);
+							} else {
+								JOptionPane.showMessageDialog(null, "Erro ao efetuaro o cadastro", "Gordão Barbearia",
+										JOptionPane.INFORMATION_MESSAGE);
+							}
+						} else {
+							JOptionPane.showMessageDialog(null, "CPF já cadastrado", "Gordão Barbearia",
+									JOptionPane.ERROR_MESSAGE);
+						}
 					} else {
-						JOptionPane.showMessageDialog(null, "Erro ao efetuaro o cadastro", "Gordão Barbearia",
-								JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "PREENCHA TODOS OS CAMPOS", "Gordão Barbearia",
+								JOptionPane.ERROR_MESSAGE);
 					}
-				} else {
-					JOptionPane.showMessageDialog(null, "PREENCHA TODOS OS CAMPOS", "Gordão Barbearia",
-							JOptionPane.ERROR_MESSAGE);
+
+					atualizarTableCliente(tabelaNome);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				atualizarTableCliente(tabelaNome);
 			}
 		});
 		btnsalvar.setBounds(12, 320, 93, 23);
 		formCadCli.getContentPane().add(btnsalvar);
 
-		JButton btnCancelarNovo = new JButton("Novo");
 		btnCancelarNovo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Funcoes funcoes = new Funcoes();
@@ -152,6 +170,7 @@ public class FrmCadastroCliente {
 
 		MaskFormatter maskCpf = new MaskFormatter("###.###.###-##");
 		txtCpf = new JFormattedTextField(maskCpf);
+		txtCpf.setFocusLostBehavior(JFormattedTextField.COMMIT);
 		txtCpf.setEnabled(false);
 		txtCpf.setColumns(10);
 		txtCpf.setBounds(12, 121, 105, 23);
