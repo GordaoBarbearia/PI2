@@ -85,7 +85,7 @@ public class FrmAgendamento {
 		// Criando Componentes
 		formPrincipal = new JFrame();
 		formPrincipal.setTitle("Barbearia O Gord\u00E3o");
-		formPrincipal.setBounds(100, 100, 960, 582);
+		formPrincipal.setBounds(100, 100, 1011, 582);
 		formPrincipal.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		formPrincipal.getContentPane().setLayout(null);
 
@@ -93,7 +93,7 @@ public class FrmAgendamento {
 		tabelaPrincipal.setBounds(407, 111, 243, 250);
 		tabelaPrincipal.setSurrendersFocusOnKeystroke(true);
 		tabelaPrincipal.setModel(
-				new DefaultTableModel(new Object[][] {}, new String[] { "DATA", "HORA", "FUNCIONÁRIO", "CLIENTE" }) {
+				new DefaultTableModel(new Object[][] {}, new String[] { "DATA", "HORA INICIO","HORA FINAL" ,"FUNCIONÁRIO", "CLIENTE", "UNIDADE","" }) {
 					public boolean isCellEditable(int row, int col) {
 						return false;
 					}
@@ -107,15 +107,22 @@ public class FrmAgendamento {
 		// Bloqueia a reordenação das tabelas
 		tabelaPrincipal.getTableHeader().setReorderingAllowed(false);
 
-		tabelaPrincipal.getColumnModel().getColumn(0).setPreferredWidth(70);
+		tabelaPrincipal.getColumnModel().getColumn(0).setPreferredWidth(50);
 		tabelaPrincipal.getColumnModel().getColumn(1).setPreferredWidth(70);
-		tabelaPrincipal.getColumnModel().getColumn(2).setPreferredWidth(120);
-		tabelaPrincipal.getColumnModel().getColumn(3).setPreferredWidth(70);
+		tabelaPrincipal.getColumnModel().getColumn(2).setPreferredWidth(70);
+		tabelaPrincipal.getColumnModel().getColumn(3).setPreferredWidth(90);
+		tabelaPrincipal.getColumnModel().getColumn(4).setPreferredWidth(90);
+		tabelaPrincipal.getColumnModel().getColumn(5).setPreferredWidth(90);
+		tabelaPrincipal.getColumnModel().getColumn(6).setMaxWidth(0);
+		tabelaPrincipal.getColumnModel().getColumn(6).setMinWidth(0);
+		tabelaPrincipal.getTableHeader().getColumnModel().getColumn(6).setMaxWidth(0);
 
-		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"", "01 Chaves", "02 Henrique", "03 Cesar"}));
-		comboBox.setBounds(145, 176, 101, 20);
-		formPrincipal.getContentPane().add(comboBox);
+
+
+		JComboBox cboFuncionario = new JComboBox();
+		cboFuncionario.setModel(new DefaultComboBoxModel(new String[] {"", "01 Chaves", "02 Henrique", "03 Cesar"}));
+		cboFuncionario.setBounds(7, 176, 101, 20);
+		formPrincipal.getContentPane().add(cboFuncionario);
 
 		MaskFormatter maskCpf = new MaskFormatter("###.###.###-##");
 		txtCpf = new JFormattedTextField(maskCpf);
@@ -172,6 +179,10 @@ public class FrmAgendamento {
 
 			}
 		});
+		
+		JComboBox cboUnidade = new JComboBox();
+		cboUnidade.setBounds(125, 176, 101, 20);
+		formPrincipal.getContentPane().add(cboUnidade);
 		txtCpf.setText(frmPrincipal.consultaCpf.toString());
 		txtCpf.setColumns(10);
 		txtCpf.setBounds(6, 122, 108, 20);
@@ -181,59 +192,8 @@ public class FrmAgendamento {
 		lblCpf.setBounds(6, 107, 46, 14);
 		formPrincipal.getContentPane().add(lblCpf);
 
-		JButton btnConsultarCpf = new JButton("Consultar");
-		btnConsultarCpf.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				try {
-					txtCliente.setText(null);
-					// Chamando a classe de interação com o banco de dados
-					DaoClientes daoClientes = new DaoClientes();
-
-					// pegando o valor do campo txtConsultaCpf
-					String consultaCpf = (txtCpf.getText().replaceAll("[./-]", ""));
-
-					// chamando o metodo de pesquisa da classe daoClientes,
-					// passando
-					// o cpf como parametross
-					// e atribuindo o resultado Boleano a variavel
-					// "pesquisaCliente"
-					ArrayList<String> pesquisaCliente;
-
-					pesquisaCliente = daoClientes.pesquisarCliente(consultaCpf);
-
-					// se o resultado da pesquisa for verdadeiro, apresento a
-					// mensagem que o cliente já possui cadastro, se não,
-					// informa
-					// que não possui cadastro para aquele cliente
-					if (pesquisaCliente.size() > 0) {
-
-						txtCliente.setText(pesquisaCliente.get(1).toString());
-						int id = Integer.parseInt(pesquisaCliente.get(0).toString());
-
-						System.out.println(id + " aquiiiiiiiiiiiiiiiiiii");
-					} else {
-						int confirmacao = JOptionPane.showConfirmDialog(null,
-								"Cliente não cadastrado, deseja cadastra-lo?", "Gordão Barbearia",
-								JOptionPane.YES_NO_OPTION);
-
-						if (confirmacao == JOptionPane.YES_OPTION) {
-							FrmCadastroCliente frmCadastroCliente = new FrmCadastroCliente();
-							frmCadastroCliente.formCadCli.setVisible(true);
-						}
-					}
-
-				} catch (SQLException | ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
-		});
-		btnConsultarCpf.setBounds(124, 121, 89, 23);
-		formPrincipal.getContentPane().add(btnConsultarCpf);
-
 		scroll = new JScrollPane(tabelaPrincipal);
-		scroll.setBounds(402, 184, 532, 337);
+		scroll.setBounds(402, 184, 583, 337);
 		formPrincipal.getContentPane().add(scroll);
 
 		JCalendar calendar = new JCalendar();
@@ -242,7 +202,7 @@ public class FrmAgendamento {
 
 		txtCliente = new JTextField();
 		txtCliente.setEditable(false);
-		txtCliente.setBounds(8, 176, 108, 20);
+		txtCliente.setBounds(138, 122, 108, 20);
 		formPrincipal.getContentPane().add(txtCliente);
 		txtCliente.setColumns(10);
 
@@ -268,16 +228,16 @@ public class FrmAgendamento {
 		btnCancelar.setBounds(105, 264, 89, 23);
 		formPrincipal.getContentPane().add(btnCancelar);
 
-		JButton btnExcluir = new JButton("Excluir");
-		btnExcluir.setBounds(303, 264, 89, 23);
-		formPrincipal.getContentPane().add(btnExcluir);
-
 		JButton bntEditar = new JButton("Editar");
 		bntEditar.setBounds(204, 264, 89, 23);
 		formPrincipal.getContentPane().add(bntEditar);
+		
+		JLabel lblUnidade = new JLabel("Unidade");
+		lblUnidade.setBounds(125, 161, 81, 14);
+		formPrincipal.getContentPane().add(lblUnidade);
 
 		JLabel lblCliente = new JLabel("Cliente");
-		lblCliente.setBounds(8, 161, 46, 14);
+		lblCliente.setBounds(138, 107, 46, 14);
 		formPrincipal.getContentPane().add(lblCliente);
 
 		JLabel lblHorrio = new JLabel("Hor\u00E1rio inicio");
@@ -287,12 +247,12 @@ public class FrmAgendamento {
 		MaskFormatter mask = new MaskFormatter("##:##");
 
 		JLabel lblFuncionrio = new JLabel("Funcion\u00E1rio");
-		lblFuncionrio.setBounds(145, 161, 81, 14);
+		lblFuncionrio.setBounds(7, 161, 81, 14);
 		formPrincipal.getContentPane().add(lblFuncionrio);
 
 		JLabel lblFundo = new JLabel("");
-		lblFundo.setIcon(new ImageIcon(FrmAgendamento.class.getResource("/image/Fundo_MarcaDagua_G.fw.png")));
-		lblFundo.setBounds(0, -4, 864, 532);
+		lblFundo.setIcon(new ImageIcon(FrmAgendamento.class.getResource("/image/Fundo_1024.png")));
+		lblFundo.setBounds(0, -4, 1005, 532);
 		formPrincipal.getContentPane().add(lblFundo);
 
 		JLabel lblLogo = new JLabel("");

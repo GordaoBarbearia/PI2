@@ -24,6 +24,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JFormattedTextField;
 import java.awt.Toolkit;
 import javax.swing.ImageIcon;
+import javax.swing.SwingConstants;
 
 public class FrmPrincipal {
 
@@ -65,8 +66,8 @@ public class FrmPrincipal {
 		frmGordoBarbearia = new JFrame();
 		frmGordoBarbearia.setResizable(false);
 		frmGordoBarbearia.setTitle("Gord\u00E3o Barbearia");
-		frmGordoBarbearia.setBounds(100, 100, 477, 323);
-		frmGordoBarbearia.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmGordoBarbearia.setBounds(100, 100, 617, 314);
+		frmGordoBarbearia.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmGordoBarbearia.getContentPane().setLayout(null);
 
 		JLabel lblConsultarClientecpf = new JLabel("Consultar cliente(CPF)");
@@ -74,6 +75,8 @@ public class FrmPrincipal {
 		frmGordoBarbearia.getContentPane().add(lblConsultarClientecpf);
 
 		JButton btnClientes = new JButton("Clientes");
+		btnClientes.setHorizontalAlignment(SwingConstants.LEFT);
+		btnClientes.setIcon(new ImageIcon(FrmPrincipal.class.getResource("/image/1297713679_list-add-user (Custom).png")));
 		btnClientes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
@@ -88,10 +91,12 @@ public class FrmPrincipal {
 				
 			}
 		});
-		btnClientes.setBounds(10, 208, 89, 58);
+		btnClientes.setBounds(10, 208, 155, 58);
 		frmGordoBarbearia.getContentPane().add(btnClientes);
 
 		JButton btnRealizarAgendamentos = new JButton("Realizar agendamentos");
+		btnRealizarAgendamentos.setHorizontalAlignment(SwingConstants.LEFT);
+		btnRealizarAgendamentos.setIcon(new ImageIcon(FrmPrincipal.class.getResource("/image/Calendar-icon (Custom).png")));
 		btnRealizarAgendamentos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
@@ -105,11 +110,13 @@ public class FrmPrincipal {
 
 			}
 		});
-		btnRealizarAgendamentos.setBounds(109, 208, 185, 58);
+		btnRealizarAgendamentos.setBounds(175, 208, 227, 58);
 		frmGordoBarbearia.getContentPane().add(btnRealizarAgendamentos);
 
 		JButton btnGerarReltorios = new JButton("Gerar rel\u00E1torios");
-		btnGerarReltorios.setBounds(304, 208, 145, 58);
+		btnGerarReltorios.setIcon(new ImageIcon(FrmPrincipal.class.getResource("/image/relatorio - icon (Custom).png")));
+		btnGerarReltorios.setHorizontalAlignment(SwingConstants.LEFT);
+		btnGerarReltorios.setBounds(412, 208, 187, 58);
 		frmGordoBarbearia.getContentPane().add(btnGerarReltorios);
 
 		MaskFormatter maskCpf = new MaskFormatter("###.###.###-##");
@@ -178,12 +185,12 @@ public class FrmPrincipal {
 
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(FrmPrincipal.class.getResource("/br/image/Logo_entalhe_403x132.fw.png")));
-		lblNewLabel.setBounds(27, -1, 416, 144);
+		lblNewLabel.setBounds(97, 0, 416, 144);
 		frmGordoBarbearia.getContentPane().add(lblNewLabel);
 
 		JLabel lblFundo = new JLabel("New label");
 		lblFundo.setIcon(new ImageIcon(FrmPrincipal.class.getResource("/br/image/Fundo_MarcaDagua_G.fw.png")));
-		lblFundo.setBounds(0, -38, 471, 357);
+		lblFundo.setBounds(0, -23, 611, 309);
 		frmGordoBarbearia.getContentPane().add(lblFundo);
 	}
 }

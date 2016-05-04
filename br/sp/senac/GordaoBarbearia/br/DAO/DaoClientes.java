@@ -35,7 +35,7 @@ public class DaoClientes {
 
 	// Metodo de pesquisa, retorna TRUE se encontrou o CPF pesquisado, ou FALSE
 	// se não encontrou
-	public ArrayList<String> pesquisarCliente(String nomeCliente) throws SQLException {
+	public ArrayList<String> pesquisarCliente(String cpfCliente) throws SQLException {
 
 		ResultSet resultset;
 
@@ -51,7 +51,7 @@ public class DaoClientes {
 			statement = con.createStatement();
 
 			// Query para pesquisar o CPF no banco de dados
-			String sql = "SELECT ID_CLIENTE, NOME_CLI FROM TB_CLIENTE WHERE CPF_CLI = '" + nomeCliente + "'";
+			String sql = "SELECT ID_CLIENTE, NOME_CLI FROM TB_CLIENTE WHERE CPF_CLI = '" + cpfCliente + "'";
 
 			// Atribuindo o resutlado da pesquisa na variavel resultset
 			resultset = statement.executeQuery(sql);
@@ -87,8 +87,28 @@ public class DaoClientes {
 					+ "')";
 
 			statement.executeUpdate(sql);
+
 			return true;
-			
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+
+	public boolean editarCliente(Cliente cliente, String idCliente) {
+
+		try {
+			conectar();
+
+			String sql = "UPDATE TB_CLIENTE SET NOME_CLI='"+cliente.getNomeCliente()+"', "
+					+ "TELEFONE_CLI='"+cliente.getTelefoneCliente()+"', CPF_CLI='"+cliente.getCpfCliente()+"'"
+					+ "WHERE ID_CLIENTE = '"+idCliente+"'";
+			statement.executeUpdate(sql);
+			return true;
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

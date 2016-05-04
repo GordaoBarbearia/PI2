@@ -31,9 +31,9 @@ public class Funcoes {
 	}
 
 	public void limparCampos(JTextField txtNome, JFormattedTextField txtCpf, JTextField txtTelefone) {
-		txtNome.setText(null);
-		txtCpf.setText(null);
-		txtTelefone.setText(null);
+		txtNome.setText("");
+		txtCpf.setText("");
+		txtTelefone.setText("");
 	}
 	
 	public boolean validarCampos(JTextField txtNome, JFormattedTextField txtCpf, JTextField txtTelefone) {
