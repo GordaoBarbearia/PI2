@@ -90,6 +90,8 @@ public class FrmCadastroCliente {
 					Funcoes funcoes = new Funcoes();
 					boolean salvar = false;
 					boolean validarCampos = funcoes.validarCampos(txtNome, txtCpf, txtTelefone);
+					
+
 					DaoClientes daoClientes = new DaoClientes();
 					ArrayList<String> pesquisaCliente;
 

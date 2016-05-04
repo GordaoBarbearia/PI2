@@ -21,8 +21,8 @@ public class Conexao {
 		Class.forName("org.sqlite.JDBC");
 		// Abrindo a conexão com o banco de dados, que encontra-se na pasta raiz do projeto, na sub-pasta "bd"
 		conexao = DriverManager.getConnection("jdbc:sqlite:"+caminho+"\\bd\\BD_GORDAO.db");
-		conexao.setAutoCommit(false);
-		conexao.setAutoCommit(true);
+		//conexao.setAutoCommit(false);
+		//conexao.setAutoCommit(true);
 		
 		return conexao;
 	}

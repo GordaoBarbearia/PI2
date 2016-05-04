@@ -113,7 +113,7 @@ public class FrmAgendamento {
 		tabelaPrincipal.getColumnModel().getColumn(3).setPreferredWidth(70);
 
 		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] { "", "Chaves", "Henrique", "Cesar" }));
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"", "01 Chaves", "02 Henrique", "03 Cesar"}));
 		comboBox.setBounds(145, 176, 101, 20);
 		formPrincipal.getContentPane().add(comboBox);
 
