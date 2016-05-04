@@ -1,38 +1,33 @@
 package formularios;
 
-import java.awt.EventQueue;
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import java.text.ParseException;
-import java.util.ArrayList;
-
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.text.MaskFormatter;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JButton;
-import com.toedter.calendar.JCalendar;
-
-import DAO.DaoClientes;
-
-import javax.swing.JLabel;
-import javax.swing.ImageIcon;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.sql.SQLException;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import org.eclipse.wb.swing.FocusTraversalOnArray;
 import java.awt.Component;
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.text.MaskFormatter;
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+import DAO.DaoClientes;
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
+import com.toedter.calendar.JCalendar;
 
 public class FrmAgendamento {
 
@@ -46,13 +41,11 @@ public class FrmAgendamento {
 	private JTextField txtHorarioInicio;
 	private JTextField txtHorarioFim;
 	private JFormattedTextField txtCpf;
-	FrmPrincipal frmPrincipal = new FrmPrincipal();
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args, JTextField txtCpf) {
-
+	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -66,20 +59,19 @@ public class FrmAgendamento {
 	}
 
 	/**
-	 * Create the application. TESTE
-	 * 
-	 * @throws ParseException
+	 * Create the application.
+	 * @throws java.text.ParseException 
+	 * @throws ParseException 
 	 */
-	public FrmAgendamento() throws ParseException {
+	public FrmAgendamento() throws ParseException, java.text.ParseException {
 		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
-	 * 
-	 * @throws ParseException
+	 * @throws java.text.ParseException 
 	 */
-	private void initialize() throws ParseException {
+	private void initialize() throws ParseException, java.text.ParseException {
 
 		// ---------------------------------------------------------------------------------------
 		// Criando Componentes
@@ -170,6 +162,9 @@ public class FrmAgendamento {
 				} catch (SQLException | ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+				} catch (java.text.ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		});
@@ -183,7 +178,7 @@ public class FrmAgendamento {
 		JComboBox cboUnidade = new JComboBox();
 		cboUnidade.setBounds(125, 176, 101, 20);
 		formPrincipal.getContentPane().add(cboUnidade);
-		txtCpf.setText(frmPrincipal.consultaCpf.toString());
+//		txtCpf.setText(frmPrincipal.consultaCpf.toString());
 		txtCpf.setColumns(10);
 		txtCpf.setBounds(6, 122, 108, 20);
 		formPrincipal.getContentPane().add(txtCpf);
@@ -274,6 +269,9 @@ public class FrmAgendamento {
 					frmCadastroCliente = new FrmCadastroCliente();
 					frmCadastroCliente.formCadCli.setVisible(true);
 				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (java.text.ParseException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
