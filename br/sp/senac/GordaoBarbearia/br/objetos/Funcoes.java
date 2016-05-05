@@ -37,8 +37,8 @@ public class Funcoes {
 	}
 	
 	public boolean validarCampos(JTextField txtNome, JFormattedTextField txtCpf, JTextField txtTelefone) {
-		if (txtNome.getText().trim().equals("") || txtCpf.getText().trim().equals("")
-				|| txtTelefone.getText().trim().equals("")) {
+		if (txtNome.getText().trim().equals("") || txtCpf.getText().trim().length() <11
+				|| txtTelefone.getText().trim().length()<11) {
 			return false;
 		} else {
 			return true;
