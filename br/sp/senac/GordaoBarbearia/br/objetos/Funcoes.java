@@ -37,8 +37,13 @@ public class Funcoes {
 	}
 	
 	public boolean validarCampos(JTextField txtNome, JFormattedTextField txtCpf, JTextField txtTelefone) {
+<<<<<<< HEAD
+		if (txtNome.getText().trim().equals("") || txtCpf.getText().trim().length() <14
+				|| txtTelefone.getText().trim().length()<13) {
+=======
 		if (txtNome.getText().trim().equals("") || txtCpf.getText().trim().length() <11
 				|| txtTelefone.getText().trim().length()<11) {
+>>>>>>> 65ad18ebafbb91f387d73bc7d0b82128da13fba7
 			return false;
 		} else {
 			return true;

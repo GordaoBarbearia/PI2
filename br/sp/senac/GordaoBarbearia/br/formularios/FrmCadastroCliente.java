@@ -35,7 +35,7 @@ public class FrmCadastroCliente {
 	static String testeCpf;
 	private JTextField txtNome;
 	private JFormattedTextField txtCpf;
-	private JTextField txtTelefone;
+	private JFormattedTextField txtTelefone;
 	private JTable tabelaNome;
 	JScrollPane scrollTable;
 
@@ -90,9 +90,9 @@ public class FrmCadastroCliente {
 		btnsalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					String nomeCli = txtNome.getText();
-					String cpfCli = txtCpf.getText().replaceAll("[./-]", "");
-					String telefoneCli = txtTelefone.getText().replaceAll("[./-]", "");
+					String nomeCli = txtNome.getText().toUpperCase();
+					String cpfCli = txtCpf.getText().replaceAll("[./-]", "").toUpperCase();
+					String telefoneCli = txtTelefone.getText().replaceAll("[./-]", "").toUpperCase();
 
 					Funcoes funcoes = new Funcoes();
 					boolean salvar = false;
@@ -113,6 +113,7 @@ public class FrmCadastroCliente {
 								funcoes.bloquearCampos(txtNome, txtCpf, txtTelefone);
 								btnCancelarNovo.setText("Novo");
 								btnsalvar.setEnabled(false);
+								tabelaNome.setEnabled(true);
 							} else {
 								JOptionPane.showMessageDialog(null, "Erro ao efetuaro o cadastro", "Gordão Barbearia",
 										JOptionPane.INFORMATION_MESSAGE);
@@ -256,6 +257,7 @@ public class FrmCadastroCliente {
 
 		MaskFormatter maskTelefone = new MaskFormatter("##-####-#####");
 		txtTelefone = new JFormattedTextField(maskTelefone);
+		txtTelefone.setFocusLostBehavior(JFormattedTextField.COMMIT);
 		txtTelefone.setEnabled(false);
 		txtTelefone.setColumns(10);
 		txtTelefone.setBounds(12, 218, 105, 23);
@@ -305,7 +307,6 @@ public class FrmCadastroCliente {
 		atualizarTableCliente(tabelaNome);
 
 		tabelaNome.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-
 			@Override
 			public void valueChanged(ListSelectionEvent arg0) {
 				// TODO Auto-generated method stub
@@ -318,6 +319,10 @@ public class FrmCadastroCliente {
 						String nome = (String) tabelaNome.getModel().getValueAt(tabelaNome.getSelectedRow(), 1);
 						String telefone = (String) tabelaNome.getModel().getValueAt(tabelaNome.getSelectedRow(), 3);
 
+						
+						txtCpf.setText("");
+						txtNome.setText("");
+						txtTelefone.setText("");
 						txtCpf.setText(cpf);
 						txtNome.setText(nome);
 						txtTelefone.setText(telefone);

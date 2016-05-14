@@ -6,10 +6,10 @@ public class Cliente {
 	private String nomeCliente;
 	private String telefoneCliente;
 	
-	public Cliente(String cpfCli, String nomeCli, String telefoneCli){
-		this.cpfCliente = cpfCli;
-		this.nomeCliente = nomeCli;
-		this.telefoneCliente = telefoneCli;
+	public Cliente(String cpfCliente, String nomeCliente, String telefoneCliente){
+		this.cpfCliente = cpfCliente;
+		this.nomeCliente = nomeCliente;
+		this.telefoneCliente = telefoneCliente;
 	}
 
 	public String getCpfCliente() {

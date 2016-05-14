@@ -67,8 +67,7 @@ public class FrmPrincipal {
 		frmGordoBarbearia = new JFrame();
 		frmGordoBarbearia.setResizable(false);
 		frmGordoBarbearia.setTitle("Gord\u00E3o Barbearia");
-		frmGordoBarbearia.setBounds(100, 100, 617, 314);
-		frmGordoBarbearia.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frmGordoBarbearia.setBounds(100, 100, 617, 310);
 		frmGordoBarbearia.getContentPane().setLayout(null);
 
 		JButton btnClientes = new JButton("Clientes");
@@ -101,6 +100,9 @@ public class FrmPrincipal {
 					FrmAgendamento frmAgendamento = new FrmAgendamento();
 					frmAgendamento.formPrincipal.setVisible(true);
 				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
