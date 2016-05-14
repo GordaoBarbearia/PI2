@@ -16,6 +16,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 import java.awt.event.ItemListener;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.awt.event.ItemEvent;
 import java.awt.event.ActionListener;
@@ -147,22 +148,35 @@ public class FrmRelatorios {
 		frmRelatorios.getContentPane().add(lblQuem);
 
 		JDateChooser dateChooserInicio = new JDateChooser();
+		dateChooserInicio.setDateFormatString("dd/MM/yyyy");
 		dateChooserInicio.setBounds(390, 117, 99, 20);
 		frmRelatorios.getContentPane().add(dateChooserInicio);
 
 		JDateChooser dateChooserFim = new JDateChooser();
+		dateChooserFim.setDateFormatString("dd/MM/yyyy");
 		dateChooserFim.setBounds(499, 117, 99, 20);
 		frmRelatorios.getContentPane().add(dateChooserFim);
 
 		JButton btnRelatOptionOK = new JButton("OK");
 		btnRelatOptionOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+								
+				int id = cboRelatPessoa.getSelectedIndex();		
+				String idString = arrayPessoa.get(id);
+				String dataInicio = null;
+				String dataFim = null;
+				SimpleDateFormat formatoData = new SimpleDateFormat("yyyy/MM/dd");
+				dataInicio = formatoData.format(dateChooserInicio.getDate());
+				dataFim = formatoData.format(dateChooserFim.getDate());
 				
-				System.out.println("Nome "+cboRelatPessoa.getSelectedItem());
+				DaoRelatorio daoRelatorio = new DaoRelatorio();
 				
-				int id = cboRelatPessoa.getSelectedIndex();
-				
-				System.out.println("ID "+arrayPessoa.get(id));
+				try {
+					daoRelatorio.atualizarTabela(tabRelat, idString, dataInicio, dataFim );
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		btnRelatOptionOK.setBounds(608, 116, 61, 23);
