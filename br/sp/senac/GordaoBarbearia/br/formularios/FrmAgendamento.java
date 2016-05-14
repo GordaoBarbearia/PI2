@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -316,21 +315,6 @@ public class FrmAgendamento {
 
 			}
 		});
-
-		JCheckBox chckbxFilaEspera = new JCheckBox("Fila espera");
-		chckbxFilaEspera.setEnabled(false);
-		chckbxFilaEspera.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-
-				if (chckbxFilaEspera.isSelected()) {
-					cboStatus.setSelectedIndex(3);
-				} else {
-					cboStatus.setSelectedIndex(0);
-				}
-			}
-		});
-		chckbxFilaEspera.setBounds(288, 290, 89, 23);
-		formPrincipal.getContentPane().add(chckbxFilaEspera);
 		btnSalvar.setBounds(208, 337, 89, 23);
 		formPrincipal.getContentPane().add(btnSalvar);
 
@@ -354,7 +338,7 @@ public class FrmAgendamento {
 						arrayUnidade = daoAgendamento.atualiazaComboUnidade(cboUnidade);
 						arrayServicos = daoAgendamento.atualizarComboServicos(cboServico);
 						cboStatus.setSelectedIndex(0);
-						chckbxFilaEspera.setEnabled(true);
+						
 					} else {
 						btnNovoCancelar.setText("Novo");
 						cboFuncionario.setEnabled(false);
@@ -362,7 +346,6 @@ public class FrmAgendamento {
 						cboStatus.setEnabled(false);
 						cboUnidade.setEnabled(false);
 						btnSalvar.setEnabled(false);
-						chckbxFilaEspera.setEnabled(false);
 						cboFuncionario.removeAllItems();
 						cboUnidade.removeAllItems();
 						cboStatus.removeAllItems();
