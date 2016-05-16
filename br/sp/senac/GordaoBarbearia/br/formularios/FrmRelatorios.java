@@ -101,6 +101,7 @@ public class FrmRelatorios {
 
 		JRadioButton rdbtnEspera = new JRadioButton("Espera");
 		JRadioButton rdbtnCancelados = new JRadioButton("Cancelados");
+
 		JRadioButton rdbtnAtendidos = new JRadioButton("Atendidos");
 		JRadioButton rdbtnAgendados = new JRadioButton("Agendados");
 		JRadioButton rdbtnTodos = new JRadioButton("Todos");
@@ -207,7 +208,7 @@ public class FrmRelatorios {
 					} else {
 						try {
 							String status = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
-							daoRelatorio.atualizarTabelaFuncStatus(tabRelat, idString, dataInicio, dataFim, status);
+							daoRelatorio.atualizarTabelaCliStatus(tabRelat, idString, dataInicio, dataFim, status);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -302,7 +303,91 @@ public class FrmRelatorios {
 
 					try {
 						String status = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
+						daoRelatorio.atualizarTabelaCliStatus(tabRelat, idString, dataInicio, dataFim, status);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				} else {
+					int id = cboRelatPessoa.getSelectedIndex();
+					String idString = arrayPessoa.get(id);
+					try {
+						String status = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
 						daoRelatorio.atualizarTabelaFuncStatus(tabRelat, idString, dataInicio, dataFim, status);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		rdbtnCancelados.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				DaoRelatorio daoRelatorio = new DaoRelatorio();
+				// pega a data selecionada
+				SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+				String dataInicio = formatoData.format(dateChooserInicio.getDate());
+				String dataFim = formatoData.format(dateChooserFim.getDate());
+
+				if (cboTipoRelat.getSelectedItem().equals("Data")) {
+					try {
+						String idStatus = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
+						daoRelatorio.atualizarTabelaTodosStatus(tabRelat, dataInicio, dataFim, idStatus);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				} else if (cboTipoRelat.getSelectedItem().equals("Cliente")) {
+					int id = cboRelatPessoa.getSelectedIndex();
+					String idString = arrayPessoa.get(id);
+
+					try {
+						String status = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
+						daoRelatorio.atualizarTabelaCliStatus(tabRelat, idString, dataInicio, dataFim, status);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				} else {
+					int id = cboRelatPessoa.getSelectedIndex();
+					String idString = arrayPessoa.get(id);
+					try {
+						String status = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
+						daoRelatorio.atualizarTabelaFuncStatus(tabRelat, idString, dataInicio, dataFim, status);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		rdbtnAgendados.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				DaoRelatorio daoRelatorio = new DaoRelatorio();
+				// pega a data selecionada
+				SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+				String dataInicio = formatoData.format(dateChooserInicio.getDate());
+				String dataFim = formatoData.format(dateChooserFim.getDate());
+
+				if (cboTipoRelat.getSelectedItem().equals("Data")) {
+					try {
+						String idStatus = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
+						daoRelatorio.atualizarTabelaTodosStatus(tabRelat, dataInicio, dataFim, idStatus);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				} else if (cboTipoRelat.getSelectedItem().equals("Cliente")) {
+					int id = cboRelatPessoa.getSelectedIndex();
+					String idString = arrayPessoa.get(id);
+
+					try {
+						String status = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
+						daoRelatorio.atualizarTabelaCliStatus(tabRelat, idString, dataInicio, dataFim, status);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -319,10 +404,52 @@ public class FrmRelatorios {
 							e.printStackTrace();
 						}
 					}
-				}
-
-			
+			}
 		});
+		rdbtnAtendidos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				DaoRelatorio daoRelatorio = new DaoRelatorio();
+				// pega a data selecionada
+				SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+				String dataInicio = formatoData.format(dateChooserInicio.getDate());
+				String dataFim = formatoData.format(dateChooserFim.getDate());
+
+				if (cboTipoRelat.getSelectedItem().equals("Data")) {
+					try {
+						String idStatus = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
+						daoRelatorio.atualizarTabelaTodosStatus(tabRelat, dataInicio, dataFim, idStatus);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				} else if (cboTipoRelat.getSelectedItem().equals("Cliente")) {
+					int id = cboRelatPessoa.getSelectedIndex();
+					String idString = arrayPessoa.get(id);
+
+					try {
+						String status = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
+						daoRelatorio.atualizarTabelaCliStatus(tabRelat, idString, dataInicio, dataFim, status);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				} else {
+					int id = cboRelatPessoa.getSelectedIndex();
+					String idString = arrayPessoa.get(id);
+						try {
+							String status = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
+							daoRelatorio.atualizarTabelaFuncStatus(tabRelat, idString, dataInicio, dataFim, status);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+			}
+		});
+	
+	
 	}
 
 	public static String idStatus(JRadioButton rdbtnAgend, JRadioButton rdbtnAtend, JRadioButton rdbtnCancel,

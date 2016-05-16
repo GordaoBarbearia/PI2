@@ -107,7 +107,7 @@ public class FrmAgendamento {
 		// Criando Componentes
 		formPrincipal = new JFrame();
 		formPrincipal.setTitle("Gord\u00E3o barbearia - Agendamentos");
-		formPrincipal.setBounds(100, 100, 1061, 661);
+		formPrincipal.setBounds(100, 100, 1143, 661);
 		formPrincipal.getContentPane().setLayout(null);
 
 		tabelaPrincipal = new JTable(0, 2);
@@ -128,13 +128,13 @@ public class FrmAgendamento {
 		// Bloqueia a reordenação das tabelas
 		tabelaPrincipal.getTableHeader().setReorderingAllowed(false);
 
-		tabelaPrincipal.getColumnModel().getColumn(0).setPreferredWidth(90);
+		tabelaPrincipal.getColumnModel().getColumn(0).setPreferredWidth(70);
 		tabelaPrincipal.getColumnModel().getColumn(1).setPreferredWidth(50);
 		tabelaPrincipal.getColumnModel().getColumn(2).setPreferredWidth(50);
-		tabelaPrincipal.getColumnModel().getColumn(3).setPreferredWidth(90);
-		tabelaPrincipal.getColumnModel().getColumn(4).setPreferredWidth(90);
+		tabelaPrincipal.getColumnModel().getColumn(3).setPreferredWidth(110);
+		tabelaPrincipal.getColumnModel().getColumn(4).setPreferredWidth(110);
 		tabelaPrincipal.getColumnModel().getColumn(5).setPreferredWidth(110);
-		tabelaPrincipal.getColumnModel().getColumn(6).setPreferredWidth(90);
+		tabelaPrincipal.getColumnModel().getColumn(6).setPreferredWidth(60);
 		tabelaPrincipal.getColumnModel().getColumn(7).setPreferredWidth(90);
 		tabelaPrincipal.getColumnModel().getColumn(8).setMaxWidth(0);
 		tabelaPrincipal.getColumnModel().getColumn(8).setMinWidth(0);
@@ -267,7 +267,7 @@ public class FrmAgendamento {
 		formPrincipal.getContentPane().add(lblCpf);
 
 		scroll = new JScrollPane(tabelaPrincipal);
-		scroll.setBounds(402, 259, 629, 337);
+		scroll.setBounds(402, 259, 703, 337);
 		formPrincipal.getContentPane().add(scroll);
 
 		calendar.setBounds(10, 371, 370, 223);
@@ -280,6 +280,8 @@ public class FrmAgendamento {
 		txtCliente.setColumns(10);
 
 		MaskFormatter maskHora = new MaskFormatter("##:##");
+		MaskFormatter maskHora1 = new MaskFormatter("##:##");
+		
 		txtHorarioInicio = new JFormattedTextField(maskHora);
 		txtHorarioInicio.setEnabled(false);
 		txtHorarioInicio.setFocusLostBehavior(JFormattedTextField.COMMIT);
@@ -287,7 +289,7 @@ public class FrmAgendamento {
 		txtHorarioInicio.setBounds(11, 290, 50, 20);
 		formPrincipal.getContentPane().add(txtHorarioInicio);
 
-		txtHorarioFim = new JFormattedTextField(maskHora);
+		txtHorarioFim = new JFormattedTextField(maskHora1);
 		txtHorarioFim.setEnabled(false);
 		txtHorarioFim.setFocusLostBehavior(JFormattedTextField.COMMIT);
 		txtHorarioFim.setColumns(10);
@@ -340,7 +342,7 @@ public class FrmAgendamento {
 
 		JLabel lblFundo = new JLabel("");
 		lblFundo.setIcon(new ImageIcon(FrmAgendamento.class.getResource("/image/Fundo_1024.png")));
-		lblFundo.setBounds(0, -4, 1031, 606);
+		lblFundo.setBounds(0, -4, 1127, 606);
 		formPrincipal.getContentPane().add(lblFundo);
 
 		menuBarPrincipal = new JMenuBar();
