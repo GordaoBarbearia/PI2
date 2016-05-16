@@ -77,7 +77,7 @@ public class FrmCadastroCliente {
 	private void initialize() throws ParseException {
 		formCadCli = new JFrame();
 		formCadCli.setResizable(false);
-		formCadCli.setTitle("Barbearia O Gord\u00E3o - Cadastro Cliente");
+		formCadCli.setTitle("Gord\u00E3o barbearia - Clientes");
 		formCadCli.setBounds(100, 100, 573, 382);
 		formCadCli.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		formCadCli.getContentPane().setLayout(null);

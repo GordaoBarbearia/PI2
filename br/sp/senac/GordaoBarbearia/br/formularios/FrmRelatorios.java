@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import com.toedter.calendar.JDateChooser;
 
@@ -23,6 +25,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
 import java.awt.Color;
+import javax.swing.ImageIcon;
 
 public class FrmRelatorios {
 
@@ -61,9 +64,9 @@ public class FrmRelatorios {
 	 */
 	private void initialize() {
 		frmRelatorios = new JFrame();
-		frmRelatorios.setTitle("Barbearia O Gard\u00E3o - Relat\u00F3rios");
-		frmRelatorios.setBounds(100, 100, 1061, 651);
-		frmRelatorios.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmRelatorios.setTitle("Gord\u00E3o barbearia - Relat\u00F3rios");
+		frmRelatorios.setBounds(100, 100, 1061, 681);
+		frmRelatorios.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmRelatorios.getContentPane().setLayout(null);
 
 		tabRelat = new JTable(0, 2);
@@ -96,15 +99,21 @@ public class FrmRelatorios {
 		tabRelat.getColumnModel().getColumn(8).setMinWidth(0);
 		tabRelat.getTableHeader().getColumnModel().getColumn(8).setMaxWidth(0);
 
+		JRadioButton rdbtnEspera = new JRadioButton("Espera");
+		JRadioButton rdbtnCancelados = new JRadioButton("Cancelados");
+		JRadioButton rdbtnAtendidos = new JRadioButton("Atendidos");
+		JRadioButton rdbtnAgendados = new JRadioButton("Agendados");
+		JRadioButton rdbtnTodos = new JRadioButton("Todos");
+		rdbtnTodos.setSelected(true);
+
 		JComboBox cboRelatPessoa = new JComboBox();
 		cboRelatPessoa.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-				
 
 			}
 		});
 		cboRelatPessoa.setEnabled(false);
-		cboRelatPessoa.setBounds(205, 117, 175, 20);
+		cboRelatPessoa.setBounds(205, 162, 175, 20);
 		frmRelatorios.getContentPane().add(cboRelatPessoa);
 
 		JComboBox cboTipoRelat = new JComboBox();
@@ -123,7 +132,6 @@ public class FrmRelatorios {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-
 				} else {
 					try {
 						arrayPessoa = daoRelatorio.atualizarComboCliente(cboRelatPessoa);
@@ -136,83 +144,198 @@ public class FrmRelatorios {
 			}
 		});
 		cboTipoRelat.setModel(new DefaultComboBoxModel(new String[] { "Data", "Cliente", "Funcionario" }));
-		cboTipoRelat.setBounds(20, 117, 175, 20);
+		cboTipoRelat.setBounds(20, 162, 175, 20);
 		frmRelatorios.getContentPane().add(cboTipoRelat);
 
 		JLabel lblNewLabel = new JLabel("Selecione o tipo de relat\u00F3rio");
-		lblNewLabel.setBounds(20, 101, 167, 14);
+		lblNewLabel.setBounds(20, 146, 167, 14);
 		frmRelatorios.getContentPane().add(lblNewLabel);
 
 		JLabel lblQuem = new JLabel("Quem?");
-		lblQuem.setBounds(205, 101, 142, 14);
+		lblQuem.setBounds(205, 146, 142, 14);
 		frmRelatorios.getContentPane().add(lblQuem);
 
 		JDateChooser dateChooserInicio = new JDateChooser();
 		dateChooserInicio.setDateFormatString("dd/MM/yyyy");
-		dateChooserInicio.setBounds(390, 117, 99, 20);
+		dateChooserInicio.setBounds(390, 162, 99, 20);
 		frmRelatorios.getContentPane().add(dateChooserInicio);
 
 		JDateChooser dateChooserFim = new JDateChooser();
 		dateChooserFim.setDateFormatString("dd/MM/yyyy");
-		dateChooserFim.setBounds(499, 117, 99, 20);
+		dateChooserFim.setBounds(499, 162, 99, 20);
 		frmRelatorios.getContentPane().add(dateChooserFim);
 
 		JButton btnRelatOptionOK = new JButton("OK");
 		btnRelatOptionOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-								
-				int id = cboRelatPessoa.getSelectedIndex();		
-				String idString = arrayPessoa.get(id);
-				String dataInicio = null;
-				String dataFim = null;
-				SimpleDateFormat formatoData = new SimpleDateFormat("yyyy/MM/dd");
-				dataInicio = formatoData.format(dateChooserInicio.getDate());
-				dataFim = formatoData.format(dateChooserFim.getDate());
-				
+
 				DaoRelatorio daoRelatorio = new DaoRelatorio();
-				
-				try {
-					daoRelatorio.atualizarTabela(tabRelat, idString, dataInicio, dataFim );
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				// pega a data selecionada
+				SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+				String dataInicio = formatoData.format(dateChooserInicio.getDate());
+				String dataFim = formatoData.format(dateChooserFim.getDate());
+
+				if (cboTipoRelat.getSelectedItem().equals("Data")) {
+					if (rdbtnTodos.isSelected()) {
+						try {
+							daoRelatorio.atualizarTabelaTodos(tabRelat, dataInicio, dataFim);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					} else {
+						try {
+							String idStatus = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
+							daoRelatorio.atualizarTabelaTodosStatus(tabRelat, dataInicio, dataFim, idStatus);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				} else if (cboTipoRelat.getSelectedItem().equals("Cliente")) {
+
+					int id = cboRelatPessoa.getSelectedIndex();
+					String idString = arrayPessoa.get(id);
+
+					if (rdbtnTodos.isSelected()) {
+						try {
+							daoRelatorio.atualizarTabelaCli(tabRelat, idString, dataInicio, dataFim);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					} else {
+						try {
+							String status = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
+							daoRelatorio.atualizarTabelaFuncStatus(tabRelat, idString, dataInicio, dataFim, status);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				} else {
+					int id = cboRelatPessoa.getSelectedIndex();
+					String idString = arrayPessoa.get(id);
+
+					if (rdbtnTodos.isSelected()) {
+						try {
+							daoRelatorio.atualizarTabelaFunc(tabRelat, idString, dataInicio, dataFim);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					} else {
+						try {
+							String status = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
+							daoRelatorio.atualizarTabelaFuncStatus(tabRelat, idString, dataInicio, dataFim, status);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
 				}
 			}
 		});
-		btnRelatOptionOK.setBounds(608, 116, 61, 23);
+		btnRelatOptionOK.setBounds(608, 161, 61, 23);
 		frmRelatorios.getContentPane().add(btnRelatOptionOK);
 
 		scroll = new JScrollPane(tabRelat);
-		scroll.setBounds(14, 195, 1015, 406);
+		scroll.setBounds(14, 223, 1015, 406);
 		frmRelatorios.getContentPane().add(scroll);
 
 		JLabel lblInicio = new JLabel("Inicio");
-		lblInicio.setBounds(390, 101, 70, 14);
+		lblInicio.setBounds(390, 146, 70, 14);
 		frmRelatorios.getContentPane().add(lblInicio);
 
 		JLabel lblFim = new JLabel("Fim");
-		lblFim.setBounds(499, 101, 70, 14);
+		lblFim.setBounds(499, 146, 70, 14);
 		frmRelatorios.getContentPane().add(lblFim);
-		
-		JRadioButton rdbtnTodos = new JRadioButton("Todos");
-		rdbtnTodos.setBounds(13, 170, 70, 23);
+
+		rdbtnTodos.setBounds(13, 195, 70, 23);
 		frmRelatorios.getContentPane().add(rdbtnTodos);
-		
-		JRadioButton rdbtnAgendados = new JRadioButton("Agendados");
-		rdbtnAgendados.setBounds(85, 170, 92, 23);
+
+		rdbtnAgendados.setBounds(85, 195, 92, 23);
 		frmRelatorios.getContentPane().add(rdbtnAgendados);
-		
-		JRadioButton rdbtnAtendidos = new JRadioButton("Atendidos");
-		rdbtnAtendidos.setBounds(179, 170, 84, 23);
+
+		rdbtnAtendidos.setBounds(179, 195, 84, 23);
 		frmRelatorios.getContentPane().add(rdbtnAtendidos);
-		
-		JRadioButton rdbtnCancelados = new JRadioButton("Cancelados");
-		rdbtnCancelados.setBounds(271, 170, 99, 23);
+
+		rdbtnCancelados.setBounds(271, 195, 99, 23);
 		frmRelatorios.getContentPane().add(rdbtnCancelados);
-		
-		JRadioButton rdbtnEspera = new JRadioButton("Espera");
-		rdbtnEspera.setBounds(372, 170, 78, 23);
+
+		rdbtnEspera.setBounds(372, 195, 78, 23);
 		frmRelatorios.getContentPane().add(rdbtnEspera);
 
+		JLabel lblFundo = new JLabel("");
+		lblFundo.setIcon(new ImageIcon(FrmRelatorios.class.getResource("/image/Fundo_1024.png")));
+		lblFundo.setBounds(0, 0, 1045, 643);
+		frmRelatorios.getContentPane().add(lblFundo);
+
+		ButtonGroup group = new ButtonGroup();
+		group.add(rdbtnTodos);
+		group.add(rdbtnAgendados);
+		group.add(rdbtnAtendidos);
+		group.add(rdbtnCancelados);
+		group.add(rdbtnEspera);
+
+		rdbtnEspera.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				DaoRelatorio daoRelatorio = new DaoRelatorio();
+				// pega a data selecionada
+				SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+				String dataInicio = formatoData.format(dateChooserInicio.getDate());
+				String dataFim = formatoData.format(dateChooserFim.getDate());
+
+				if (cboTipoRelat.getSelectedItem().equals("Data")) {
+					try {
+						String idStatus = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
+						daoRelatorio.atualizarTabelaTodosStatus(tabRelat, dataInicio, dataFim, idStatus);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				} else if (cboTipoRelat.getSelectedItem().equals("Cliente")) {
+					int id = cboRelatPessoa.getSelectedIndex();
+					String idString = arrayPessoa.get(id);
+
+					try {
+						String status = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
+						daoRelatorio.atualizarTabelaFuncStatus(tabRelat, idString, dataInicio, dataFim, status);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				} else {
+					int id = cboRelatPessoa.getSelectedIndex();
+					String idString = arrayPessoa.get(id);
+						try {
+							String status = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
+							daoRelatorio.atualizarTabelaFuncStatus(tabRelat, idString, dataInicio, dataFim, status);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+
+			
+		});
+	}
+
+	public static String idStatus(JRadioButton rdbtnAgend, JRadioButton rdbtnAtend, JRadioButton rdbtnCancel,
+			JRadioButton rdbtnEsp) {
+
+		if (rdbtnAgend.isSelected()) {
+			return "1";
+		} else if (rdbtnAtend.isSelected()) {
+			return "2";
+		} else if (rdbtnCancel.isSelected()) {
+			return "3";
+		} else {
+			return "4";
+		}
 	}
 }

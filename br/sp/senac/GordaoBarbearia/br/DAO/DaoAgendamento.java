@@ -151,7 +151,7 @@ public class DaoAgendamento {
 	public void atualizarTabela(JTable tabelaAgendamento, JCalendar calendario) throws Exception {
 
 		String dataCalendar = null;
-		SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy/MM/dd");
+		SimpleDateFormat dataFormat = new SimpleDateFormat("dd/MM/yyyy");
 		dataCalendar = dataFormat.format(calendario.getDate());
 
 		DefaultTableModel model = (DefaultTableModel) tabelaAgendamento.getModel();
@@ -235,5 +235,6 @@ public class DaoAgendamento {
 		con.close();
 		return false;
 	}
-
+	
+	
 }

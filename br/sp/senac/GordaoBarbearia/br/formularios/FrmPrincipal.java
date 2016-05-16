@@ -66,7 +66,7 @@ public class FrmPrincipal {
 	private void initialize() throws ParseException {
 		frmGordoBarbearia = new JFrame();
 		frmGordoBarbearia.setResizable(false);
-		frmGordoBarbearia.setTitle("Gord\u00E3o Barbearia");
+		frmGordoBarbearia.setTitle("Gord\u00E3o barbearia");
 		frmGordoBarbearia.setBounds(100, 100, 617, 310);
 		frmGordoBarbearia.getContentPane().setLayout(null);
 
@@ -113,6 +113,12 @@ public class FrmPrincipal {
 		frmGordoBarbearia.getContentPane().add(btnRealizarAgendamentos);
 
 		JButton btnGerarReltorios = new JButton("Gerar rel\u00E1torios");
+		btnGerarReltorios.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FrmRelatorios frmRelatorios = new FrmRelatorios();
+				frmRelatorios.frmRelatorios.setVisible(true);
+			}
+		});
 		btnGerarReltorios.setIcon(new ImageIcon(FrmPrincipal.class.getResource("/image/relatorio - icon (Custom).png")));
 		btnGerarReltorios.setHorizontalAlignment(SwingConstants.LEFT);
 		btnGerarReltorios.setBounds(412, 208, 187, 58);

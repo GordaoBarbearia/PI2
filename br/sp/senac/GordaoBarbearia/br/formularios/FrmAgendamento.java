@@ -106,7 +106,7 @@ public class FrmAgendamento {
 		// ---------------------------------------------------------------------------------------
 		// Criando Componentes
 		formPrincipal = new JFrame();
-		formPrincipal.setTitle("Barbearia O Gord\u00E3o");
+		formPrincipal.setTitle("Gord\u00E3o barbearia - Agendamentos");
 		formPrincipal.setBounds(100, 100, 1061, 661);
 		formPrincipal.getContentPane().setLayout(null);
 
@@ -486,7 +486,7 @@ public class FrmAgendamento {
 							String status = arrayStatus.get(codStatus);
 
 							String dataCalendario = null;
-							SimpleDateFormat formatoData = new SimpleDateFormat("yyyy/MM/dd");
+							SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
 							dataCalendario = formatoData.format(calendar.getDate());
 
 							DaoAgendamento daoAgendamento = new DaoAgendamento();
