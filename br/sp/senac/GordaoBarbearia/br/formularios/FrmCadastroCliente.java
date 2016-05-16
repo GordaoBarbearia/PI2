@@ -32,7 +32,7 @@ import javax.swing.ListSelectionModel;
 public class FrmCadastroCliente {
 
 	static JFrame formCadCli;
-	static String testeCpf;
+	private String testeCpf;
 	private JTextField txtNome;
 	private JFormattedTextField txtCpf;
 	private JFormattedTextField txtTelefone;

@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.swing.JComboBox;
@@ -13,7 +15,10 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import com.toedter.calendar.JCalendar;
+
 import objetos.Agendamento;
+import objetos.Funcoes;
 
 public class DaoAgendamento {
 
@@ -44,9 +49,9 @@ public class DaoAgendamento {
 					+ agendamento.getHoraFimAgendamento() + "')";
 
 			statement.executeUpdate(sql);
-
+			con.close();
 			return true;
-			
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -56,6 +61,7 @@ public class DaoAgendamento {
 
 	public ArrayList<String> atualiazaComboStatus(JComboBox<String> status) throws Exception {
 
+		status.removeAllItems();
 		ArrayList<String> arrayStatus = new ArrayList<>();
 		ResultSet rs;
 
@@ -76,6 +82,7 @@ public class DaoAgendamento {
 
 	public ArrayList<String> atualiazaComboUnidade(JComboBox<String> unidade) throws Exception {
 
+		unidade.removeAllItems();
 		ArrayList<String> arrayStatus = new ArrayList<>();
 		ResultSet rs;
 
@@ -121,6 +128,8 @@ public class DaoAgendamento {
 
 	public ArrayList<String> atualizarComboServicos(JComboBox<String> servicos) throws Exception {
 
+		servicos.removeAllItems();
+		
 		ArrayList<String> arrayServicos = new ArrayList<>();
 		ResultSet rs;
 
@@ -135,12 +144,15 @@ public class DaoAgendamento {
 			servicos.addItem(rs.getString("TIPO_SERVICO"));
 
 		}
-
 		con.close();
 		return arrayServicos;
 	}
 
-	public void atualizarTabela(JTable tabelaAgendamento) throws Exception {
+	public void atualizarTabela(JTable tabelaAgendamento, JCalendar calendario) throws Exception {
+
+		String dataCalendar = null;
+		SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy/MM/dd");
+		dataCalendar = dataFormat.format(calendario.getDate());
 
 		DefaultTableModel model = (DefaultTableModel) tabelaAgendamento.getModel();
 		int linhas = model.getRowCount();
@@ -150,12 +162,13 @@ public class DaoAgendamento {
 		}
 		conectar();
 
-		String sql = "SELECT A.DATA_AGENDAMENTO, A.HORA_INICIO_AGEND, A.HORA_FIM_AGEND, F.NOME_FUNC, C.NOME_CLI, U.NOME_UNIDADE, SE.TIPO_SERVICO, S.STATUS_AGEND, A.ID_AGENDAMENTO"
-				+ " FROM TB_AGENDAMENTO A " + "INNER JOIN TB_CLIENTE C ON C.ID_CLIENTE = A.ID_CLIENTE "
+		String sql = "SELECT A.DATA_AGENDAMENTO, A.HORA_INICIO_AGEND, A.HORA_FIM_AGEND, F.NOME_FUNC, C.NOME_CLI, U.NOME_UNIDADE, SE.TIPO_SERVICO, S.STATUS_AGEND, A.ID_AGENDAMENTO "
+				+ "FROM TB_AGENDAMENTO A " + "INNER JOIN TB_CLIENTE C ON C.ID_CLIENTE = A.ID_CLIENTE "
 				+ "INNER JOIN TB_FUNCIONARIO F ON F.ID_FUNC = A.ID_FUNC "
 				+ "INNER JOIN TB_UNIDADE U ON U.ID_UNIDADE = F.ID_UNIDADE "
 				+ "INNER JOIN TB_STATUS S ON S.ID_STATUS = A.ID_STATUS "
-				+ "INNER JOIN TB_SERVICOS SE ON SE.ID_SERVICO = A.ID_SERVICO";
+				+ "INNER JOIN TB_SERVICOS SE ON SE.ID_SERVICO = A.ID_SERVICO " + "WHERE A.DATA_AGENDAMENTO = '"
+				+ dataCalendar + "' ORDER BY A.HORA_INICIO_AGEND";
 
 		ResultSet rs = statement.executeQuery(sql);
 
@@ -187,21 +200,40 @@ public class DaoAgendamento {
 		return table;
 	}
 
-	public boolean verificarDisponibilidade(String idFuncionario, String data, String horaInicio, String horaFim) throws Exception{
-		
+	public boolean verificarDisponibilidade(String idFuncionario, String data, String horaInicio, String horaFim)
+			throws Exception {
+
+		Funcoes funcoes = new Funcoes();
+		Time horaInicioTime = funcoes.converterHora(horaInicio);
+		Time horaFimTime = funcoes.converterHora(horaFim);
+
 		conectar();
-		
-		String sql = "SELECT ID_AGENDAMENTO FROM TB_AGENDAMENTO WHERE "
-		+ "ID_FUNC = '"+idFuncionario+"' AND DATA_AGENDAMENTO = '"+data+"' AND HORA_INICIO_AGEND BETWEEN '"+horaInicio+"' AND '"+horaFim+"'";
-		
+
+		String sql = "SELECT HORA_INICIO_AGEND, HORA_FIM_AGEND FROM TB_AGENDAMENTO WHERE " + "ID_FUNC = '"
+				+ idFuncionario + "' AND DATA_AGENDAMENTO = '" + data + "'";
+		// AND HORA_INICIO_AGEND BETWEEN '"+horaInicio+"' AND '"+horaFim+"'";
+
 		ResultSet rs = statement.executeQuery(sql);
-		
-		while(rs.next()){
-			return true;
+
+		while (rs.next()) {
+			Time horaI = funcoes.converterHora(rs.getString(1));
+			Time horaF = funcoes.converterHora(rs.getString(2));
+
+			System.out.println("hora banco inicio: " + horaI);
+			System.out.println("hora banco fim: " + horaF);
+
+			if (horaInicioTime.equals(horaI) || horaFimTime.equals(horaF)) {
+				con.close();
+				return true;
+
+			} else if (horaInicioTime.after(horaI) && horaInicioTime.before(horaF)
+					|| horaFimTime.after(horaI) && horaFimTime.before(horaF)) {
+				con.close();
+				return true;
+			}
 		}
-		
-		
+		con.close();
 		return false;
 	}
-	
+
 }

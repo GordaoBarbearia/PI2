@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
@@ -39,10 +40,6 @@ public class Funcoes {
 	public boolean validarCampos(JTextField txtNome, JFormattedTextField txtCpf, JTextField txtTelefone) {
 		if (txtNome.getText().trim().equals("") || txtCpf.getText().trim().length() <14
 				|| txtTelefone.getText().trim().length()<13) {
-			
-		}
-		if (txtNome.getText().trim().equals("") || txtCpf.getText().trim().length() <11
-				|| txtTelefone.getText().trim().length()<11) {
 			return false;
 		} else {
 			return true;
@@ -92,4 +89,32 @@ public class Funcoes {
 		txtCpf.setEnabled(true);
 		txtTelefone.setEnabled(true);
 	}
+
+	public void bloquearCamposAgendamento(JComboBox<String> cboFuncionario, JComboBox<String> cboServico, JComboBox<String> cboStatus, JComboBox<String> cboUnidade,
+			JButton btnSalvar, JButton btnEditar, JButton btnCancelar, JTextField txtHorarioInicio, JTextField txtHorarioFim, JCheckBox chckbxFilaEspera ){
+		cboFuncionario.setEnabled(false);
+		cboServico.setEnabled(false);
+		cboStatus.setEnabled(false);
+		cboUnidade.setEnabled(false);
+		btnSalvar.setEnabled(false);
+		chckbxFilaEspera.setEnabled(false);
+		txtHorarioInicio.setEnabled(false);
+		btnCancelar.setEnabled(false);
+		btnEditar.setEnabled(false);
+		txtHorarioFim.setEnabled(false);
+	}
+	
+	
+	public void limparcamposAgendamento(JComboBox<String> cboFuncionario, JComboBox<String> cboServico, JComboBox<String> cboStatus, JComboBox<String> cboUnidade,
+			JTextField txtHorarioInicio, JTextField txtHorarioFim, JCheckBox chckbxFilaEspera, JTextField txtCpf, JTextField txtCliente ){
+		cboFuncionario.removeAllItems();
+		cboUnidade.removeAllItems();
+		cboStatus.removeAllItems();
+		cboServico.removeAllItems();
+		txtHorarioInicio.setText("");
+		txtHorarioFim.setText("");
+		txtCpf.setText("");
+		txtCliente.setText("");
+	}
+	
 }

@@ -26,7 +26,7 @@ import java.awt.Color;
 
 public class FrmRelatorios {
 
-	private JFrame frmRelatorios;
+	static JFrame frmRelatorios;
 	private JScrollPane scroll;
 	private JTable tabRelat;
 	private ArrayList<String> arrayFunc;
