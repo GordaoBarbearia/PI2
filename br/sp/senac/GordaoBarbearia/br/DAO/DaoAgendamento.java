@@ -189,9 +189,17 @@ public class DaoAgendamento {
 				String status = (String) table.getModel().getValueAt(row, 7);
 
 				if (status.equalsIgnoreCase("ESPERA")) {
-					setForeground(Color.red);
-				} else {
-					setForeground(Color.black);
+					setForeground(Color.MAGENTA);
+					
+				} else if(status.equalsIgnoreCase("ATENDIDO")) {
+					setForeground(Color.green);
+					
+				}else if(status.equalsIgnoreCase("CANCELADO")){
+					setForeground(Color.RED);
+					
+				}else if(status.equalsIgnoreCase("AGENDADO")){
+					setForeground(Color.BLUE);
+					
 				}
 
 				return this;

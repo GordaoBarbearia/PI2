@@ -5,13 +5,12 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import com.toedter.calendar.JDateChooser;
 
+import DAO.DaoAgendamento;
 import DAO.DaoRelatorio;
-
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -23,8 +22,6 @@ import java.util.ArrayList;
 import java.awt.event.ItemEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JPanel;
-import java.awt.Color;
 import javax.swing.ImageIcon;
 
 public class FrmRelatorios {
@@ -35,7 +32,8 @@ public class FrmRelatorios {
 	private ArrayList<String> arrayFunc;
 	private ArrayList<String> arrayCli;
 	private ArrayList<String> arrayPessoa;
-
+	private ButtonGroup group;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -63,6 +61,8 @@ public class FrmRelatorios {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		
+			
 		frmRelatorios = new JFrame();
 		frmRelatorios.setTitle("Gord\u00E3o barbearia - Relat\u00F3rios");
 		frmRelatorios.setBounds(100, 100, 1061, 681);
@@ -105,19 +105,18 @@ public class FrmRelatorios {
 		JRadioButton rdbtnAtendidos = new JRadioButton("Atendidos");
 		JRadioButton rdbtnAgendados = new JRadioButton("Agendados");
 		JRadioButton rdbtnTodos = new JRadioButton("Todos");
-		rdbtnTodos.setSelected(true);
 
-		JComboBox cboRelatPessoa = new JComboBox();
+		JComboBox<String> cboRelatPessoa = new JComboBox<String>();
 		cboRelatPessoa.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-
+				group.clearSelection();
 			}
 		});
 		cboRelatPessoa.setEnabled(false);
 		cboRelatPessoa.setBounds(205, 162, 175, 20);
 		frmRelatorios.getContentPane().add(cboRelatPessoa);
 
-		JComboBox cboTipoRelat = new JComboBox();
+		JComboBox<String> cboTipoRelat = new JComboBox<String>();
 		cboTipoRelat.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				DaoRelatorio daoRelatorio = new DaoRelatorio();
@@ -125,7 +124,6 @@ public class FrmRelatorios {
 					cboRelatPessoa.removeAllItems();
 					cboRelatPessoa.setEnabled(false);
 				} else if (cboTipoRelat.getSelectedItem().equals("Funcionario")) {
-
 					try {
 						arrayPessoa = daoRelatorio.atualizarComboFuncionario(cboRelatPessoa);
 						cboRelatPessoa.setEnabled(true);
@@ -142,6 +140,7 @@ public class FrmRelatorios {
 						e1.printStackTrace();
 					}
 				}
+				group.clearSelection();
 			}
 		});
 		cboTipoRelat.setModel(new DefaultComboBoxModel(new String[] { "Data", "Cliente", "Funcionario" }));
@@ -166,10 +165,47 @@ public class FrmRelatorios {
 		dateChooserFim.setBounds(499, 162, 99, 20);
 		frmRelatorios.getContentPane().add(dateChooserFim);
 
-		JButton btnRelatOptionOK = new JButton("OK");
-		btnRelatOptionOK.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		scroll = new JScrollPane(tabRelat);
+		scroll.setBounds(14, 223, 1015, 406);
+		frmRelatorios.getContentPane().add(scroll);
 
+		JLabel lblInicio = new JLabel("Inicio");
+		lblInicio.setBounds(390, 146, 70, 14);
+		frmRelatorios.getContentPane().add(lblInicio);
+
+		JLabel lblFim = new JLabel("Fim");
+		lblFim.setBounds(499, 146, 70, 14);
+		frmRelatorios.getContentPane().add(lblFim);
+
+		rdbtnTodos.setBounds(13, 195, 70, 23);
+		frmRelatorios.getContentPane().add(rdbtnTodos);
+
+		rdbtnAgendados.setBounds(85, 195, 92, 23);
+		frmRelatorios.getContentPane().add(rdbtnAgendados);
+
+		rdbtnAtendidos.setBounds(179, 195, 84, 23);
+		frmRelatorios.getContentPane().add(rdbtnAtendidos);
+
+		rdbtnCancelados.setBounds(271, 195, 99, 23);
+		frmRelatorios.getContentPane().add(rdbtnCancelados);
+
+		rdbtnEspera.setBounds(372, 195, 78, 23);
+		frmRelatorios.getContentPane().add(rdbtnEspera);
+
+		JLabel lblFundo = new JLabel("");
+		lblFundo.setIcon(new ImageIcon(FrmRelatorios.class.getResource("/image/Fundo_MarcaDagua_2000x1200.fw.png")));
+		lblFundo.setBounds(-5, 0, 1050, 643);
+		frmRelatorios.getContentPane().add(lblFundo);
+
+		group = new ButtonGroup();
+		group.add(rdbtnTodos);
+		group.add(rdbtnAgendados);
+		group.add(rdbtnAtendidos);
+		group.add(rdbtnCancelados);
+		group.add(rdbtnEspera);
+		
+		rdbtnTodos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
 				DaoRelatorio daoRelatorio = new DaoRelatorio();
 				// pega a data selecionada
 				SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
@@ -180,10 +216,12 @@ public class FrmRelatorios {
 					if (rdbtnTodos.isSelected()) {
 						try {
 							daoRelatorio.atualizarTabelaTodos(tabRelat, dataInicio, dataFim);
+
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+						
 					} else {
 						try {
 							String idStatus = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
@@ -235,50 +273,9 @@ public class FrmRelatorios {
 						}
 					}
 				}
+
 			}
 		});
-		btnRelatOptionOK.setBounds(608, 161, 61, 23);
-		frmRelatorios.getContentPane().add(btnRelatOptionOK);
-
-		scroll = new JScrollPane(tabRelat);
-		scroll.setBounds(14, 223, 1015, 406);
-		frmRelatorios.getContentPane().add(scroll);
-
-		JLabel lblInicio = new JLabel("Inicio");
-		lblInicio.setBounds(390, 146, 70, 14);
-		frmRelatorios.getContentPane().add(lblInicio);
-
-		JLabel lblFim = new JLabel("Fim");
-		lblFim.setBounds(499, 146, 70, 14);
-		frmRelatorios.getContentPane().add(lblFim);
-
-		rdbtnTodos.setBounds(13, 195, 70, 23);
-		frmRelatorios.getContentPane().add(rdbtnTodos);
-
-		rdbtnAgendados.setBounds(85, 195, 92, 23);
-		frmRelatorios.getContentPane().add(rdbtnAgendados);
-
-		rdbtnAtendidos.setBounds(179, 195, 84, 23);
-		frmRelatorios.getContentPane().add(rdbtnAtendidos);
-
-		rdbtnCancelados.setBounds(271, 195, 99, 23);
-		frmRelatorios.getContentPane().add(rdbtnCancelados);
-
-		rdbtnEspera.setBounds(372, 195, 78, 23);
-		frmRelatorios.getContentPane().add(rdbtnEspera);
-
-		JLabel lblFundo = new JLabel("");
-		lblFundo.setIcon(new ImageIcon(FrmRelatorios.class.getResource("/image/Fundo_MarcaDagua_2000x1200.fw.png")));
-		lblFundo.setBounds(-5, 0, 1050, 643);
-		frmRelatorios.getContentPane().add(lblFundo);
-
-		ButtonGroup group = new ButtonGroup();
-		group.add(rdbtnTodos);
-		group.add(rdbtnAgendados);
-		group.add(rdbtnAtendidos);
-		group.add(rdbtnCancelados);
-		group.add(rdbtnEspera);
-
 		rdbtnEspera.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//Pesquisa de agendamentos que estejam em ESPERA				 
@@ -450,10 +447,16 @@ public class FrmRelatorios {
 					}
 			}
 		});
+		
+		
+		DaoAgendamento daoAgendamento = new DaoAgendamento();
+		// colorir os atendimentos que estão na fila de espera
+		daoAgendamento.getNewRenderedTable(tabRelat);
 	
+	}	
 	
-	}
-
+		
+	
 	public static String idStatus(JRadioButton rdbtnAgend, JRadioButton rdbtnAtend, JRadioButton rdbtnCancel,
 			JRadioButton rdbtnEsp) {
 

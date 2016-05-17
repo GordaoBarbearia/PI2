@@ -148,7 +148,8 @@ public class FrmAgendamento {
 		txtCpf.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				//tabelaPrincipal.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+				// tabelaPrincipal.putClientProperty("terminateEditOnFocusLost",
+				// Boolean.TRUE);
 				tabelaPrincipal.clearSelection();
 				txtHorarioFim.setText("");
 				txtHorarioInicio.setText("");
@@ -280,7 +281,7 @@ public class FrmAgendamento {
 
 		MaskFormatter maskHora = new MaskFormatter("##:##");
 		MaskFormatter maskHora1 = new MaskFormatter("##:##");
-		
+
 		txtHorarioInicio = new JFormattedTextField(maskHora);
 		txtHorarioInicio.setEnabled(false);
 		txtHorarioInicio.setFocusLostBehavior(JFormattedTextField.COMMIT);
@@ -376,7 +377,7 @@ public class FrmAgendamento {
 			public void actionPerformed(ActionEvent arg0) {
 				FrmRelatorios frmRelatorios = new FrmRelatorios();
 				frmRelatorios.frmRelatorios.setVisible(true);
-				
+
 			}
 		});
 		mnAgendamento.add(mntmNovoAgendamento);
@@ -420,7 +421,7 @@ public class FrmAgendamento {
 				txtHorarioFim.setText("");
 				txtCpf.setText("");
 				txtCliente.setText("");
-				
+
 				DaoAgendamento daoAgendamento = new DaoAgendamento();
 
 				try {
@@ -450,7 +451,7 @@ public class FrmAgendamento {
 				btnCancelar.setEnabled(false);
 				btnEditar.setEnabled(false);
 				txtHorarioFim.setEnabled(false);
-				
+
 				cboFuncionario.removeAllItems();
 				cboUnidade.removeAllItems();
 				cboStatus.removeAllItems();
@@ -467,8 +468,9 @@ public class FrmAgendamento {
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (txtHorarioInicio.getText().equals(txtHorarioFim.getText())) {
-					JOptionPane.showMessageDialog(null, "HORÁRIO DE FINAL, NÃO PODE SER IGUAL OU MENOR DO QUE O HORÁRIO DE INICIO", "Gordão Barbearia",
-							JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null,
+							"HORÁRIO DE FINAL, NÃO PODE SER IGUAL OU MENOR DO QUE O HORÁRIO DE INICIO",
+							"Gordão Barbearia", JOptionPane.INFORMATION_MESSAGE);
 					txtHorarioFim.setText("");
 				} else {
 					if (cboFuncionario.getSelectedItem() != null && txtHorarioInicio.getText().trim().length() == 5
@@ -541,34 +543,49 @@ public class FrmAgendamento {
 		});
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
+				DaoAgendamento daoAgendamento = new DaoAgendamento();
 				if (btnEditar.getText().equals("Editar")) {
 					btnEditar.setText("Confirmar");
-					DaoAgendamento daoAgendamento = new DaoAgendamento();
 					try {
-						
 						daoAgendamento.atualiazaComboStatus(cboStatus);
 						daoAgendamento.atualiazaComboUnidade(cboUnidade);
 						daoAgendamento.atualizarComboServicos(cboServico);
-						cboFuncionario.setEnabled(true);
-						cboServico.setEnabled(true);
-						cboStatus.setEnabled(true);
-						cboUnidade.setEnabled(true);
-						txtHorarioInicio.setEnabled(true);
-						txtHorarioFim.setEnabled(true);
-						btnCancelar.setEnabled(true);
-
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					cboFuncionario.setEnabled(true);
+					cboServico.setEnabled(true);
+					cboStatus.setEnabled(true);
+					cboUnidade.setEnabled(true);
+					txtHorarioInicio.setEnabled(true);
+					txtHorarioFim.setEnabled(true);
+					btnCancelar.setEnabled(true);
+
+				} else {
+					try {
+						daoAgendamento.atualiazaComboStatus(cboStatus);
+
+						daoAgendamento.atualiazaComboUnidade(cboUnidade);
+						daoAgendamento.atualizarComboServicos(cboServico);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					btnEditar.setText("Editar");
+					cboFuncionario.setEnabled(false);
+					cboServico.setEnabled(false);
+					cboStatus.setEnabled(false);
+					cboUnidade.setEnabled(false);
+					txtHorarioInicio.setEnabled(false);
+					txtHorarioFim.setEnabled(false);
+					btnCancelar.setEnabled(false);
 				}
 			}
 		});
 
-		// atualizando combobox do status
-		DaoAgendamento daoAgendamento = new DaoAgendamento();
 
+		DaoAgendamento daoAgendamento = new DaoAgendamento();
 		// colorir os atendimentos que estão na fila de espera
 		daoAgendamento.getNewRenderedTable(tabelaPrincipal);
 
