@@ -268,8 +268,8 @@ public class FrmRelatorios {
 		frmRelatorios.getContentPane().add(rdbtnEspera);
 
 		JLabel lblFundo = new JLabel("");
-		lblFundo.setIcon(new ImageIcon(FrmRelatorios.class.getResource("/image/Fundo_1024.png")));
-		lblFundo.setBounds(0, 0, 1045, 643);
+		lblFundo.setIcon(new ImageIcon(FrmRelatorios.class.getResource("/image/Fundo_MarcaDagua_2000x1200.fw.png")));
+		lblFundo.setBounds(-5, 0, 1050, 643);
 		frmRelatorios.getContentPane().add(lblFundo);
 
 		ButtonGroup group = new ButtonGroup();
@@ -281,13 +281,15 @@ public class FrmRelatorios {
 
 		rdbtnEspera.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
+				//Pesquisa de agendamentos que estejam em ESPERA				 
+				
 				DaoRelatorio daoRelatorio = new DaoRelatorio();
-				// pega a data selecionada
+				//pega a data selecionada transforma em string
 				SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
 				String dataInicio = formatoData.format(dateChooserInicio.getDate());
 				String dataFim = formatoData.format(dateChooserFim.getDate());
 
+				//Pesquisa geral por periodo e status ESPERA
 				if (cboTipoRelat.getSelectedItem().equals("Data")) {
 					try {
 						String idStatus = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
@@ -296,7 +298,7 @@ public class FrmRelatorios {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-
+					//Pesquisa por Cliente/status Espera
 				} else if (cboTipoRelat.getSelectedItem().equals("Cliente")) {
 					int id = cboRelatPessoa.getSelectedIndex();
 					String idString = arrayPessoa.get(id);
@@ -308,7 +310,7 @@ public class FrmRelatorios {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-
+					//Pesquisa por Funcionario/status Espera
 				} else {
 					int id = cboRelatPessoa.getSelectedIndex();
 					String idString = arrayPessoa.get(id);

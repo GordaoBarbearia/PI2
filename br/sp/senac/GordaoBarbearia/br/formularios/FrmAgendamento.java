@@ -34,7 +34,6 @@ import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.awt.event.ItemEvent;
-import javax.swing.JCheckBox;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
@@ -200,7 +199,7 @@ public class FrmAgendamento {
 
 					} else {
 						int confirmacao = JOptionPane.showConfirmDialog(null,
-								"Cliente não cadastrado, deseja cadastra-lo?", "Gordão Barbearia",
+								"CLIENTE NÃO CADASTRADO, DESEJA CADASTRA-LO?", "Gordão Barbearia",
 								JOptionPane.YES_NO_OPTION);
 
 						if (confirmacao == JOptionPane.YES_OPTION) {
@@ -341,8 +340,8 @@ public class FrmAgendamento {
 		formPrincipal.getContentPane().add(lblLogo);
 
 		JLabel lblFundo = new JLabel("");
-		lblFundo.setIcon(new ImageIcon(FrmAgendamento.class.getResource("/image/Fundo_1024.png")));
-		lblFundo.setBounds(0, -4, 1127, 606);
+		lblFundo.setIcon(new ImageIcon(FrmAgendamento.class.getResource("/image/Fundo_MarcaDagua_2000x1200.fw.png")));
+		lblFundo.setBounds(-12, -4, 1139, 606);
 		formPrincipal.getContentPane().add(lblFundo);
 
 		menuBarPrincipal = new JMenuBar();
@@ -468,7 +467,7 @@ public class FrmAgendamento {
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (txtHorarioInicio.getText().equals(txtHorarioFim.getText())) {
-					JOptionPane.showMessageDialog(null, "Horario inicio não pode ser igual ao fim", "Gordão Barbearia",
+					JOptionPane.showMessageDialog(null, "HORÁRIO DE FINAL, NÃO PODE SER IGUAL OU MENOR DO QUE O HORÁRIO DE INICIO", "Gordão Barbearia",
 							JOptionPane.INFORMATION_MESSAGE);
 					txtHorarioFim.setText("");
 				} else {
@@ -505,7 +504,7 @@ public class FrmAgendamento {
 							if (!validarHorario) {
 								daoAgendamento.salvarAgendamento(agendamento);
 								daoAgendamento.atualizarTabela(tabelaPrincipal, calendar);
-								JOptionPane.showMessageDialog(null, "Agendado com sucesso", "Gordão Barbearia",
+								JOptionPane.showMessageDialog(null, "AGENDADO COM SUCESSO", "Gordão Barbearia",
 										JOptionPane.INFORMATION_MESSAGE);
 								cboFuncionario.setEnabled(false);
 								cboServico.setEnabled(false);
@@ -525,7 +524,7 @@ public class FrmAgendamento {
 								btnCancelar.setEnabled(false);
 								idCliente = "";
 							} else {
-								JOptionPane.showMessageDialog(null, "Horaário indisponivel", "Gordão Barbearia",
+								JOptionPane.showMessageDialog(null, "HORÁRIO INDISPONÍVEL", "Gordão Barbearia",
 										JOptionPane.INFORMATION_MESSAGE);
 							}
 
@@ -534,7 +533,7 @@ public class FrmAgendamento {
 							e.printStackTrace();
 						}
 					} else {
-						JOptionPane.showMessageDialog(null, "Preencha todos os campos", "Gordão Barbearia",
+						JOptionPane.showMessageDialog(null, "PREENCHA TODOS OS CAMPOS", "Gordão Barbearia",
 								JOptionPane.INFORMATION_MESSAGE);
 					}
 				}

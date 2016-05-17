@@ -1,7 +1,7 @@
 package formularios;
 
 import java.awt.EventQueue;
-import java.awt.TextField;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -15,18 +15,15 @@ import javax.swing.text.MaskFormatter;
 import DAO.DaoClientes;
 import objetos.Cliente;
 import objetos.Funcoes;
-
+import objetos.ValidaCpf;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JFormattedTextField;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import javax.swing.ListSelectionModel;
 
 public class FrmCadastroCliente {
@@ -87,149 +84,14 @@ public class FrmCadastroCliente {
 		JButton btnsalvar = new JButton("Salvar");
 
 		btnsalvar.setEnabled(false);
-		btnsalvar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				try {
-					String nomeCli = txtNome.getText().toUpperCase();
-					String cpfCli = txtCpf.getText().replaceAll("[./-]", "").toUpperCase();
-					String telefoneCli = txtTelefone.getText().replaceAll("[./-]", "").toUpperCase();
-
-					Funcoes funcoes = new Funcoes();
-					boolean salvar = false;
-					boolean validarCampos = funcoes.validarCampos(txtNome, txtCpf, txtTelefone);
-
-					DaoClientes daoClientes = new DaoClientes();
-					boolean validarDuplicidade;
-
-					if (validarCampos) {
-						validarDuplicidade = validarDuplicidade(cpfCli);
-						Cliente cliente = new Cliente(cpfCli, nomeCli, telefoneCli);
-						if (validarDuplicidade) {
-							salvar = daoClientes.salvarCliente(cliente);
-							if (salvar) {
-								JOptionPane.showMessageDialog(null, "Cadastrado com sucesso", "Gordão Barbearia",
-										JOptionPane.INFORMATION_MESSAGE);
-								funcoes.limparCampos(txtNome, txtCpf, txtTelefone);
-								funcoes.bloquearCampos(txtNome, txtCpf, txtTelefone);
-								btnCancelarNovo.setText("Novo");
-								btnsalvar.setEnabled(false);
-								tabelaNome.setEnabled(true);
-							} else {
-								JOptionPane.showMessageDialog(null, "Erro ao efetuaro o cadastro", "Gordão Barbearia",
-										JOptionPane.INFORMATION_MESSAGE);
-							}
-						} else {
-							JOptionPane.showMessageDialog(null, "CPF já cadastrado", "Gordão Barbearia",
-									JOptionPane.ERROR_MESSAGE);
-						}
-					} else {
-						JOptionPane.showMessageDialog(null, "PREENCHA TODOS OS CAMPOS", "Gordão Barbearia",
-								JOptionPane.ERROR_MESSAGE);
-					}
-
-					atualizarTableCliente(tabelaNome);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		});
 		btnsalvar.setBounds(12, 320, 93, 23);
 		formCadCli.getContentPane().add(btnsalvar);
 
-		btnCancelarNovo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				Funcoes funcoes = new Funcoes();
-				if (btnCancelarNovo.getText().equals("Novo")) {
-					atualizarTableCliente(tabelaNome);
-					btnCancelarNovo.setText("Cancelar");
-					btnsalvar.setEnabled(true);
-					btnEditar.setEnabled(false);
-					funcoes.desbloquearCampos(txtNome, txtCpf, txtTelefone);
-					funcoes.limparCampos(txtNome, txtCpf, txtTelefone);
-					txtCpf.requestFocus();
-					tabelaNome.setEnabled(false);
-
-				} else {
-					atualizarTableCliente(tabelaNome);
-					btnCancelarNovo.setText("Novo");
-					btnEditar.setText("Editar");
-					btnsalvar.setEnabled(false);
-					btnEditar.setEnabled(false);
-					funcoes.bloquearCampos(txtNome, txtCpf, txtTelefone);
-					funcoes.limparCampos(txtNome, txtCpf, txtTelefone);
-					tabelaNome.setEnabled(true);
-
-				}
-			}
-		});
 		btnCancelarNovo.setBounds(12, 252, 93, 23);
 		formCadCli.getContentPane().add(btnCancelarNovo);
 
 		btnEditar.setEnabled(false);
-		btnEditar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-								
-				try {
-					Funcoes funcoes = new Funcoes();
-					if (btnEditar.getText().equals("Editar")) {
-						funcoes.desbloquearCampos(txtNome, txtCpf, txtTelefone);
-						btnEditar.setText("Confirmar");
-						btnCancelarNovo.setText("Cancelar");
-						tabelaNome.setEnabled(false);
-						testeCpf = txtCpf.getText().replaceAll("[./-]", "");
-						//System.out.println(testeCpf);
-					} else {
-						String nomeCli = txtNome.getText();
-						String cpfCli = txtCpf.getText().replaceAll("[./-]", "");
-						String telefoneCli = txtTelefone.getText().replaceAll("[./-]", "");
 
-						String idCliente = (String) tabelaNome.getModel().getValueAt(tabelaNome.getSelectedRow(), 0);
-
-						DaoClientes daoClientes = new DaoClientes();
-						Cliente cliente = new Cliente(cpfCli, nomeCli, telefoneCli);
-						boolean validarDulicidade = true;
-						
-						boolean validarCampos = funcoes.validarCampos(txtNome, txtCpf, txtTelefone);
-						
-						//System.out.println(testeCpf);
-						
-						if (validarCampos) {
-							if(!testeCpf.equals(cpfCli)){
-								validarDulicidade = validarDuplicidade(cpfCli);
-							}							
-
-							if (validarDulicidade) {
-								boolean editar = daoClientes.editarCliente(cliente, idCliente);
-								if (editar) {
-									JOptionPane.showMessageDialog(null, "Alterado com sucesso", "Gordão Barbearia",
-											JOptionPane.INFORMATION_MESSAGE);
-									atualizarTableCliente(tabelaNome);
-									funcoes.bloquearCampos(txtNome, txtCpf, txtTelefone);
-									funcoes.limparCampos(txtNome, txtCpf, txtTelefone);
-									btnCancelarNovo.setText("Novo");
-									btnEditar.setText("Editar");
-									btnEditar.setEnabled(false);
-									tabelaNome.setEnabled(true);
-
-								}
-							}else{
-								JOptionPane.showMessageDialog(null, "CPF já cadastrado", "Gordão Barbearia",
-										JOptionPane.ERROR_MESSAGE);
-							}
-
-						} else {
-							JOptionPane.showMessageDialog(null, "PREENCHA TODOS OS CAMPOS", "Gordão Barbearia",
-									JOptionPane.ERROR_MESSAGE);
-						}
-
-					}
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		});
 		btnEditar.setBounds(12, 286, 93, 23);
 		formCadCli.getContentPane().add(btnEditar);
 
@@ -277,19 +139,18 @@ public class FrmCadastroCliente {
 			}
 
 		});
-		
+
 		tabelaNome.getTableHeader().setReorderingAllowed(false);
 		tabelaNome.getColumnModel().getColumn(0).setResizable(false);
 		tabelaNome.getColumnModel().getColumn(1).setResizable(false);
 		tabelaNome.getColumnModel().getColumn(2).setResizable(false);
 		tabelaNome.getColumnModel().getColumn(3).setResizable(false);
-		
+
 		tabelaNome.getColumnModel().getColumn(0).setMaxWidth(50);
 		tabelaNome.getColumnModel().getColumn(1).setMaxWidth(130);
 		tabelaNome.getColumnModel().getColumn(2).setMaxWidth(110);
 		tabelaNome.getColumnModel().getColumn(3).setMaxWidth(110);
-		
-		
+
 		formCadCli.getContentPane().add(tabelaNome);
 		scrollTable = new JScrollPane(tabelaNome);
 		scrollTable.setBounds(165, 108, 391, 235);
@@ -319,7 +180,6 @@ public class FrmCadastroCliente {
 						String nome = (String) tabelaNome.getModel().getValueAt(tabelaNome.getSelectedRow(), 1);
 						String telefone = (String) tabelaNome.getModel().getValueAt(tabelaNome.getSelectedRow(), 3);
 
-						
 						txtCpf.setText("");
 						txtNome.setText("");
 						txtTelefone.setText("");
@@ -328,6 +188,150 @@ public class FrmCadastroCliente {
 						txtTelefone.setText(telefone);
 					}
 				}
+
+			}
+		});
+		btnEditar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				try {
+					Funcoes funcoes = new Funcoes();
+					if (btnEditar.getText().equals("Editar")) {
+						funcoes.desbloquearCampos(txtNome, txtCpf, txtTelefone);
+						btnEditar.setText("Confirmar");
+						btnCancelarNovo.setText("Cancelar");
+						tabelaNome.setEnabled(false);
+						testeCpf = txtCpf.getText().replaceAll("[./-]", "");
+						// System.out.println(testeCpf);
+					} else {
+						String nomeCli = txtNome.getText();
+						String cpfCli = txtCpf.getText().replaceAll("[./-]", "");
+						String telefoneCli = txtTelefone.getText().replaceAll("[./-]", "");
+
+						String idCliente = (String) tabelaNome.getModel().getValueAt(tabelaNome.getSelectedRow(), 0);
+
+						DaoClientes daoClientes = new DaoClientes();
+						Cliente cliente = new Cliente(cpfCli, nomeCli, telefoneCli);
+						boolean validarDulicidade = true;
+
+						boolean validarCampos = funcoes.validarCampos(txtNome, txtCpf, txtTelefone);
+
+						// System.out.println(testeCpf);
+
+						if (validarCampos) {
+							if (!testeCpf.equals(cpfCli)) {
+								validarDulicidade = validarDuplicidade(cpfCli);
+							}
+
+							if (validarDulicidade) {
+								boolean editar = daoClientes.editarCliente(cliente, idCliente);
+								if (editar) {
+									JOptionPane.showMessageDialog(null, "ALTERADO COM SUCESSO", "Gordão Barbearia",
+											JOptionPane.INFORMATION_MESSAGE);
+									atualizarTableCliente(tabelaNome);
+									funcoes.bloquearCampos(txtNome, txtCpf, txtTelefone);
+									funcoes.limparCampos(txtNome, txtCpf, txtTelefone);
+									btnCancelarNovo.setText("Novo");
+									btnEditar.setText("Editar");
+									btnEditar.setEnabled(false);
+									tabelaNome.setEnabled(true);
+
+								}
+							} else {
+								JOptionPane.showMessageDialog(null, "CPF JÁ CADASTRADO", "Gordão Barbearia",
+										JOptionPane.ERROR_MESSAGE);
+							}
+
+						} else {
+							JOptionPane.showMessageDialog(null, "PREENCHA TODOS OS CAMPOS", "Gordão Barbearia",
+									JOptionPane.ERROR_MESSAGE);
+						}
+
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		btnCancelarNovo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Funcoes funcoes = new Funcoes();
+				if (btnCancelarNovo.getText().equals("Novo")) {
+					atualizarTableCliente(tabelaNome);
+					btnCancelarNovo.setText("Cancelar");
+					btnsalvar.setEnabled(true);
+					btnEditar.setEnabled(false);
+					funcoes.desbloquearCampos(txtNome, txtCpf, txtTelefone);
+					funcoes.limparCampos(txtNome, txtCpf, txtTelefone);
+					txtCpf.requestFocus();
+					tabelaNome.setEnabled(false);
+
+				} else {
+					atualizarTableCliente(tabelaNome);
+					btnCancelarNovo.setText("Novo");
+					btnEditar.setText("Editar");
+					btnsalvar.setEnabled(false);
+					btnEditar.setEnabled(false);
+					funcoes.bloquearCampos(txtNome, txtCpf, txtTelefone);
+					funcoes.limparCampos(txtNome, txtCpf, txtTelefone);
+					tabelaNome.setEnabled(true);
+
+				}
+			}
+		});
+		btnsalvar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				String nomeCli = txtNome.getText().toUpperCase();
+				String cpfCli = txtCpf.getText().replaceAll("[./-]", "").toUpperCase();
+				String telefoneCli = txtTelefone.getText().replaceAll("[./-]", "").toUpperCase();
+
+				Funcoes funcoes = new Funcoes();
+				boolean salvar = false;
+				boolean validarCampos = funcoes.validarCampos(txtNome, txtCpf, txtTelefone);
+
+				DaoClientes daoClientes = new DaoClientes();
+				ValidaCpf validaCpf = new ValidaCpf();
+				boolean validarDuplicidade = false;
+				boolean validarCpf = validaCpf.isCPF(cpfCli);
+				
+				if (validarCpf) {
+					if (validarCampos) {
+						try {
+							validarDuplicidade = validarDuplicidade(cpfCli);
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						Cliente cliente = new Cliente(cpfCli, nomeCli, telefoneCli);
+						if (validarDuplicidade) {
+							salvar = daoClientes.salvarCliente(cliente);
+							if (salvar) {
+								JOptionPane.showMessageDialog(null, "CADASTRADO COM SUCESSO", "Gordão Barbearia",
+										JOptionPane.INFORMATION_MESSAGE);
+								funcoes.limparCampos(txtNome, txtCpf, txtTelefone);
+								funcoes.bloquearCampos(txtNome, txtCpf, txtTelefone);
+								btnCancelarNovo.setText("Novo");
+								btnsalvar.setEnabled(false);
+								tabelaNome.setEnabled(true);
+							} else {
+								JOptionPane.showMessageDialog(null, "ERRO AO EFETUAR O CADASTRO", "Gordão Barbearia",
+										JOptionPane.INFORMATION_MESSAGE);
+							}
+						} else {
+							JOptionPane.showMessageDialog(null, "CPF já cadastrado", "Gordão Barbearia",
+									JOptionPane.ERROR_MESSAGE);
+						}
+					} else {
+						JOptionPane.showMessageDialog(null, "PREENCHA TODOS OS CAMPOS", "Gordão Barbearia",
+								JOptionPane.ERROR_MESSAGE);
+					}
+				}else{
+					JOptionPane.showMessageDialog(null, "CPF DIGITADO INVALIDO", "Gordão Barbearia",
+							JOptionPane.ERROR_MESSAGE);
+				}
+				atualizarTableCliente(tabelaNome);
 
 			}
 		});
@@ -343,6 +347,7 @@ public class FrmCadastroCliente {
 			e.printStackTrace();
 		}
 	}
+
 	static boolean validarDuplicidade(String cpf) throws SQLException {
 
 		DaoClientes daoClientes = new DaoClientes();
