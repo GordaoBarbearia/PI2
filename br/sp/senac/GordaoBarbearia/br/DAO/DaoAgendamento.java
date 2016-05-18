@@ -17,8 +17,8 @@ import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JCalendar;
 
-import objetos.Agendamento;
-import objetos.Funcoes;
+import modelo.Agendamento;
+import modelo.Funcoes;
 
 public class DaoAgendamento {
 
@@ -192,7 +192,7 @@ public class DaoAgendamento {
 					setForeground(Color.MAGENTA);
 					
 				} else if(status.equalsIgnoreCase("ATENDIDO")) {
-					setForeground(Color.green);
+					setForeground(new Color(34,139,34));
 					
 				}else if(status.equalsIgnoreCase("CANCELADO")){
 					setForeground(Color.RED);

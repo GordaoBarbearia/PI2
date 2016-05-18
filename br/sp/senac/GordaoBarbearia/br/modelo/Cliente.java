@@ -1,4 +1,4 @@
-package objetos;
+package modelo;
 
 public class Cliente {
 	
@@ -11,6 +11,13 @@ public class Cliente {
 		this.nomeCliente = nomeCliente;
 		this.telefoneCliente = telefoneCliente;
 	}
+	
+	public Cliente(String idCliente, String cpfCliente, String nomeCliente, String telefoneCliente){
+		this.cpfCliente = cpfCliente;
+		this.nomeCliente = nomeCliente;
+		this.telefoneCliente = telefoneCliente;
+	}
+
 
 	public String getCpfCliente() {
 		return cpfCliente;

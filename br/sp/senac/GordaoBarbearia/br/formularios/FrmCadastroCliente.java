@@ -13,9 +13,10 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 import DAO.DaoClientes;
-import objetos.Cliente;
-import objetos.Funcoes;
-import objetos.ValidaCpf;
+import modelo.Cliente;
+import modelo.Funcoes;
+import modelo.ValidaCpf;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;

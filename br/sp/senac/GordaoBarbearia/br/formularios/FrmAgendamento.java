@@ -24,10 +24,12 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
-import objetos.Agendamento;
+
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 import DAO.DaoAgendamento;
 import DAO.DaoClientes;
+import modelo.Agendamento;
+
 import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
 import com.toedter.calendar.JCalendar;
 import java.awt.event.ItemListener;
@@ -54,6 +56,7 @@ public class FrmAgendamento {
 	private ArrayList<String> arrayFuncionario;
 	private ArrayList<String> arrayServicos;
 	private String idCliente;
+	DaoAgendamento daoAgendamento = new DaoAgendamento();
 
 	/**
 	 * Launch the application.
@@ -190,10 +193,8 @@ public class FrmAgendamento {
 						cboUnidade.setEnabled(true);
 						txtHorarioInicio.setEnabled(true);
 						txtHorarioFim.setEnabled(true);
-						DaoAgendamento daoAgendamento = new DaoAgendamento();
 						daoAgendamento.atualizarTabela(tabelaPrincipal, calendar);
 						arrayStatus = daoAgendamento.atualiazaComboStatus(cboStatus);
-						arrayUnidade = daoAgendamento.atualiazaComboUnidade(cboUnidade);
 						arrayServicos = daoAgendamento.atualizarComboServicos(cboServico);
 						cboStatus.setSelectedIndex(0);
 						btnCancelar.setEnabled(true);
@@ -234,7 +235,7 @@ public class FrmAgendamento {
 							cboFuncionario.removeAllItems();
 							int posicaoArray = cboUnidade.getSelectedIndex();
 							String idUnidade = arrayUnidade.get(posicaoArray);
-							DaoAgendamento daoAgendamento = new DaoAgendamento();
+
 							arrayFuncionario = daoAgendamento.atualizarComboFuncionario(cboFuncionario, idUnidade);
 
 						}
@@ -422,8 +423,6 @@ public class FrmAgendamento {
 				txtCpf.setText("");
 				txtCliente.setText("");
 
-				DaoAgendamento daoAgendamento = new DaoAgendamento();
-
 				try {
 					daoAgendamento.atualizarTabela(tabelaPrincipal, calendar);
 				} catch (Exception e) {
@@ -435,7 +434,7 @@ public class FrmAgendamento {
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				btnEditar.setText("Editar");
-				DaoAgendamento daoAgendamento = new DaoAgendamento();
+
 				try {
 					daoAgendamento.atualizarTabela(tabelaPrincipal, calendar);
 				} catch (Exception e) {
@@ -492,8 +491,6 @@ public class FrmAgendamento {
 							SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
 							dataCalendario = formatoData.format(calendar.getDate());
 
-							DaoAgendamento daoAgendamento = new DaoAgendamento();
-
 							Agendamento agendamento = new Agendamento(funcionario, idCliente, status, servicos,
 									dataCalendario, horaInicio, horaFim);
 
@@ -543,7 +540,7 @@ public class FrmAgendamento {
 		});
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				DaoAgendamento daoAgendamento = new DaoAgendamento();
+
 				if (btnEditar.getText().equals("Editar")) {
 					btnEditar.setText("Confirmar");
 					try {
@@ -584,8 +581,7 @@ public class FrmAgendamento {
 			}
 		});
 
-
-		DaoAgendamento daoAgendamento = new DaoAgendamento();
+		arrayUnidade = daoAgendamento.atualiazaComboUnidade(cboUnidade);
 		// colorir os atendimentos que estão na fila de espera
 		daoAgendamento.getNewRenderedTable(tabelaPrincipal);
 

@@ -5,12 +5,15 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import com.toedter.calendar.JDateChooser;
 
 import DAO.DaoAgendamento;
 import DAO.DaoRelatorio;
+import modelo.Relatorio;
+
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -19,6 +22,7 @@ import javax.swing.JButton;
 import java.awt.event.ItemListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Vector;
 import java.awt.event.ItemEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -33,7 +37,9 @@ public class FrmRelatorios {
 	private ArrayList<String> arrayCli;
 	private ArrayList<String> arrayPessoa;
 	private ButtonGroup group;
-	
+	private Vector<Relatorio> vetorRel;
+	DaoRelatorio daoRelatorio = new DaoRelatorio();
+
 	/**
 	 * Launch the application.
 	 */
@@ -61,8 +67,7 @@ public class FrmRelatorios {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		
-			
+
 		frmRelatorios = new JFrame();
 		frmRelatorios.setTitle("Gord\u00E3o barbearia - Relat\u00F3rios");
 		frmRelatorios.setBounds(100, 100, 1061, 681);
@@ -99,51 +104,20 @@ public class FrmRelatorios {
 		tabRelat.getColumnModel().getColumn(8).setMinWidth(0);
 		tabRelat.getTableHeader().getColumnModel().getColumn(8).setMaxWidth(0);
 
+		// Criação dos componentes
 		JRadioButton rdbtnEspera = new JRadioButton("Espera");
 		JRadioButton rdbtnCancelados = new JRadioButton("Cancelados");
-
 		JRadioButton rdbtnAtendidos = new JRadioButton("Atendidos");
 		JRadioButton rdbtnAgendados = new JRadioButton("Agendados");
 		JRadioButton rdbtnTodos = new JRadioButton("Todos");
 
 		JComboBox<String> cboRelatPessoa = new JComboBox<String>();
-		cboRelatPessoa.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				group.clearSelection();
-			}
-		});
 		cboRelatPessoa.setEnabled(false);
 		cboRelatPessoa.setBounds(205, 162, 175, 20);
 		frmRelatorios.getContentPane().add(cboRelatPessoa);
 
 		JComboBox<String> cboTipoRelat = new JComboBox<String>();
-		cboTipoRelat.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				DaoRelatorio daoRelatorio = new DaoRelatorio();
-				if (cboTipoRelat.getSelectedItem().equals("Data")) {
-					cboRelatPessoa.removeAllItems();
-					cboRelatPessoa.setEnabled(false);
-				} else if (cboTipoRelat.getSelectedItem().equals("Funcionario")) {
-					try {
-						arrayPessoa = daoRelatorio.atualizarComboFuncionario(cboRelatPessoa);
-						cboRelatPessoa.setEnabled(true);
-					} catch (Exception e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				} else {
-					try {
-						arrayPessoa = daoRelatorio.atualizarComboCliente(cboRelatPessoa);
-						cboRelatPessoa.setEnabled(true);
-					} catch (Exception e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-				group.clearSelection();
-			}
-		});
-		cboTipoRelat.setModel(new DefaultComboBoxModel(new String[] { "Data", "Cliente", "Funcionario" }));
+		cboTipoRelat.setModel(new DefaultComboBoxModel(new String[] { "Data", "Cliente", "Funcionario", "Unidade" }));
 		cboTipoRelat.setBounds(20, 162, 175, 20);
 		frmRelatorios.getContentPane().add(cboTipoRelat);
 
@@ -203,248 +177,341 @@ public class FrmRelatorios {
 		group.add(rdbtnAtendidos);
 		group.add(rdbtnCancelados);
 		group.add(rdbtnEspera);
-		
+
 		rdbtnTodos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				DaoRelatorio daoRelatorio = new DaoRelatorio();
-				// pega a data selecionada
-				SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
-				String dataInicio = formatoData.format(dateChooserInicio.getDate());
-				String dataFim = formatoData.format(dateChooserFim.getDate());
 
-				if (cboTipoRelat.getSelectedItem().equals("Data")) {
-					if (rdbtnTodos.isSelected()) {
+				if (dateChooserInicio.getDate() != null && dateChooserFim.getDate() != null) {
+					// pega a data selecionada
+					SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+					String dataInicio = formatoData.format(dateChooserInicio.getDate());
+					String dataFim = formatoData.format(dateChooserFim.getDate());
+
+					if (cboTipoRelat.getSelectedItem().equals("Data")) {
 						try {
-							daoRelatorio.atualizarTabelaTodos(tabRelat, dataInicio, dataFim);
-
+							vetorRel = daoRelatorio.atualizarTabelaTodos(tabRelat, dataInicio, dataFim);
+							daoRelatorio.preencherTabela(vetorRel, tabRelat);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						
-					} else {
+
+					} else if (cboTipoRelat.getSelectedItem().equals("Cliente")) {
+						int id = cboRelatPessoa.getSelectedIndex();
+						String idString = arrayPessoa.get(id);
 						try {
-							String idStatus = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
-							daoRelatorio.atualizarTabelaTodosStatus(tabRelat, dataInicio, dataFim, idStatus);
+							vetorRel = daoRelatorio.atualizarTabelaCli(tabRelat, idString, dataInicio, dataFim);
+							daoRelatorio.preencherTabela(vetorRel, tabRelat);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-					}
-				} else if (cboTipoRelat.getSelectedItem().equals("Cliente")) {
-
-					int id = cboRelatPessoa.getSelectedIndex();
-					String idString = arrayPessoa.get(id);
-
-					if (rdbtnTodos.isSelected()) {
+					} else if (cboTipoRelat.getSelectedItem().equals("Funcionario")) {
+						int id = cboRelatPessoa.getSelectedIndex();
+						String idString = arrayPessoa.get(id);
 						try {
-							daoRelatorio.atualizarTabelaCli(tabRelat, idString, dataInicio, dataFim);
+							vetorRel = daoRelatorio.atualizarTabelaFunc(tabRelat, idString, dataInicio, dataFim);
+							daoRelatorio.preencherTabela(vetorRel, tabRelat);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-					} else {
+					} else if (cboTipoRelat.getSelectedItem().equals("Unidade")) {
+						int id = cboRelatPessoa.getSelectedIndex();
+						String idString = arrayPessoa.get(id);						
 						try {
-							String status = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
-							daoRelatorio.atualizarTabelaCliStatus(tabRelat, idString, dataInicio, dataFim, status);
+							vetorRel = daoRelatorio.atualizarTabelaUnidade(tabRelat, idString, dataInicio, dataFim);
+							daoRelatorio.preencherTabela(vetorRel, tabRelat);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
 				} else {
-					int id = cboRelatPessoa.getSelectedIndex();
-					String idString = arrayPessoa.get(id);
-
-					if (rdbtnTodos.isSelected()) {
-						try {
-							daoRelatorio.atualizarTabelaFunc(tabRelat, idString, dataInicio, dataFim);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					} else {
-						try {
-							String status = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
-							daoRelatorio.atualizarTabelaFuncStatus(tabRelat, idString, dataInicio, dataFim, status);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
+					JOptionPane.showMessageDialog(null, "PREENCHA O CAMPO DATA INICIO E DATA FIM", "Gordão Barbearia",
+							JOptionPane.INFORMATION_MESSAGE);
+					group.clearSelection();
 				}
-
 			}
 		});
 		rdbtnEspera.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//Pesquisa de agendamentos que estejam em ESPERA				 
-				
-				DaoRelatorio daoRelatorio = new DaoRelatorio();
-				//pega a data selecionada transforma em string
-				SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
-				String dataInicio = formatoData.format(dateChooserInicio.getDate());
-				String dataFim = formatoData.format(dateChooserFim.getDate());
+				// Pesquisa de agendamentos que estejam em ESPERA
+				if (dateChooserInicio.getDate() != null && dateChooserFim.getDate() != null) {
 
-				//Pesquisa geral por periodo e status ESPERA
-				if (cboTipoRelat.getSelectedItem().equals("Data")) {
-					try {
-						String idStatus = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
-						daoRelatorio.atualizarTabelaTodosStatus(tabRelat, dataInicio, dataFim, idStatus);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					//Pesquisa por Cliente/status Espera
-				} else if (cboTipoRelat.getSelectedItem().equals("Cliente")) {
-					int id = cboRelatPessoa.getSelectedIndex();
-					String idString = arrayPessoa.get(id);
+					// pega a data selecionada transforma em string
+					SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+					String dataInicio = formatoData.format(dateChooserInicio.getDate());
+					String dataFim = formatoData.format(dateChooserFim.getDate());
 
-					try {
-						String status = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
-						daoRelatorio.atualizarTabelaCliStatus(tabRelat, idString, dataInicio, dataFim, status);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					// Pesquisa geral por periodo e status ESPERA
+					if (cboTipoRelat.getSelectedItem().equals("Data")) {
+						try {
+							vetorRel = daoRelatorio.atualizarTabelaTodosStatus(tabRelat, dataInicio, dataFim, "4");
+							daoRelatorio.preencherTabela(vetorRel, tabRelat);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						// Pesquisa por Cliente/status Espera
+					} else if (cboTipoRelat.getSelectedItem().equals("Cliente")) {
+						int id = cboRelatPessoa.getSelectedIndex();
+						String idString = arrayPessoa.get(id);
+						try {
+
+							vetorRel = daoRelatorio.atualizarTabelaCliStatus(tabRelat, idString, dataInicio, dataFim,
+									"4");
+							daoRelatorio.preencherTabela(vetorRel, tabRelat);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						// Pesquisa por Funcionario/status Espera
+					} else if (cboTipoRelat.getSelectedItem().equals("Funcionario")) {
+						int id = cboRelatPessoa.getSelectedIndex();
+						String idString = arrayPessoa.get(id);
+						try {
+							vetorRel = daoRelatorio.atualizarTabelaFuncStatus(tabRelat, idString, dataInicio, dataFim,"4");
+							daoRelatorio.preencherTabela(vetorRel, tabRelat);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					} else if (cboTipoRelat.getSelectedItem().equals("Unidade")) {
+						int id = cboRelatPessoa.getSelectedIndex();
+						String idString = arrayPessoa.get(id);
+						try {
+							vetorRel = daoRelatorio.atualizarTabelaUnidadeStatus(tabRelat, idString, dataInicio, dataFim,"4");
+							daoRelatorio.preencherTabela(vetorRel, tabRelat);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
-					//Pesquisa por Funcionario/status Espera
+
 				} else {
-					int id = cboRelatPessoa.getSelectedIndex();
-					String idString = arrayPessoa.get(id);
-					try {
-						String status = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
-						daoRelatorio.atualizarTabelaFuncStatus(tabRelat, idString, dataInicio, dataFim, status);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					JOptionPane.showMessageDialog(null, "PREENCHA O CAMPO DATA INICIO E DATA FIM", "Gordão Barbearia",
+							JOptionPane.INFORMATION_MESSAGE);
+					group.clearSelection();
 				}
 			}
 		});
 		rdbtnCancelados.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				DaoRelatorio daoRelatorio = new DaoRelatorio();
-				// pega a data selecionada
-				SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
-				String dataInicio = formatoData.format(dateChooserInicio.getDate());
-				String dataFim = formatoData.format(dateChooserFim.getDate());
 
-				if (cboTipoRelat.getSelectedItem().equals("Data")) {
-					try {
-						String idStatus = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
-						daoRelatorio.atualizarTabelaTodosStatus(tabRelat, dataInicio, dataFim, idStatus);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+				if (dateChooserInicio.getDate() != null && dateChooserFim.getDate() != null) {
+
+					// pega a data selecionada
+					SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+					String dataInicio = formatoData.format(dateChooserInicio.getDate());
+					String dataFim = formatoData.format(dateChooserFim.getDate());
+
+					if (cboTipoRelat.getSelectedItem().equals("Data")) {
+						try {
+							vetorRel = daoRelatorio.atualizarTabelaTodosStatus(tabRelat, dataInicio, dataFim, "3");
+							daoRelatorio.preencherTabela(vetorRel, tabRelat);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					} else if (cboTipoRelat.getSelectedItem().equals("Cliente")) {
+						int id = cboRelatPessoa.getSelectedIndex();
+						String idString = arrayPessoa.get(id);
+
+						try {
+							vetorRel = daoRelatorio.atualizarTabelaCliStatus(tabRelat, idString, dataInicio, dataFim,"3");
+							daoRelatorio.preencherTabela(vetorRel, tabRelat);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					} else if (cboTipoRelat.getSelectedItem().equals("Funcionario")) {
+						int id = cboRelatPessoa.getSelectedIndex();
+						String idString = arrayPessoa.get(id);
+						try {
+							vetorRel = daoRelatorio.atualizarTabelaFuncStatus(tabRelat, idString, dataInicio, dataFim,"3");
+							daoRelatorio.preencherTabela(vetorRel, tabRelat);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					} else if (cboTipoRelat.getSelectedItem().equals("Unidade")){
+						int id = cboRelatPessoa.getSelectedIndex();
+						String idString = arrayPessoa.get(id);
+						try {
+							vetorRel = daoRelatorio.atualizarTabelaUnidadeStatus(tabRelat, idString, dataInicio, dataFim,"3");
+							daoRelatorio.preencherTabela(vetorRel, tabRelat);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
-
-				} else if (cboTipoRelat.getSelectedItem().equals("Cliente")) {
-					int id = cboRelatPessoa.getSelectedIndex();
-					String idString = arrayPessoa.get(id);
-
-					try {
-						String status = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
-						daoRelatorio.atualizarTabelaCliStatus(tabRelat, idString, dataInicio, dataFim, status);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
 				} else {
-					int id = cboRelatPessoa.getSelectedIndex();
-					String idString = arrayPessoa.get(id);
-					try {
-						String status = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
-						daoRelatorio.atualizarTabelaFuncStatus(tabRelat, idString, dataInicio, dataFim, status);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					JOptionPane.showMessageDialog(null, "PREENCHA O CAMPO DATA INICIO E DATA FIM", "Gordão Barbearia",
+							JOptionPane.INFORMATION_MESSAGE);
+					group.clearSelection();
 				}
 			}
 		});
 		rdbtnAgendados.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				DaoRelatorio daoRelatorio = new DaoRelatorio();
-				// pega a data selecionada
-				SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
-				String dataInicio = formatoData.format(dateChooserInicio.getDate());
-				String dataFim = formatoData.format(dateChooserFim.getDate());
 
-				if (cboTipoRelat.getSelectedItem().equals("Data")) {
-					try {
-						String idStatus = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
-						daoRelatorio.atualizarTabelaTodosStatus(tabRelat, dataInicio, dataFim, idStatus);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+				if (dateChooserInicio.getDate() != null && dateChooserFim.getDate() != null) {
+					// pega a data selecionada
+					SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+					String dataInicio = formatoData.format(dateChooserInicio.getDate());
+					String dataFim = formatoData.format(dateChooserFim.getDate());
 
-				} else if (cboTipoRelat.getSelectedItem().equals("Cliente")) {
-					int id = cboRelatPessoa.getSelectedIndex();
-					String idString = arrayPessoa.get(id);
-
-					try {
-						String status = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
-						daoRelatorio.atualizarTabelaCliStatus(tabRelat, idString, dataInicio, dataFim, status);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-				} else {
-					int id = cboRelatPessoa.getSelectedIndex();
-					String idString = arrayPessoa.get(id);
+					if (cboTipoRelat.getSelectedItem().equals("Data")) {
 						try {
-							String status = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
-							daoRelatorio.atualizarTabelaFuncStatus(tabRelat, idString, dataInicio, dataFim, status);
+							vetorRel = daoRelatorio.atualizarTabelaTodosStatus(tabRelat, dataInicio, dataFim, "1");
+							daoRelatorio.preencherTabela(vetorRel, tabRelat);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					} else if (cboTipoRelat.getSelectedItem().equals("Cliente")) {
+						int id = cboRelatPessoa.getSelectedIndex();
+						String idString = arrayPessoa.get(id);
+
+						try {
+							vetorRel = daoRelatorio.atualizarTabelaCliStatus(tabRelat, idString, dataInicio, dataFim,
+									"1");
+							daoRelatorio.preencherTabela(vetorRel, tabRelat);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					} else if (cboTipoRelat.getSelectedItem().equals("Funcionario")) {
+						int id = cboRelatPessoa.getSelectedIndex();
+						String idString = arrayPessoa.get(id);
+						try {
+							vetorRel = daoRelatorio.atualizarTabelaFuncStatus(tabRelat, idString, dataInicio, dataFim,"1");
+							daoRelatorio.preencherTabela(vetorRel, tabRelat);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					} else if (cboTipoRelat.getSelectedItem().equals("Unidade")) {
+						int id = cboRelatPessoa.getSelectedIndex();
+						String idString = arrayPessoa.get(id);
+						try {
+							vetorRel = daoRelatorio.atualizarTabelaUnidadeStatus(tabRelat, idString, dataInicio, dataFim,"1");
+							daoRelatorio.preencherTabela(vetorRel, tabRelat);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
+				} else {
+					JOptionPane.showMessageDialog(null, "PREENCHA O CAMPO DATA INICIO E DATA FIM", "Gordão Barbearia",
+							JOptionPane.INFORMATION_MESSAGE);
+					group.clearSelection();
+				}
 			}
 		});
 		rdbtnAtendidos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				DaoRelatorio daoRelatorio = new DaoRelatorio();
-				// pega a data selecionada
-				SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
-				String dataInicio = formatoData.format(dateChooserInicio.getDate());
-				String dataFim = formatoData.format(dateChooserFim.getDate());
 
-				if (cboTipoRelat.getSelectedItem().equals("Data")) {
-					try {
-						String idStatus = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
-						daoRelatorio.atualizarTabelaTodosStatus(tabRelat, dataInicio, dataFim, idStatus);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+				if (dateChooserInicio.getDate() != null && dateChooserFim.getDate() != null) {
+					// pega a data selecionada
+					SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+					String dataInicio = formatoData.format(dateChooserInicio.getDate());
+					String dataFim = formatoData.format(dateChooserFim.getDate());
 
-				} else if (cboTipoRelat.getSelectedItem().equals("Cliente")) {
-					int id = cboRelatPessoa.getSelectedIndex();
-					String idString = arrayPessoa.get(id);
-
-					try {
-						String status = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
-						daoRelatorio.atualizarTabelaCliStatus(tabRelat, idString, dataInicio, dataFim, status);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-				} else {
-					int id = cboRelatPessoa.getSelectedIndex();
-					String idString = arrayPessoa.get(id);
+					if (cboTipoRelat.getSelectedItem().equals("Data")) {
 						try {
-							String status = idStatus(rdbtnAgendados, rdbtnAtendidos, rdbtnCancelados, rdbtnEspera);
-							daoRelatorio.atualizarTabelaFuncStatus(tabRelat, idString, dataInicio, dataFim, status);
+							vetorRel = daoRelatorio.atualizarTabelaTodosStatus(tabRelat, dataInicio, dataFim, "2");
+							daoRelatorio.preencherTabela(vetorRel, tabRelat);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					} else if (cboTipoRelat.getSelectedItem().equals("Cliente")) {
+						int id = cboRelatPessoa.getSelectedIndex();
+						String idString = arrayPessoa.get(id);
+
+						try {
+							vetorRel = daoRelatorio.atualizarTabelaCliStatus(tabRelat, idString, dataInicio, dataFim,
+									"2");
+							daoRelatorio.preencherTabela(vetorRel, tabRelat);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					} else if (cboTipoRelat.getSelectedItem().equals("Funcionario")) {
+						int id = cboRelatPessoa.getSelectedIndex();
+						String idString = arrayPessoa.get(id);
+						try {
+							vetorRel = daoRelatorio.atualizarTabelaFuncStatus(tabRelat, idString, dataInicio, dataFim,"2");
+							daoRelatorio.preencherTabela(vetorRel, tabRelat);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					} else if (cboTipoRelat.getSelectedItem().equals("Unidade")) {
+						int id = cboRelatPessoa.getSelectedIndex();
+						String idString = arrayPessoa.get(id);
+						try {
+							vetorRel = daoRelatorio.atualizarTabelaUnidadeStatus(tabRelat, idString, dataInicio, dataFim,"2");
+							daoRelatorio.preencherTabela(vetorRel, tabRelat);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
+				} else {
+					JOptionPane.showMessageDialog(null, "PREENCHA O CAMPO DATA INICIO E DATA FIM", "Gordão Barbearia",
+							JOptionPane.INFORMATION_MESSAGE);
+					group.clearSelection();
+				}
+			}
+		});
+
+		cboRelatPessoa.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				group.clearSelection();
+			}
+		});
+		cboTipoRelat.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+
+				if (cboTipoRelat.getSelectedItem().equals("Data")) {
+					cboRelatPessoa.removeAllItems();
+					cboRelatPessoa.setEnabled(false);
+				} else if (cboTipoRelat.getSelectedItem().equals("Funcionario")) {
+					try {
+						arrayPessoa = daoRelatorio.atualizarComboFuncionario(cboRelatPessoa);
+						cboRelatPessoa.setEnabled(true);
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				} else if (cboTipoRelat.getSelectedItem().equals("Cliente")) {
+					try {
+						arrayPessoa = daoRelatorio.atualizarComboCliente(cboRelatPessoa);
+						cboRelatPessoa.setEnabled(true);
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				} else if (cboTipoRelat.getSelectedItem().equals("Unidade")) { 
+					try {
+						arrayPessoa = daoRelatorio.atualizarComboUnidade(cboRelatPessoa);
+						cboRelatPessoa.setEnabled(true);
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
+				}
+				group.clearSelection();
 			}
 		});
 		
@@ -452,22 +519,7 @@ public class FrmRelatorios {
 		DaoAgendamento daoAgendamento = new DaoAgendamento();
 		// colorir os atendimentos que estão na fila de espera
 		daoAgendamento.getNewRenderedTable(tabRelat);
-	
-	}	
-	
-		
-	
-	public static String idStatus(JRadioButton rdbtnAgend, JRadioButton rdbtnAtend, JRadioButton rdbtnCancel,
-			JRadioButton rdbtnEsp) {
 
-		if (rdbtnAgend.isSelected()) {
-			return "1";
-		} else if (rdbtnAtend.isSelected()) {
-			return "2";
-		} else if (rdbtnCancel.isSelected()) {
-			return "3";
-		} else {
-			return "4";
-		}
 	}
+
 }

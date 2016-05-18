@@ -1,4 +1,4 @@
-package objetos;
+package modelo;
 
 import java.sql.Time;
 import java.text.ParseException;
