@@ -92,9 +92,6 @@ public class DaoRelatorio {
 		con.close();
 		return arrayUnidade;
 	}
-
-		
-	
 	
 	public Vector<Relatorio> atualizarTabelaFunc(JTable tabela, String id, String dataInicio, String dataFim)
 			throws Exception {
@@ -365,11 +362,6 @@ public class DaoRelatorio {
 		con.close();
 		return vectorRelatorio;
 	}
-	
-	
-	
-	
-	
 	
 	public Vector<Relatorio> atualizarTabelaTodos(JTable tabela, String dataInicio, String dataFim) throws Exception {
 

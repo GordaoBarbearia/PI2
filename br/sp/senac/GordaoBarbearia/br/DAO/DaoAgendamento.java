@@ -7,8 +7,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.JComboBox;
 import javax.swing.JTable;
@@ -18,6 +20,7 @@ import javax.swing.table.DefaultTableModel;
 import com.toedter.calendar.JCalendar;
 
 import modelo.Agendamento;
+import modelo.Funcionario;
 import modelo.Funcoes;
 
 public class DaoAgendamento {
@@ -37,7 +40,7 @@ public class DaoAgendamento {
 		}
 	}
 
-	public boolean salvarAgendamento(Agendamento agendamento) {
+	public boolean salvarAgendamento(Agendamento agendamento) throws SQLException {
 
 		try {
 			conectar();
@@ -56,6 +59,7 @@ public class DaoAgendamento {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		con.close();
 		return false;
 	}
 
@@ -105,25 +109,39 @@ public class DaoAgendamento {
 		return arrayStatus;
 	}
 
-	public ArrayList<String> atualizarComboFuncionario(JComboBox<String> funcionario, String idUnidade)
+	public Vector<Funcionario> atualizarComboFuncionario(JComboBox<String> funcionario1, String idUnidade)
 			throws Exception {
 
-		ArrayList<String> arrayFuncionario = new ArrayList<>();
+		//ArrayList<String> arrayFuncionario = new ArrayList<>();
+		
 		ResultSet rs;
 
 		conectar();
 
-		String sql = "SELECT NOME_FUNC, ID_FUNC FROM TB_FUNCIONARIO WHERE ID_UNIDADE = '" + idUnidade + "' ";
+		String sql = "SELECT NOME_FUNC, ID_FUNC, HORA_INICIO_FUNC, HORA_FIM_FUNC FROM TB_FUNCIONARIO WHERE ID_UNIDADE = '" + idUnidade + "' ";
 
 		rs = statement.executeQuery(sql);
 
-		while (rs.next()) {
+		Vector<Funcionario> vectorFunc = new Vector<Funcionario>(); 
+				
+		while(rs.next()){
+			Funcionario funcionario = new Funcionario();
+			funcionario.setNomeFunc(rs.getString("NOME_FUNC"));
+			funcionario1.addItem(rs.getString("NOME_FUNC")); 
+			funcionario.setIdFunc(rs.getString("ID_FUNC"));
+			funcionario.setHoraInicio(rs.getString("HORA_INICIO_FUNC"));
+			funcionario.setHoraFim(rs.getString("HORA_FIM_FUNC"));
+			vectorFunc.addElement(funcionario);			
+		}
+		
+		
+		/*while (rs.next()) {
 			funcionario.addItem(rs.getString("NOME_FUNC"));
 			arrayFuncionario.add(rs.getString("ID_FUNC"));
-		}
-
+		}*/
+		
 		con.close();
-		return arrayFuncionario;
+		return vectorFunc;
 	}
 
 	public ArrayList<String> atualizarComboServicos(JComboBox<String> servicos) throws Exception {
@@ -215,6 +233,7 @@ public class DaoAgendamento {
 		Time horaInicioTime = funcoes.converterHora(horaInicio);
 		Time horaFimTime = funcoes.converterHora(horaFim);
 
+
 		conectar();
 
 		String sql = "SELECT HORA_INICIO_AGEND, HORA_FIM_AGEND FROM TB_AGENDAMENTO WHERE " + "ID_FUNC = '"
@@ -232,16 +251,33 @@ public class DaoAgendamento {
 
 			if (horaInicioTime.equals(horaI) || horaFimTime.equals(horaF)) {
 				con.close();
-				return true;
+				return false;
 
-			} else if (horaInicioTime.after(horaI) && horaInicioTime.before(horaF)
-					|| horaFimTime.after(horaI) && horaFimTime.before(horaF)) {
+			} else if (horaInicioTime.after(horaI) && horaInicioTime.before(horaF) || horaFimTime.after(horaI) && horaFimTime.before(horaF)) {
 				con.close();
-				return true;
+				return false;
 			}
 		}
 		con.close();
-		return false;
+		return true;
+	}
+	
+	public boolean verificarHorarioFunc(String horaInicio, String horaFim, String horaFuncIni, String horaFuncFim) throws ParseException, SQLException{
+		
+		System.out.println("se Inicio A "+horaInicio+ " for antes de "+horaFuncIni+ " ou inicio A for depois de "+horaFuncFim+ " não pode");
+		
+		Funcoes funcoes = new Funcoes();
+		Time horaInicioTime = funcoes.converterHora(horaInicio);
+		Time horaFimTime = funcoes.converterHora(horaFim);
+		Time horaFuncTimeIni = funcoes.converterHora(horaFuncIni);
+		Time horaFuncTimeFim = funcoes.converterHora(horaFuncFim);
+		
+		if(horaInicioTime.before(horaFuncTimeIni)||horaInicioTime.after(horaFuncTimeFim) || horaFimTime.after(horaFuncTimeFim)){
+			con.close();
+			return false;
+		}
+		con.close();
+		return true;
 	}
 	
 	
