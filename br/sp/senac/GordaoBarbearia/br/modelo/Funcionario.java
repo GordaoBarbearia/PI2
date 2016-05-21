@@ -6,8 +6,36 @@ public class Funcionario {
 	private String idFunc;
 	private String horaInicio;
 	private String horaFim;
+	private String rg;
+	private String cpf;
+	private String telefone;
+	private String idUnidade;
 	
 	
+	public String getIdUnidade() {
+		return idUnidade;
+	}
+	public void setIdUnidade(String idUnidade) {
+		this.idUnidade = idUnidade;
+	}
+	public String getRg() {
+		return rg;
+	}
+	public void setRg(String rg) {
+		this.rg = rg;
+	}
+	public String getCpf() {
+		return cpf;
+	}
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+	public String getTelefone() {
+		return telefone;
+	}
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+	}
 	public String getNomeFunc() {
 		return nomeFunc;
 	}
