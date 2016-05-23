@@ -216,35 +216,42 @@ public class FrmCadastroCliente {
 						boolean validarDulicidade = true;
 
 						boolean validarCampos = funcoes.validarCampos(txtNome, txtCpf, txtTelefone);
-
+						ValidaCpf validaCpf = new ValidaCpf();
+						boolean validarCpf = validaCpf.isCPF(cpfCli);
 						// System.out.println(testeCpf);
 
-						if (validarCampos) {
-							if (!testeCpf.equals(cpfCli)) {
-								validarDulicidade = validarDuplicidade(cpfCli);
-							}
-
-							if (validarDulicidade) {
-								boolean editar = daoClientes.editarCliente(cliente, idCliente);
-								if (editar) {
-									JOptionPane.showMessageDialog(null, "ALTERADO COM SUCESSO", "Gordão Barbearia",
-											JOptionPane.INFORMATION_MESSAGE);
-									atualizarTableCliente(tabelaNome);
-									funcoes.bloquearCampos(txtNome, txtCpf, txtTelefone);
-									funcoes.limparCampos(txtNome, txtCpf, txtTelefone);
-									btnCancelarNovo.setText("Novo");
-									btnEditar.setText("Editar");
-									btnEditar.setEnabled(false);
-									tabelaNome.setEnabled(true);
-
+						if (validarCpf) {
+							if (validarCampos) {
+								if (!testeCpf.equals(cpfCli)) {
+									validarDulicidade = validarDuplicidade(cpfCli);
 								}
+
+								if (validarDulicidade) {
+									boolean editar = daoClientes.editarCliente(cliente, idCliente);
+									if (editar) {
+										JOptionPane.showMessageDialog(null, "ALTERADO COM SUCESSO", "Gordão Barbearia",
+												JOptionPane.INFORMATION_MESSAGE);
+										atualizarTableCliente(tabelaNome);
+										funcoes.bloquearCampos(txtNome, txtCpf, txtTelefone);
+										funcoes.limparCampos(txtNome, txtCpf, txtTelefone);
+										btnCancelarNovo.setText("Novo");
+										btnEditar.setText("Editar");
+										btnEditar.setEnabled(false);
+										tabelaNome.setEnabled(true);
+
+									}
+								} else {
+									JOptionPane.showMessageDialog(null, "CPF JÁ CADASTRADO", "Gordão Barbearia",
+											JOptionPane.ERROR_MESSAGE);
+								}
+
 							} else {
-								JOptionPane.showMessageDialog(null, "CPF JÁ CADASTRADO", "Gordão Barbearia",
+								JOptionPane.showMessageDialog(null, "PREENCHA TODOS OS CAMPOS", "Gordão Barbearia",
 										JOptionPane.ERROR_MESSAGE);
 							}
 
 						} else {
-							JOptionPane.showMessageDialog(null, "PREENCHA TODOS OS CAMPOS", "Gordão Barbearia",
+							JOptionPane.showMessageDialog(null, "CPF DIGITADO INVALIDO", "Gordão Barbearia",
 									JOptionPane.ERROR_MESSAGE);
 						}
 
@@ -296,7 +303,7 @@ public class FrmCadastroCliente {
 				ValidaCpf validaCpf = new ValidaCpf();
 				boolean validarDuplicidade = false;
 				boolean validarCpf = validaCpf.isCPF(cpfCli);
-				
+
 				if (validarCpf) {
 					if (validarCampos) {
 						try {
@@ -328,7 +335,7 @@ public class FrmCadastroCliente {
 						JOptionPane.showMessageDialog(null, "PREENCHA TODOS OS CAMPOS", "Gordão Barbearia",
 								JOptionPane.ERROR_MESSAGE);
 					}
-				}else{
+				} else {
 					JOptionPane.showMessageDialog(null, "CPF DIGITADO INVALIDO", "Gordão Barbearia",
 							JOptionPane.ERROR_MESSAGE);
 				}

@@ -348,7 +348,7 @@ public class FrmAgendamento {
 
 		JLabel lblFundo = new JLabel("");
 		lblFundo.setIcon(new ImageIcon(FrmAgendamento.class.getResource("/image/Fundo_MarcaDagua_2000x1200.fw.png")));
-		lblFundo.setBounds(-12, -4, 1139, 606);
+		lblFundo.setBounds(0, -4, 1127, 606);
 		formPrincipal.getContentPane().add(lblFundo);
 
 		menuBarPrincipal = new JMenuBar();
@@ -374,6 +374,16 @@ public class FrmAgendamento {
 			}
 		});
 		mnCadastros.add(mntmClientes);
+		
+		JMenuItem mntmFuncionarios = new JMenuItem("Funcion\u00E1rios");
+		mntmFuncionarios.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FrmCadastroFuncionario frmCadastroFuncionario = new FrmCadastroFuncionario();
+				
+				frmCadastroFuncionario.formCadFunc.setVisible(true);
+			}
+		});
+		mnCadastros.add(mntmFuncionarios);
 
 		JMenu mnAgendamento = new JMenu("Relatorios");
 		menuBarPrincipal.add(mnAgendamento);
