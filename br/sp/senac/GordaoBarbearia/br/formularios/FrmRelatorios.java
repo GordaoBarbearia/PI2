@@ -8,10 +8,13 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
+
+import com.itextpdf.text.DocumentException;
 import com.toedter.calendar.JDateChooser;
 
 import DAO.DaoAgendamento;
 import DAO.DaoRelatorio;
+import modelo.ExportarPdf;
 import modelo.Relatorio;
 
 import javax.swing.JRadioButton;
@@ -20,6 +23,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 import java.awt.event.ItemListener;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -128,6 +132,33 @@ public class FrmRelatorios {
 		JLabel lblQuem = new JLabel("Quem?");
 		lblQuem.setBounds(205, 146, 142, 14);
 		frmRelatorios.getContentPane().add(lblQuem);
+		
+		JButton btnExportar = new JButton("Exportar para PDF");
+		btnExportar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				DefaultTableModel model = (DefaultTableModel) tabRelat.getModel();
+				
+				int linhas = model.getRowCount();
+				
+				if(linhas>0){
+					ExportarPdf exportarPdf = new ExportarPdf();
+					try {
+						exportarPdf.gerarPdf(vetorRel);
+					} catch (DocumentException | IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						JOptionPane.showMessageDialog(null, e, "Gordão Barbearia",
+								JOptionPane.INFORMATION_MESSAGE);
+					}
+				}else{
+					JOptionPane.showMessageDialog(null, "Não há dados para gerar o Relatório", "Gordão Barbearia",JOptionPane.INFORMATION_MESSAGE);
+				}
+
+			}
+		});
+		btnExportar.setBounds(818, 189, 211, 23);
+		frmRelatorios.getContentPane().add(btnExportar);
 
 		JDateChooser dateChooserInicio = new JDateChooser();
 		dateChooserInicio.setDateFormatString("dd/MM/yyyy");
@@ -473,7 +504,6 @@ public class FrmRelatorios {
 				}
 			}
 		});
-
 		cboRelatPessoa.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				group.clearSelection();
@@ -521,5 +551,4 @@ public class FrmRelatorios {
 		daoAgendamento.getNewRenderedTable(tabRelat);
 
 	}
-
 }
