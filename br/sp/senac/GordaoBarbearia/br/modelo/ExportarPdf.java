@@ -45,7 +45,7 @@ public class ExportarPdf {
 
 		}
 		
-		SimpleDateFormat formatoData = new SimpleDateFormat("dd-MM-yyyy");
+		SimpleDateFormat formatoData = new SimpleDateFormat("dd-MM-yyyy HH.mm.ss");
 		String data = formatoData.format(new Date());
 
 		try {
@@ -54,7 +54,7 @@ public class ExportarPdf {
 			doc = new Document(PageSize.A4.rotate());
 
 			// cria a stream de saída
-			os = new FileOutputStream("c:\\Relatorio do dia "+data+".pdf");
+			os = new FileOutputStream("c:\\Relatorio "+data+".pdf");
 			
 
 			// associa a stream de saída ao
@@ -70,7 +70,7 @@ public class ExportarPdf {
 			doc.add(img);
 			
 			//Formatando o texto do titulo e colocando ele no PDF
-			Font f = new Font(FontFamily.COURIER, 20, Font.BOLD);
+			Font f = new Font(FontFamily.COURIER, 30, Font.BOLD);
 			Paragraph titulo = new Paragraph("RELATORIO DE ATENDIMENTOS", f);
 			titulo.setAlignment(Element.ALIGN_CENTER);
 			titulo.setSpacingAfter(40);
@@ -104,8 +104,9 @@ public class ExportarPdf {
 
 			// adiciona o texto ao PDF
 			Paragraph p = new Paragraph("AGENDADOS: " + agendados + "\nATENDIDOS: " + atendidos + "\nCANCELADOS: "
-					+ cancelados + "\nEM ESPERA: " + espera+ "\n TOTAL: "+vetorRel.size());
+					+ cancelados + "\nEM ESPERA: " + espera+ "\nTOTAL: "+vetorRel.size());
 			p.setSpacingBefore(20);
+			p.setAlignment(Element.ALIGN_CENTER);
 			doc.add(p);
 
 			JOptionPane.showMessageDialog(null, "Gerado relatório em PDF na pasta C:", "Gordão Barbearia",

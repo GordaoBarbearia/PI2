@@ -31,6 +31,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
+import javax.swing.SwingConstants;
 
 public class FrmRelatorios {
 
@@ -134,6 +135,8 @@ public class FrmRelatorios {
 		frmRelatorios.getContentPane().add(lblQuem);
 		
 		JButton btnExportar = new JButton("Exportar para PDF");
+		btnExportar.setHorizontalAlignment(SwingConstants.LEFT);
+		btnExportar.setIcon(new ImageIcon(FrmRelatorios.class.getResource("/image/icone-pdf.ico")));
 		btnExportar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
@@ -157,7 +160,7 @@ public class FrmRelatorios {
 
 			}
 		});
-		btnExportar.setBounds(818, 189, 211, 23);
+		btnExportar.setBounds(829, 155, 200, 57);
 		frmRelatorios.getContentPane().add(btnExportar);
 
 		JDateChooser dateChooserInicio = new JDateChooser();
