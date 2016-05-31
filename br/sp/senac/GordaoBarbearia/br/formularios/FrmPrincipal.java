@@ -74,6 +74,7 @@ public class FrmPrincipal {
 		btnClientes.setHorizontalAlignment(SwingConstants.LEFT);
 		btnClientes.setIcon(new ImageIcon(FrmPrincipal.class.getResource("/image/1297713679_list-add-user (Custom).png")));
 		btnClientes.addActionListener(new ActionListener() {
+			//ação no botão para abrir o formulário de cadastro de cliente
 			public void actionPerformed(ActionEvent arg0) {
 
 				FrmCadastroCliente cadastroCliente;
@@ -94,8 +95,8 @@ public class FrmPrincipal {
 		btnRealizarAgendamentos.setHorizontalAlignment(SwingConstants.LEFT);
 		btnRealizarAgendamentos.setIcon(new ImageIcon(FrmPrincipal.class.getResource("/image/Calendar-icon (Custom).png")));
 		btnRealizarAgendamentos.addActionListener(new ActionListener() {
+			//ação no botão para abrir o formulário de Agendamento
 			public void actionPerformed(ActionEvent arg0) {
-
 				try {
 					FrmAgendamento frmAgendamento = new FrmAgendamento();
 					frmAgendamento.formPrincipal.setVisible(true);
@@ -114,6 +115,7 @@ public class FrmPrincipal {
 
 		JButton btnGerarReltorios = new JButton("Gerar rel\u00E1torios");
 		btnGerarReltorios.addActionListener(new ActionListener() {
+			//ação no botão para abrir o formulário de relatorio
 			public void actionPerformed(ActionEvent arg0) {
 				FrmRelatorios frmRelatorios = new FrmRelatorios();
 				frmRelatorios.frmRelatorios.setVisible(true);
@@ -123,8 +125,6 @@ public class FrmPrincipal {
 		btnGerarReltorios.setHorizontalAlignment(SwingConstants.LEFT);
 		btnGerarReltorios.setBounds(412, 208, 187, 58);
 		frmGordoBarbearia.getContentPane().add(btnGerarReltorios);
-
-		MaskFormatter maskCpf = new MaskFormatter("###.###.###-##");
 
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(FrmPrincipal.class.getResource("/br/image/Logo_entalhe_403x132.fw.png")));

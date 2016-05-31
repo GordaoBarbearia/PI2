@@ -1,5 +1,7 @@
 package modelo;
 
+import java.awt.Color;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -10,6 +12,7 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -29,10 +32,12 @@ public class ExportarPdf {
 		OutputStream os = null;
 		String caminho = System.getProperty("user.dir");
 		
+		
 		int agendados = 0;
 		int atendidos = 0;
 		int cancelados = 0;
 		int espera = 0;
+		//contar a quantidade de cada status de agendamento
 		for (int i = 0; i < vetorRel.size(); i++) {
 			Relatorio relatorio = vetorRel.get(i);
 			if (relatorio.getStatus().equals("AGENDADO")) {
@@ -47,7 +52,8 @@ public class ExportarPdf {
 
 		}
 		
-		SimpleDateFormat formatoData = new SimpleDateFormat("dd-MM-yyyy HH.mm.ss");
+		//pegando a data atual e formatando, para salvar o aquivo com data e hora
+		SimpleDateFormat formatoData = new SimpleDateFormat("dd-MM-yyyy HH.mm");
 		String data = formatoData.format(new Date());
 
 		try {
@@ -55,8 +61,8 @@ public class ExportarPdf {
 			// cria o documento tamanho A4, margens de 2,54cm
 			doc = new Document(PageSize.A4.rotate());
 
-			// cria a stream de saída
-			os = new FileOutputStream(caminho+"\\Relatorio "+data+".pdf");
+			// cria a stream de saída com a data e hora
+			os = new FileOutputStream(caminho+"\\relatorio "+data+".pdf");
 			
 
 			// associa a stream de saída ao
@@ -72,8 +78,10 @@ public class ExportarPdf {
 			doc.add(img);
 			
 			//Formatando o texto do titulo e colocando ele no PDF
-			Font f = new Font(FontFamily.COURIER, 30, Font.BOLD);
-			Paragraph titulo = new Paragraph("RELATORIO DE ATENDIMENTOS", f);
+			Font f = new Font(FontFamily.COURIER, 13, Font.BOLD);
+			Font f2 = new Font(FontFamily.COURIER, 30, Font.BOLD);
+			Font f3 = new Font(FontFamily.COURIER, 11, Font.BOLD);
+			Paragraph titulo = new Paragraph("RELATÓRIO DE ATENDIMENTOS", f2);
 			titulo.setAlignment(Element.ALIGN_CENTER);
 			titulo.setSpacingAfter(40);
 			titulo.setSpacingBefore(40);
@@ -83,12 +91,52 @@ public class ExportarPdf {
 			// 0.2f, 0.1f, 0.2f, 0.1f, 0.1f });
 
 			PdfPTable table = new PdfPTable(8);
-			//PdfPCell header = new PdfPCell(new Paragraph("RELATORIO DE ATENDIMENTOS", f));
-			//header.setVerticalAlignment(Element.ALIGN_CENTER);
+			PdfPCell header;
+			
+			//Criando o nome de cada coluna das tabelas e colorindo
+			header = new PdfPCell(new Paragraph("Data", f));
+			header.setBackgroundColor(BaseColor.YELLOW);
+			header.setVerticalAlignment(Element.ALIGN_CENTER);			
+			header.setColspan(1);
+			table.addCell(header);
+			header = new PdfPCell(new Paragraph("Inicio", f));
+			header.setBackgroundColor(BaseColor.YELLOW);
+			header.setVerticalAlignment(Element.ALIGN_CENTER);
+			header.setColspan(1);
+			table.addCell(header);
+			header = new PdfPCell(new Paragraph("Fim", f));
+			header.setBackgroundColor(BaseColor.YELLOW);
+			header.setVerticalAlignment(Element.ALIGN_CENTER);
+			header.setColspan(1);
+			table.addCell(header);
+			header = new PdfPCell(new Paragraph("Funcionário", f3));
+			header.setBackgroundColor(BaseColor.YELLOW);
+			header.setVerticalAlignment(Element.ALIGN_CENTER);
+			header.setColspan(1);
+			table.addCell(header);
+			header = new PdfPCell(new Paragraph("Cliente", f));
+			header.setBackgroundColor(BaseColor.YELLOW);
+			header.setVerticalAlignment(Element.ALIGN_CENTER);
+			header.setColspan(1);
+			table.addCell(header);
+			header = new PdfPCell(new Paragraph("Unidade", f));
+			header.setBackgroundColor(BaseColor.YELLOW);
+			header.setVerticalAlignment(Element.ALIGN_CENTER);
+			header.setColspan(1);
+			table.addCell(header);
+			header = new PdfPCell(new Paragraph("Serviços", f));
+			header.setBackgroundColor(BaseColor.YELLOW);
+			header.setVerticalAlignment(Element.ALIGN_CENTER);
+			header.setColspan(1);
+			table.addCell(header);
+			header = new PdfPCell(new Paragraph("Status", f));
+			header.setBackgroundColor(BaseColor.YELLOW);
+			header.setVerticalAlignment(Element.ALIGN_CENTER);
+			header.setColspan(1);
+			table.addCell(header);
 
-			//header.setColspan(8);
-			//table.addCell(header);
-
+			
+			
 			//preenchendo o arquivo pdf com os atendimentos
 			for (int i = 0; i < vetorRel.size(); i++) {
 				Relatorio relatorio = vetorRel.get(i);
@@ -113,6 +161,9 @@ public class ExportarPdf {
 
 			JOptionPane.showMessageDialog(null, "Gerado relatório em PDF na pasta C:", "Gordão Barbearia",
 					JOptionPane.INFORMATION_MESSAGE);
+			
+			java.awt.Desktop.getDesktop().open(new File("relatorio "+data+".pdf"));
+			
 		} finally {
 			if (doc != null) {
 				// fechamento do documento

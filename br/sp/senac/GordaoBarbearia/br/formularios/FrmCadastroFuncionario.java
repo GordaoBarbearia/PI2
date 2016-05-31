@@ -56,6 +56,7 @@ public class FrmCadastroFuncionario {
 		formCadFunc.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		formCadFunc.getContentPane().setLayout(null);
 		
+		//criação da tabela de exibição dos funcionários
 		tabelaFuncionario = new JTable(0,0);
 		tabelaFuncionario.setBounds(50,50,50,50);
 		tabelaFuncionario.setSurrendersFocusOnKeystroke(true);
@@ -94,9 +95,12 @@ public class FrmCadastroFuncionario {
 		lblFundo.setBounds(0, 0, 697, 387);
 		formCadFunc.getContentPane().add(lblFundo);
 		
+		
 		Vector<Funcionario>vetor = new Vector<>();
 		DaoFuncionario daoFuncionario = new DaoFuncionario();
+		//retorna em um vetor todos os funcionários cadastrados
 		vetor = daoFuncionario.funcionarios();
+		//preenche a tabela de funcionários com os dados
 		daoFuncionario.preencherTabela(vetor, tabelaFuncionario);
 		
 	}

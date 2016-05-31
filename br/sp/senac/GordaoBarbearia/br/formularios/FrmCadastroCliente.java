@@ -130,6 +130,7 @@ public class FrmCadastroCliente {
 		lblTelefone.setBounds(12, 203, 59, 14);
 		formCadCli.getContentPane().add(lblTelefone);
 
+		//criação da tabela de funcionarios
 		tabelaNome = new JTable(0, 0);
 		tabelaNome.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tabelaNome.setBounds(407, 111, 243, 250);
@@ -203,7 +204,7 @@ public class FrmCadastroCliente {
 						btnCancelarNovo.setText("Cancelar");
 						tabelaNome.setEnabled(false);
 						testeCpf = txtCpf.getText().replaceAll("[./-]", "");
-						// System.out.println(testeCpf);
+
 					} else {
 						String nomeCli = txtNome.getText();
 						String cpfCli = txtCpf.getText().replaceAll("[./-]", "");
@@ -218,7 +219,6 @@ public class FrmCadastroCliente {
 						boolean validarCampos = funcoes.validarCampos(txtNome, txtCpf, txtTelefone);
 						ValidaCpf validaCpf = new ValidaCpf();
 						boolean validarCpf = validaCpf.isCPF(cpfCli);
-						// System.out.println(testeCpf);
 
 						if (validarCpf) {
 							if (validarCampos) {
@@ -291,19 +291,21 @@ public class FrmCadastroCliente {
 		btnsalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
+				//pegando os dados dos campos
 				String nomeCli = txtNome.getText().toUpperCase();
 				String cpfCli = txtCpf.getText().replaceAll("[./-]", "").toUpperCase();
 				String telefoneCli = txtTelefone.getText().replaceAll("[./-]", "").toUpperCase();
 
 				Funcoes funcoes = new Funcoes();
 				boolean salvar = false;
+				//funcção para validar se os campos estão preenchidos
 				boolean validarCampos = funcoes.validarCampos(txtNome, txtCpf, txtTelefone);
 
 				DaoClientes daoClientes = new DaoClientes();
 				ValidaCpf validaCpf = new ValidaCpf();
 				boolean validarDuplicidade = false;
+				//Valida se o CPF digitado é valido
 				boolean validarCpf = validaCpf.isCPF(cpfCli);
-
 				if (validarCpf) {
 					if (validarCampos) {
 						try {
@@ -312,12 +314,14 @@ public class FrmCadastroCliente {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+						//Criando um objeto Cliente
 						Cliente cliente = new Cliente(cpfCli, nomeCli, telefoneCli);
+						//valida se já não existe o cpf digitado
 						if (validarDuplicidade) {
+							//chama a classe dao para salvar o cliente
 							salvar = daoClientes.salvarCliente(cliente);
 							if (salvar) {
-								JOptionPane.showMessageDialog(null, "CADASTRADO COM SUCESSO", "Gordão Barbearia",
-										JOptionPane.INFORMATION_MESSAGE);
+								JOptionPane.showMessageDialog(null, "CADASTRADO COM SUCESSO", "Gordão Barbearia",JOptionPane.INFORMATION_MESSAGE);
 								funcoes.limparCampos(txtNome, txtCpf, txtTelefone);
 								funcoes.bloquearCampos(txtNome, txtCpf, txtTelefone);
 								btnCancelarNovo.setText("Novo");
@@ -346,6 +350,7 @@ public class FrmCadastroCliente {
 
 	}
 
+	//função para atualizar a tabela de clientes
 	static void atualizarTableCliente(JTable tableNome) {
 		DaoClientes daoClientes = new DaoClientes();
 		try {
@@ -356,8 +361,8 @@ public class FrmCadastroCliente {
 		}
 	}
 
+	//função para não deixar cadastrar dois cpf iguais
 	static boolean validarDuplicidade(String cpf) throws SQLException {
-
 		DaoClientes daoClientes = new DaoClientes();
 		ArrayList<String> validarDupli = daoClientes.pesquisarCliente(cpf);
 		if (validarDupli.size() > 0) {
