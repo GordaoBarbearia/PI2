@@ -27,6 +27,8 @@ public class ExportarPdf {
 	public static void gerarPdf(Vector<Relatorio> vetorRel) throws DocumentException, IOException {
 		Document doc = null;
 		OutputStream os = null;
+		String caminho = System.getProperty("user.dir");
+		
 		int agendados = 0;
 		int atendidos = 0;
 		int cancelados = 0;
@@ -54,7 +56,7 @@ public class ExportarPdf {
 			doc = new Document(PageSize.A4.rotate());
 
 			// cria a stream de saída
-			os = new FileOutputStream("c:\\Relatorio "+data+".pdf");
+			os = new FileOutputStream(caminho+"\\Relatorio "+data+".pdf");
 			
 
 			// associa a stream de saída ao
@@ -64,7 +66,7 @@ public class ExportarPdf {
 			doc.open();
 
 			//pega o caminho da imagem e colocar a imagem no PDF
-			String caminho = System.getProperty("user.dir");			
+						
 			Image img = Image.getInstance(caminho+"\\br\\image\\Logo_entalhe_403x132.fw.png");
 			img.setAlignment(Element.ALIGN_CENTER);
 			doc.add(img);
