@@ -1,6 +1,8 @@
 package formularios;
 
 import java.awt.EventQueue;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Vector;
 
 import javax.swing.JFrame;
@@ -96,6 +98,7 @@ public class FrmCadastroFuncionario {
 		formCadFunc.getContentPane().add(lblFundo);
 		
 		
+				
 		Vector<Funcionario>vetor = new Vector<>();
 		DaoFuncionario daoFuncionario = new DaoFuncionario();
 		//retorna em um vetor todos os funcionários cadastrados

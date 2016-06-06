@@ -235,8 +235,8 @@ public class DaoAgendamento {
 
 		conectar();
 
-		String sql = "SELECT HORA_INICIO_AGEND, HORA_FIM_AGEND FROM TB_AGENDAMENTO WHERE " + "ID_FUNC = '"
-				+ idFuncionario + "' AND DATA_AGENDAMENTO = '" + data + "'";
+		String sql = "SELECT HORA_INICIO_AGEND, HORA_FIM_AGEND, ID_STATUS FROM TB_AGENDAMENTO WHERE " + "ID_FUNC = '"
+				+ idFuncionario + "' AND DATA_AGENDAMENTO = '" + data + "' AND ID_STATUS <> '3' AND ID_STATUS <> '2' ";
 		// AND HORA_INICIO_AGEND BETWEEN '"+horaInicio+"' AND '"+horaFim+"'";
 
 		ResultSet rs = statement.executeQuery(sql);
@@ -254,6 +254,9 @@ public class DaoAgendamento {
 
 			} else if (horaInicioTime.after(horaI) && horaInicioTime.before(horaF)
 					|| horaFimTime.after(horaI) && horaFimTime.before(horaF)) {
+				con.close();
+				return false;
+			}else if(horaInicioTime.before(horaI) && horaFimTime.after(horaF)){
 				con.close();
 				return false;
 			}

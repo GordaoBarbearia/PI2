@@ -30,8 +30,8 @@ import java.awt.Component;
 
 public class FrmPrincipal {
 
-	private JFrame frmGordoBarbearia;
-	static String consultaCpf = "";
+	static JFrame frmGordoBarbearia;
+
 
 	/**
 	 * Launch the application.
@@ -76,11 +76,11 @@ public class FrmPrincipal {
 		btnClientes.addActionListener(new ActionListener() {
 			//ação no botão para abrir o formulário de cadastro de cliente
 			public void actionPerformed(ActionEvent arg0) {
-
 				FrmCadastroCliente cadastroCliente;
 				try {
 					cadastroCliente = new FrmCadastroCliente();
 					cadastroCliente.formCadCli.setVisible(true);
+					frmGordoBarbearia.setVisible(false);
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -99,7 +99,8 @@ public class FrmPrincipal {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					FrmAgendamento frmAgendamento = new FrmAgendamento();
-					frmAgendamento.formPrincipal.setVisible(true);
+					frmAgendamento.formAgendamento.setVisible(true);
+					frmGordoBarbearia.setVisible(false);
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -118,7 +119,8 @@ public class FrmPrincipal {
 			//ação no botão para abrir o formulário de relatorio
 			public void actionPerformed(ActionEvent arg0) {
 				FrmRelatorios frmRelatorios = new FrmRelatorios();
-				frmRelatorios.frmRelatorios.setVisible(true);
+				frmRelatorios.formRelatorios.setVisible(true);
+				frmGordoBarbearia.setVisible(false);
 			}
 		});
 		btnGerarReltorios.setIcon(new ImageIcon(FrmPrincipal.class.getResource("/image/relatorio - icon (Custom).png")));
@@ -127,12 +129,13 @@ public class FrmPrincipal {
 		frmGordoBarbearia.getContentPane().add(btnGerarReltorios);
 
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(FrmPrincipal.class.getResource("/br/image/Logo_entalhe_403x132.fw.png")));
+		lblNewLabel.setIcon(new ImageIcon(FrmPrincipal.class.getResource("/image/Logo_entalhe_403x132.fw.png")));
+		
 		lblNewLabel.setBounds(97, 0, 416, 144);
 		frmGordoBarbearia.getContentPane().add(lblNewLabel);
 
 		JLabel lblFundo = new JLabel("New label");
-		lblFundo.setIcon(new ImageIcon(FrmPrincipal.class.getResource("/br/image/Fundo_MarcaDagua_G.fw.png")));
+		lblFundo.setIcon(new ImageIcon(FrmPrincipal.class.getResource("/image/Fundo_1024.png")));
 		lblFundo.setBounds(0, -23, 611, 309);
 		frmGordoBarbearia.getContentPane().add(lblFundo);
 		frmGordoBarbearia.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{frmGordoBarbearia.getContentPane()}));

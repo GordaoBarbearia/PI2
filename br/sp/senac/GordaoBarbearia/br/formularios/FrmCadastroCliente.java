@@ -26,6 +26,10 @@ import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JFormattedTextField;
 import javax.swing.ListSelectionModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class FrmCadastroCliente {
 
@@ -76,7 +80,7 @@ public class FrmCadastroCliente {
 		formCadCli = new JFrame();
 		formCadCli.setResizable(false);
 		formCadCli.setTitle("Gord\u00E3o barbearia - Clientes");
-		formCadCli.setBounds(100, 100, 573, 382);
+		formCadCli.setBounds(100, 100, 573, 388);
 		formCadCli.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		formCadCli.getContentPane().setLayout(null);
 
@@ -132,6 +136,25 @@ public class FrmCadastroCliente {
 
 		//criação da tabela de funcionarios
 		tabelaNome = new JTable(0, 0);
+		tabelaNome.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent clique) {
+				
+				if (clique.getClickCount() == 2) {					
+					String cpf = (String) tabelaNome.getModel().getValueAt(tabelaNome.getSelectedRow(), 2);
+					try {
+						FrmAgendamento frmAgendamento = new FrmAgendamento();
+						frmAgendamento.formAgendamento.setVisible(true);
+						frmAgendamento.txtCpf.setText(cpf);
+						formCadCli.setVisible(false);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
+			}
+		});
 		tabelaNome.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tabelaNome.setBounds(407, 111, 243, 250);
 		tabelaNome.setSurrendersFocusOnKeystroke(true);
@@ -155,8 +178,12 @@ public class FrmCadastroCliente {
 
 		formCadCli.getContentPane().add(tabelaNome);
 		scrollTable = new JScrollPane(tabelaNome);
-		scrollTable.setBounds(165, 108, 391, 235);
+		scrollTable.setBounds(163, 118, 391, 235);
 		formCadCli.getContentPane().add(scrollTable);
+		
+		JLabel lblCliente = new JLabel("clique duas vezes sobre o cliente para agendar um hor\u00E1rio");
+		lblCliente.setBounds(163, 102, 325, 14);
+		formCadCli.getContentPane().add(lblCliente);
 
 		JLabel lblLogoCadCli = new JLabel("");
 		lblLogoCadCli.setIcon(new ImageIcon(FrmCadastroCliente.class.getResource("/image/Logo_CadCli_240X81.png")));
@@ -345,6 +372,20 @@ public class FrmCadastroCliente {
 				}
 				atualizarTableCliente(tabelaNome);
 
+			}
+		});
+		
+		formCadCli.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				formCadCli.setVisible(false);
+				try {
+					FrmPrincipal frmPrincipal = new FrmPrincipal();
+					frmPrincipal.frmGordoBarbearia.setVisible(true);
+				} catch (java.text.ParseException f) {
+					// TODO Auto-generated catch block
+					f.printStackTrace();
+				}
 			}
 		});
 

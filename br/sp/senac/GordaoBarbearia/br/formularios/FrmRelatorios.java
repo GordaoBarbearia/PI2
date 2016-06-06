@@ -23,6 +23,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 import java.awt.event.ItemListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,7 +37,7 @@ import javax.swing.SwingConstants;
 
 public class FrmRelatorios {
 
-	static JFrame frmRelatorios;
+	static JFrame formRelatorios;
 	private JScrollPane scroll;
 	private JTable tabRelat;
 	private ArrayList<String> arrayFunc;
@@ -53,7 +55,7 @@ public class FrmRelatorios {
 			public void run() {
 				try {
 					FrmRelatorios window = new FrmRelatorios();
-					window.frmRelatorios.setVisible(true);
+					window.formRelatorios.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -73,11 +75,11 @@ public class FrmRelatorios {
 	 */
 	private void initialize() {
 
-		frmRelatorios = new JFrame();
-		frmRelatorios.setTitle("Gord\u00E3o barbearia - Relat\u00F3rios");
-		frmRelatorios.setBounds(100, 100, 1061, 682);
-		frmRelatorios.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frmRelatorios.getContentPane().setLayout(null);
+		formRelatorios = new JFrame();
+		formRelatorios.setTitle("Gord\u00E3o barbearia - Relat\u00F3rios");
+		formRelatorios.setBounds(100, 100, 1061, 682);
+		formRelatorios.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		formRelatorios.getContentPane().setLayout(null);
 
 		tabRelat = new JTable(0, 2);
 		tabRelat.setBounds(407, 111, 243, 250);
@@ -90,7 +92,7 @@ public class FrmRelatorios {
 
 		});
 
-		frmRelatorios.getContentPane().add(tabRelat);
+		formRelatorios.getContentPane().add(tabRelat);
 
 		// Bloqueia a rendenização das tabelas
 		tabRelat.getTableHeader().setResizingAllowed(false);
@@ -119,20 +121,20 @@ public class FrmRelatorios {
 		JComboBox<String> cboRelatPessoa = new JComboBox<String>();
 		cboRelatPessoa.setEnabled(false);
 		cboRelatPessoa.setBounds(198, 209, 175, 20);
-		frmRelatorios.getContentPane().add(cboRelatPessoa);
+		formRelatorios.getContentPane().add(cboRelatPessoa);
 
 		JComboBox<String> cboTipoRelat = new JComboBox<String>();
 		cboTipoRelat.setModel(new DefaultComboBoxModel(new String[] { "Data", "Cliente", "Funcionario", "Unidade" }));
 		cboTipoRelat.setBounds(13, 209, 175, 20);
-		frmRelatorios.getContentPane().add(cboTipoRelat);
+		formRelatorios.getContentPane().add(cboTipoRelat);
 
 		JLabel lblNewLabel = new JLabel("Selecione o tipo de relat\u00F3rio");
 		lblNewLabel.setBounds(13, 193, 167, 14);
-		frmRelatorios.getContentPane().add(lblNewLabel);
+		formRelatorios.getContentPane().add(lblNewLabel);
 
 		JLabel lblQuem = new JLabel("Quem?");
 		lblQuem.setBounds(198, 193, 142, 14);
-		frmRelatorios.getContentPane().add(lblQuem);
+		formRelatorios.getContentPane().add(lblQuem);
 		
 		JButton btnExportar = new JButton("Exportar para PDF");
 		btnExportar.setHorizontalAlignment(SwingConstants.LEFT);
@@ -161,54 +163,54 @@ public class FrmRelatorios {
 			}
 		});
 		btnExportar.setBounds(822, 202, 200, 57);
-		frmRelatorios.getContentPane().add(btnExportar);
+		formRelatorios.getContentPane().add(btnExportar);
 
 		JDateChooser dateChooserInicio = new JDateChooser();
 		dateChooserInicio.setDateFormatString("dd/MM/yyyy");
 		dateChooserInicio.setBounds(383, 209, 99, 20);
-		frmRelatorios.getContentPane().add(dateChooserInicio);
+		formRelatorios.getContentPane().add(dateChooserInicio);
 
 		JDateChooser dateChooserFim = new JDateChooser();
 		dateChooserFim.setDateFormatString("dd/MM/yyyy");
 		dateChooserFim.setBounds(492, 209, 99, 20);
-		frmRelatorios.getContentPane().add(dateChooserFim);
+		formRelatorios.getContentPane().add(dateChooserFim);
 
 		scroll = new JScrollPane(tabRelat);
 		scroll.setBounds(7, 270, 1015, 362);
-		frmRelatorios.getContentPane().add(scroll);
+		formRelatorios.getContentPane().add(scroll);
 
 		JLabel lblInicio = new JLabel("Inicio");
 		lblInicio.setBounds(383, 193, 70, 14);
-		frmRelatorios.getContentPane().add(lblInicio);
+		formRelatorios.getContentPane().add(lblInicio);
 
 		JLabel lblFim = new JLabel("Fim");
 		lblFim.setBounds(492, 193, 70, 14);
-		frmRelatorios.getContentPane().add(lblFim);
+		formRelatorios.getContentPane().add(lblFim);
 		
 		JLabel label = new JLabel("");
 		label.setIcon(new ImageIcon(FrmRelatorios.class.getResource("/image/logo_relatorio_476x148.png")));
 		label.setBounds(283, 0, 475, 148);
-		frmRelatorios.getContentPane().add(label);
+		formRelatorios.getContentPane().add(label);
 
 		rdbtnTodos.setBounds(6, 242, 70, 23);
-		frmRelatorios.getContentPane().add(rdbtnTodos);
+		formRelatorios.getContentPane().add(rdbtnTodos);
 
 		rdbtnAgendados.setBounds(78, 242, 92, 23);
-		frmRelatorios.getContentPane().add(rdbtnAgendados);
+		formRelatorios.getContentPane().add(rdbtnAgendados);
 
 		rdbtnAtendidos.setBounds(172, 242, 84, 23);
-		frmRelatorios.getContentPane().add(rdbtnAtendidos);
+		formRelatorios.getContentPane().add(rdbtnAtendidos);
 
 		rdbtnCancelados.setBounds(264, 242, 99, 23);
-		frmRelatorios.getContentPane().add(rdbtnCancelados);
+		formRelatorios.getContentPane().add(rdbtnCancelados);
 
 		rdbtnEspera.setBounds(365, 242, 78, 23);
-		frmRelatorios.getContentPane().add(rdbtnEspera);
+		formRelatorios.getContentPane().add(rdbtnEspera);
 
 		JLabel lblFundo = new JLabel("");
 		lblFundo.setIcon(new ImageIcon(FrmRelatorios.class.getResource("/image/Fundo_MarcaDagua_2000x1200.fw.png")));
 		lblFundo.setBounds(-5, 0, 1050, 643);
-		frmRelatorios.getContentPane().add(lblFundo);
+		formRelatorios.getContentPane().add(lblFundo);
 
 		group = new ButtonGroup();
 		group.add(rdbtnTodos);
@@ -552,7 +554,19 @@ public class FrmRelatorios {
 				group.clearSelection();
 			}
 		});
-		
+		formRelatorios.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				formRelatorios.setVisible(false);
+				try {
+					FrmPrincipal frmPrincipal = new FrmPrincipal();
+					frmPrincipal.frmGordoBarbearia.setVisible(true);
+				} catch (java.text.ParseException f) {
+					// TODO Auto-generated catch block
+					f.printStackTrace();
+				}
+			}
+		});
 		
 		DaoAgendamento daoAgendamento = new DaoAgendamento();
 		// colorir os atendimentos que estão na fila de espera

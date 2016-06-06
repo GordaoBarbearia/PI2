@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Vector;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -26,25 +25,28 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
-
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 import DAO.DaoAgendamento;
 import DAO.DaoClientes;
 import modelo.Agendamento;
 import modelo.Funcionario;
-
 import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
 import com.toedter.calendar.JCalendar;
 import java.awt.event.ItemListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.Color;
 
 public class FrmAgendamento {
 
-	static JFrame formPrincipal;
+	static JFrame formAgendamento;
 	private JScrollPane scroll;
 	private JTable tabelaAgendamento;
 	private JMenuBar menuBarPrincipal;
@@ -53,7 +55,7 @@ public class FrmAgendamento {
 	private JTextField txtCliente;
 	private JFormattedTextField txtHorarioInicio;
 	private JFormattedTextField txtHorarioFim;
-	private JFormattedTextField txtCpf;
+	static  JFormattedTextField txtCpf;
 	private ArrayList<String> arrayStatus;
 	private ArrayList<String> arrayUnidade;
 	private Vector<Funcionario> vectorFuncionario;
@@ -70,7 +72,7 @@ public class FrmAgendamento {
 			public void run() {
 				try {
 					FrmAgendamento window = new FrmAgendamento();
-					window.formPrincipal.setVisible(true);
+					window.formAgendamento.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -111,10 +113,11 @@ public class FrmAgendamento {
 		JCalendar calendar = new JCalendar();
 		// ---------------------------------------------------------------------------------------
 		// Criando Componentes
-		formPrincipal = new JFrame();
-		formPrincipal.setTitle("Gord\u00E3o barbearia - Agendamentos");
-		formPrincipal.setBounds(100, 100, 1143, 661);
-		formPrincipal.getContentPane().setLayout(null);
+		formAgendamento = new JFrame();
+		formAgendamento.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		formAgendamento.setTitle("Gord\u00E3o barbearia - Agendamentos");
+		formAgendamento.setBounds(100, 100, 1143, 661);
+		formAgendamento.getContentPane().setLayout(null);
 
 		tabelaAgendamento = new JTable(0, 2);
 		tabelaAgendamento.setBounds(407, 111, 243, 250);
@@ -127,7 +130,7 @@ public class FrmAgendamento {
 
 		});
 
-		formPrincipal.getContentPane().add(tabelaAgendamento);
+		formAgendamento.getContentPane().add(tabelaAgendamento);
 
 		// Bloqueia a rendenização das tabelas
 		tabelaAgendamento.getTableHeader().setResizingAllowed(false);
@@ -153,7 +156,7 @@ public class FrmAgendamento {
 
 		cboFuncionario.setEnabled(false);
 		cboFuncionario.setBounds(138, 246, 101, 20);
-		formPrincipal.getContentPane().add(cboFuncionario);
+		formAgendamento.getContentPane().add(cboFuncionario);
 
 		MaskFormatter maskCpf = new MaskFormatter("###.###.###-##");
 		txtCpf = new JFormattedTextField(maskCpf);
@@ -258,36 +261,36 @@ public class FrmAgendamento {
 			}
 		});
 		cboUnidade.setBounds(10, 244, 112, 20);
-		formPrincipal.getContentPane().add(cboUnidade);
+		formAgendamento.getContentPane().add(cboUnidade);
 
 		cboStatus.setEnabled(false);
 		cboStatus.setEditable(true);
 		cboStatus.setBounds(159, 291, 123, 20);
-		formPrincipal.getContentPane().add(cboStatus);
+		formAgendamento.getContentPane().add(cboStatus);
 
 		cboServico.setEnabled(false);
 		cboServico.setBounds(260, 246, 101, 20);
-		formPrincipal.getContentPane().add(cboServico);
+		formAgendamento.getContentPane().add(cboServico);
 		// txtCpf.setText(frmPrincipal.consultaCpf.toString());
 		txtCpf.setColumns(10);
 		txtCpf.setBounds(10, 200, 108, 20);
-		formPrincipal.getContentPane().add(txtCpf);
+		formAgendamento.getContentPane().add(txtCpf);
 
 		JLabel lblCpf = new JLabel("CPF");
 		lblCpf.setBounds(10, 185, 46, 14);
-		formPrincipal.getContentPane().add(lblCpf);
+		formAgendamento.getContentPane().add(lblCpf);
 
 		scroll = new JScrollPane(tabelaAgendamento);
 		scroll.setBounds(402, 259, 715, 337);
-		formPrincipal.getContentPane().add(scroll);
+		formAgendamento.getContentPane().add(scroll);
 
 		calendar.setBounds(10, 371, 370, 223);
-		formPrincipal.getContentPane().add(calendar);
+		formAgendamento.getContentPane().add(calendar);
 
 		txtCliente = new JTextField();
 		txtCliente.setEditable(false);
 		txtCliente.setBounds(138, 200, 108, 20);
-		formPrincipal.getContentPane().add(txtCliente);
+		formAgendamento.getContentPane().add(txtCliente);
 		txtCliente.setColumns(10);
 
 		MaskFormatter maskHora = new MaskFormatter("##:##");
@@ -298,66 +301,89 @@ public class FrmAgendamento {
 		txtHorarioInicio.setFocusLostBehavior(JFormattedTextField.COMMIT);
 		txtHorarioInicio.setColumns(10);
 		txtHorarioInicio.setBounds(11, 290, 50, 20);
-		formPrincipal.getContentPane().add(txtHorarioInicio);
+		formAgendamento.getContentPane().add(txtHorarioInicio);
 
 		txtHorarioFim = new JFormattedTextField(maskHora1);
 		txtHorarioFim.setEnabled(false);
 		txtHorarioFim.setFocusLostBehavior(JFormattedTextField.COMMIT);
 		txtHorarioFim.setColumns(10);
 		txtHorarioFim.setBounds(89, 291, 50, 20);
-		formPrincipal.getContentPane().add(txtHorarioFim);
+		formAgendamento.getContentPane().add(txtHorarioFim);
 
 		btnSalvar.setEnabled(false);
 		btnSalvar.setBounds(212, 337, 89, 23);
-		formPrincipal.getContentPane().add(btnSalvar);
+		formAgendamento.getContentPane().add(btnSalvar);
 
 		btnCancelar.setBounds(10, 337, 89, 23);
-		formPrincipal.getContentPane().add(btnCancelar);
+		formAgendamento.getContentPane().add(btnCancelar);
 
 		btnEditar.setEnabled(false);
 		btnEditar.setBounds(109, 337, 97, 23);
-		formPrincipal.getContentPane().add(btnEditar);
+		formAgendamento.getContentPane().add(btnEditar);
+		
+		JLabel lblPesq = new JLabel("");
+		lblPesq.setBackground(Color.YELLOW);
+		lblPesq.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {
+					FrmCadastroCliente frmCadastroCliente = new FrmCadastroCliente();
+					frmCadastroCliente.formCadCli.setVisible(true);
+				} catch (java.text.ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		
+		JButton btnNewButton = new JButton("New button");
+		btnNewButton.setBounds(314, 181, 89, 23);
+		formAgendamento.getContentPane().add(btnNewButton);
+		lblPesq.setIcon(new ImageIcon(FrmAgendamento.class.getResource("/image/procurar.png")));
+		lblPesq.setBounds(254, 197, 31, 22);
+		formAgendamento.getContentPane().add(lblPesq);
 
 		JLabel lblServicos = new JLabel("Servi\u00E7os");
 		lblServicos.setBounds(260, 231, 81, 14);
-		formPrincipal.getContentPane().add(lblServicos);
+		formAgendamento.getContentPane().add(lblServicos);
 
 		JLabel lblHorrioSaida = new JLabel("Fim");
 		lblHorrioSaida.setBounds(89, 276, 46, 14);
-		formPrincipal.getContentPane().add(lblHorrioSaida);
+		formAgendamento.getContentPane().add(lblHorrioSaida);
 
 		JLabel lblStatus = new JLabel("Status");
 		lblStatus.setBounds(159, 276, 81, 14);
-		formPrincipal.getContentPane().add(lblStatus);
+		formAgendamento.getContentPane().add(lblStatus);
 
 		JLabel lblUnidade = new JLabel("Unidade");
 		lblUnidade.setBounds(10, 229, 112, 14);
-		formPrincipal.getContentPane().add(lblUnidade);
+		formAgendamento.getContentPane().add(lblUnidade);
 
 		JLabel lblCliente = new JLabel("Cliente");
 		lblCliente.setBounds(138, 185, 46, 14);
-		formPrincipal.getContentPane().add(lblCliente);
+		formAgendamento.getContentPane().add(lblCliente);
 
 		JLabel lblHorrio = new JLabel("Inicio");
 		lblHorrio.setBounds(11, 275, 60, 14);
-		formPrincipal.getContentPane().add(lblHorrio);
+		formAgendamento.getContentPane().add(lblHorrio);
 
 		JLabel lblFuncionrio = new JLabel("Funcion\u00E1rio");
 		lblFuncionrio.setBounds(138, 231, 81, 14);
-		formPrincipal.getContentPane().add(lblFuncionrio);
+		formAgendamento.getContentPane().add(lblFuncionrio);
 
 		JLabel lblLogo = new JLabel("");
 		lblLogo.setIcon(new ImageIcon(FrmAgendamento.class.getResource("/image/Logo_entalhe_403x132.fw.png")));
 		lblLogo.setBounds(301, 3, 403, 132);
-		formPrincipal.getContentPane().add(lblLogo);
+		formAgendamento.getContentPane().add(lblLogo);
 
 		JLabel lblFundo = new JLabel("");
 		lblFundo.setIcon(new ImageIcon(FrmAgendamento.class.getResource("/image/Fundo_MarcaDagua_2000x1200.fw.png")));
 		lblFundo.setBounds(0, -4, 1127, 606);
-		formPrincipal.getContentPane().add(lblFundo);
+		formAgendamento.getContentPane().add(lblFundo);
 
 		menuBarPrincipal = new JMenuBar();
-		formPrincipal.setJMenuBar(menuBarPrincipal);
+		formAgendamento.setJMenuBar(menuBarPrincipal);
 
 		mnCadastros = new JMenu("Cadastros");
 		menuBarPrincipal.add(mnCadastros);
@@ -369,6 +395,7 @@ public class FrmAgendamento {
 				try {
 					frmCadastroCliente = new FrmCadastroCliente();
 					frmCadastroCliente.formCadCli.setVisible(true);
+					formAgendamento.setVisible(false);
 				} catch (ParseException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -397,7 +424,7 @@ public class FrmAgendamento {
 		mntmNovoAgendamento.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				FrmRelatorios frmRelatorios = new FrmRelatorios();
-				frmRelatorios.frmRelatorios.setVisible(true);
+				frmRelatorios.formRelatorios.setVisible(true);
 
 			}
 		});
@@ -670,12 +697,26 @@ public class FrmAgendamento {
 				}
 			}
 		});
-
+		formAgendamento.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				formAgendamento.setVisible(false);
+				try {
+					FrmPrincipal frmPrincipal = new FrmPrincipal();
+					frmPrincipal.frmGordoBarbearia.setVisible(true);
+				} catch (java.text.ParseException f) {
+					// TODO Auto-generated catch block
+					f.printStackTrace();
+				}
+			}
+		});
+		
+		
 		arrayUnidade = daoAgendamento.atualiazaComboUnidade(cboUnidade);
 		// colorir os atendimentos que estão na fila de espera
 		daoAgendamento.getNewRenderedTable(tabelaAgendamento);
 
-		formPrincipal.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] { txtCpf, cboUnidade,
+		formAgendamento.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] { txtCpf, cboUnidade,
 				cboFuncionario, cboServico, txtHorarioInicio, txtHorarioFim, btnSalvar, btnCancelar, btnEditar }));
 
 	}
