@@ -159,7 +159,7 @@ public class ExportarPdf {
 			p.setAlignment(Element.ALIGN_CENTER);
 			doc.add(p);
 
-			JOptionPane.showMessageDialog(null, "Gerado relatório em PDF na pasta C:", "Gordão Barbearia",
+			JOptionPane.showMessageDialog(null, "Gerado relatório em PDF", "Gordão Barbearia",
 					JOptionPane.INFORMATION_MESSAGE);
 			
 			java.awt.Desktop.getDesktop().open(new File("relatorio "+data+".pdf"));

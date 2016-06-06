@@ -43,6 +43,10 @@ import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Color;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.LineBorder;
+import java.awt.Cursor;
 
 public class FrmAgendamento {
 
@@ -114,7 +118,7 @@ public class FrmAgendamento {
 		// ---------------------------------------------------------------------------------------
 		// Criando Componentes
 		formAgendamento = new JFrame();
-		formAgendamento.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		formAgendamento.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		formAgendamento.setTitle("Gord\u00E3o barbearia - Agendamentos");
 		formAgendamento.setBounds(100, 100, 1143, 661);
 		formAgendamento.getContentPane().setLayout(null);
@@ -320,29 +324,24 @@ public class FrmAgendamento {
 		btnEditar.setEnabled(false);
 		btnEditar.setBounds(109, 337, 97, 23);
 		formAgendamento.getContentPane().add(btnEditar);
-		
-		JLabel lblPesq = new JLabel("");
-		lblPesq.setBackground(Color.YELLOW);
-		lblPesq.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+
+		JButton btnNewButton = new JButton("");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
 				try {
 					FrmCadastroCliente frmCadastroCliente = new FrmCadastroCliente();
 					frmCadastroCliente.formCadCli.setVisible(true);
+					formAgendamento.setVisible(false);
 				} catch (java.text.ParseException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
 			}
 		});
-		
-		JButton btnNewButton = new JButton("New button");
-		btnNewButton.setBounds(314, 181, 89, 23);
+		btnNewButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		btnNewButton.setIcon(new ImageIcon(FrmAgendamento.class.getResource("/image/procurar.png")));
+		btnNewButton.setBounds(250, 198, 46, 23);
 		formAgendamento.getContentPane().add(btnNewButton);
-		lblPesq.setIcon(new ImageIcon(FrmAgendamento.class.getResource("/image/procurar.png")));
-		lblPesq.setBounds(254, 197, 31, 22);
-		formAgendamento.getContentPane().add(lblPesq);
 
 		JLabel lblServicos = new JLabel("Servi\u00E7os");
 		lblServicos.setBounds(260, 231, 81, 14);

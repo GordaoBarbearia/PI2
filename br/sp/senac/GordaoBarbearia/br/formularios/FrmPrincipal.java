@@ -128,13 +128,13 @@ public class FrmPrincipal {
 		btnGerarReltorios.setBounds(412, 208, 187, 58);
 		frmGordoBarbearia.getContentPane().add(btnGerarReltorios);
 
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(FrmPrincipal.class.getResource("/image/Logo_entalhe_403x132.fw.png")));
+		JLabel lblLogo = new JLabel("");
+		lblLogo.setIcon(new ImageIcon(FrmPrincipal.class.getResource("/image/Logo_entalhe_403x132.fw.png")));
 		
-		lblNewLabel.setBounds(97, 0, 416, 144);
-		frmGordoBarbearia.getContentPane().add(lblNewLabel);
+		lblLogo.setBounds(97, 0, 416, 144);
+		frmGordoBarbearia.getContentPane().add(lblLogo);
 
-		JLabel lblFundo = new JLabel("New label");
+		JLabel lblFundo = new JLabel("");
 		lblFundo.setIcon(new ImageIcon(FrmPrincipal.class.getResource("/image/Fundo_1024.png")));
 		lblFundo.setBounds(0, -23, 611, 309);
 		frmGordoBarbearia.getContentPane().add(lblFundo);
