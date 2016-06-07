@@ -129,15 +129,9 @@ public class FrmRelatorios {
 		JLabel lblNewLabel = new JLabel("Selecione o tipo de relat\u00F3rio");
 		lblNewLabel.setBounds(13, 177, 167, 14);
 		formRelatorios.getContentPane().add(lblNewLabel);
-<<<<<<< HEAD
 
-		JLabel lblQuem = new JLabel("Selecione o periodo");
-		lblQuem.setBounds(198, 177, 165, 14);
-=======
-		JLabel lblQuem = new JLabel("Quem?");
-		lblQuem.setBounds(198, 193, 142, 14);
->>>>>>> b029260c1e1019707f8b7af7780d2a9f0034c007
-		formRelatorios.getContentPane().add(lblQuem);
+
+
 		JButton btnExportar = new JButton("Exportar para PDF");
 		btnExportar.setHorizontalAlignment(SwingConstants.LEFT);
 		btnExportar.setIcon(new ImageIcon(FrmRelatorios.class.getResource("/image/icone-pdf.ico")));
@@ -220,6 +214,8 @@ public class FrmRelatorios {
 		group.add(rdbtnAtendidos);
 		group.add(rdbtnCancelados);
 		group.add(rdbtnEspera);
+		
+		JLabel lblQuem = new JLabel("Selecione o periodo");
 
 		rdbtnTodos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -580,6 +576,10 @@ public class FrmRelatorios {
 		JLabel lblSelecioneOStatus = new JLabel("Selecione o Status");
 		lblSelecioneOStatus.setBounds(13, 224, 167, 14);
 		formRelatorios.getContentPane().add(lblSelecioneOStatus);
+		
+
+		lblQuem.setBounds(197, 177, 143, 14);
+		formRelatorios.getContentPane().add(lblQuem);
 
 	}
 }
