@@ -48,6 +48,10 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import java.awt.Cursor;
 
+/**
+* @author NH2
+*/
+
 public class FrmAgendamento {
 
 	static JFrame formAgendamento;
@@ -140,7 +144,6 @@ public class FrmAgendamento {
 		tabelaAgendamento.getTableHeader().setResizingAllowed(false);
 		// Bloqueia a reordenação das tabelas
 		tabelaAgendamento.getTableHeader().setReorderingAllowed(false);
-
 		tabelaAgendamento.getColumnModel().getColumn(0).setPreferredWidth(70);
 		tabelaAgendamento.getColumnModel().getColumn(1).setPreferredWidth(50);
 		tabelaAgendamento.getColumnModel().getColumn(2).setPreferredWidth(50);
@@ -152,11 +155,9 @@ public class FrmAgendamento {
 		tabelaAgendamento.getColumnModel().getColumn(8).setMaxWidth(50);
 		tabelaAgendamento.getColumnModel().getColumn(8).setMinWidth(50);
 		tabelaAgendamento.getTableHeader().getColumnModel().getColumn(8).setMaxWidth(50);
-		
 		tabelaAgendamento.getColumnModel().getColumn(9).setMaxWidth(0);
 		tabelaAgendamento.getColumnModel().getColumn(9).setMinWidth(0);
 		tabelaAgendamento.getTableHeader().getColumnModel().getColumn(9).setMaxWidth(0);
-		
 
 		cboFuncionario.setEnabled(false);
 		cboFuncionario.setBounds(138, 246, 101, 20);
@@ -252,9 +253,7 @@ public class FrmAgendamento {
 							cboFuncionario.removeAllItems();
 							int posicaoArray = cboUnidade.getSelectedIndex();
 							String idUnidade = arrayUnidade.get(posicaoArray);
-
 							vectorFuncionario = daoAgendamento.atualizarComboFuncionario(cboFuncionario, idUnidade);
-
 						}
 					}
 
@@ -558,7 +557,7 @@ public class FrmAgendamento {
 									daoAgendamento.salvarAgendamento(agendamento);
 									daoAgendamento.atualizarTabela(tabelaAgendamento, calendar);
 									JOptionPane.showMessageDialog(null, "AGENDADO COM SUCESSO", "Gordão Barbearia",
-											JOptionPane.INFORMATION_MESSAGE);
+									JOptionPane.INFORMATION_MESSAGE);
 									cboFuncionario.setEnabled(false);
 									cboServico.setEnabled(false);
 									cboStatus.setEnabled(false);
@@ -717,6 +716,5 @@ public class FrmAgendamento {
 
 		formAgendamento.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] { txtCpf, cboUnidade,
 				cboFuncionario, cboServico, txtHorarioInicio, txtHorarioFim, btnSalvar, btnCancelar, btnEditar }));
-
 	}
 }

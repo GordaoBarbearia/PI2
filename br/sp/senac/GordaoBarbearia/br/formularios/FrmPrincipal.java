@@ -1,18 +1,14 @@
 package formularios;
 
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
-
 import com.sun.corba.se.pept.transport.Connection;
-
 import DAO.DaoClientes;
-
 import java.awt.event.ActionListener;
 import java.beans.Statement;
 import java.sql.PreparedStatement;
@@ -27,6 +23,10 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 import java.awt.Component;
+
+/**
+* @author NH2
+*/
 
 public class FrmPrincipal {
 

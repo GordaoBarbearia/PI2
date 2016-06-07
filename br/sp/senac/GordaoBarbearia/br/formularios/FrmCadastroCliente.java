@@ -1,7 +1,6 @@
 package formularios;
 
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -16,7 +15,6 @@ import DAO.DaoClientes;
 import modelo.Cliente;
 import modelo.Funcoes;
 import modelo.ValidaCpf;
-
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
@@ -30,6 +28,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
+/**
+* @author NH2
+*/
 
 public class FrmCadastroCliente {
 
@@ -162,7 +164,6 @@ public class FrmCadastroCliente {
 			public boolean isCellEditable(int row, int col) {
 				return false;
 			}
-
 		});
 
 		tabelaNome.getTableHeader().setReorderingAllowed(false);
@@ -170,7 +171,6 @@ public class FrmCadastroCliente {
 		tabelaNome.getColumnModel().getColumn(1).setResizable(false);
 		tabelaNome.getColumnModel().getColumn(2).setResizable(false);
 		tabelaNome.getColumnModel().getColumn(3).setResizable(false);
-
 		tabelaNome.getColumnModel().getColumn(0).setMaxWidth(50);
 		tabelaNome.getColumnModel().getColumn(1).setMaxWidth(130);
 		tabelaNome.getColumnModel().getColumn(2).setMaxWidth(110);
@@ -343,7 +343,7 @@ public class FrmCadastroCliente {
 						}
 						//Criando um objeto Cliente
 						Cliente cliente = new Cliente(cpfCli, nomeCli, telefoneCli);
-						//valida se já não existe o cpf digitado
+						//valida se ja não existe o cpf digitado
 						if (validarDuplicidade) {
 							//chama a classe dao para salvar o cliente
 							salvar = daoClientes.salvarCliente(cliente);
@@ -410,6 +410,5 @@ public class FrmCadastroCliente {
 			return false;
 		}
 		return true;
-
 	}
 }

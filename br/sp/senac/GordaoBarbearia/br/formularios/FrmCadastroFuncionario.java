@@ -4,7 +4,6 @@ import java.awt.EventQueue;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Vector;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -12,11 +11,13 @@ import javax.swing.JTable;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-
 import DAO.DaoFuncionario;
 import modelo.Funcionario;
-
 import javax.swing.JButton;
+
+/**
+* @author NH2
+*/
 
 public class FrmCadastroFuncionario {
 
@@ -84,7 +85,6 @@ public class FrmCadastroFuncionario {
 		scrollTabelaFuncionario = new JScrollPane(tabelaFuncionario);
 		scrollTabelaFuncionario.setBounds(10,116,678,260);
 		
-
 		formCadFunc.getContentPane().add(scrollTabelaFuncionario);
 		
 		JLabel lblLogoCadFunc = new JLabel("");
@@ -96,8 +96,6 @@ public class FrmCadastroFuncionario {
 		lblFundo.setIcon(new ImageIcon(FrmCadastroFuncionario.class.getResource("/image/Fundo_MarcaDagua_G.fw.png")));
 		lblFundo.setBounds(0, 0, 697, 387);
 		formCadFunc.getContentPane().add(lblFundo);
-		
-		
 				
 		Vector<Funcionario>vetor = new Vector<>();
 		DaoFuncionario daoFuncionario = new DaoFuncionario();

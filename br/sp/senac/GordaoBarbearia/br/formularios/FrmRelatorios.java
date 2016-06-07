@@ -1,22 +1,18 @@
 package formularios;
 
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
-
 import com.itextpdf.text.DocumentException;
 import com.toedter.calendar.JDateChooser;
-
 import DAO.DaoAgendamento;
 import DAO.DaoRelatorio;
 import modelo.ExportarPdf;
 import modelo.Relatorio;
-
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -34,6 +30,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
+
+/**
+* @author NH2
+*/
 
 public class FrmRelatorios {
 
@@ -117,25 +117,20 @@ public class FrmRelatorios {
 		JRadioButton rdbtnAtendidos = new JRadioButton("Atendidos");
 		JRadioButton rdbtnAgendados = new JRadioButton("Agendados");
 		JRadioButton rdbtnTodos = new JRadioButton("Todos");
-
 		JComboBox<String> cboRelatPessoa = new JComboBox<String>();
 		cboRelatPessoa.setEnabled(false);
 		cboRelatPessoa.setBounds(198, 209, 175, 20);
 		formRelatorios.getContentPane().add(cboRelatPessoa);
-
 		JComboBox<String> cboTipoRelat = new JComboBox<String>();
 		cboTipoRelat.setModel(new DefaultComboBoxModel(new String[] { "Data", "Cliente", "Funcionario", "Unidade" }));
 		cboTipoRelat.setBounds(13, 209, 175, 20);
 		formRelatorios.getContentPane().add(cboTipoRelat);
-
 		JLabel lblNewLabel = new JLabel("Selecione o tipo de relat\u00F3rio");
 		lblNewLabel.setBounds(13, 193, 167, 14);
 		formRelatorios.getContentPane().add(lblNewLabel);
-
 		JLabel lblQuem = new JLabel("Quem?");
 		lblQuem.setBounds(198, 193, 142, 14);
 		formRelatorios.getContentPane().add(lblQuem);
-		
 		JButton btnExportar = new JButton("Exportar para PDF");
 		btnExportar.setHorizontalAlignment(SwingConstants.LEFT);
 		btnExportar.setIcon(new ImageIcon(FrmRelatorios.class.getResource("/image/icone-pdf.ico")));
