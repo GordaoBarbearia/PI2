@@ -76,8 +76,9 @@ public class FrmRelatorios {
 	private void initialize() {
 
 		formRelatorios = new JFrame();
+		formRelatorios.setResizable(false);
 		formRelatorios.setTitle("Gord\u00E3o barbearia - Relat\u00F3rios");
-		formRelatorios.setBounds(100, 100, 1061, 682);
+		formRelatorios.setBounds(100, 100, 1044, 682);
 		formRelatorios.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		formRelatorios.getContentPane().setLayout(null);
 
@@ -119,17 +120,23 @@ public class FrmRelatorios {
 		JRadioButton rdbtnTodos = new JRadioButton("Todos");
 		JComboBox<String> cboRelatPessoa = new JComboBox<String>();
 		cboRelatPessoa.setEnabled(false);
-		cboRelatPessoa.setBounds(198, 209, 175, 20);
+		cboRelatPessoa.setBounds(198, 193, 175, 20);
 		formRelatorios.getContentPane().add(cboRelatPessoa);
 		JComboBox<String> cboTipoRelat = new JComboBox<String>();
 		cboTipoRelat.setModel(new DefaultComboBoxModel(new String[] { "Data", "Cliente", "Funcionario", "Unidade" }));
-		cboTipoRelat.setBounds(13, 209, 175, 20);
+		cboTipoRelat.setBounds(13, 193, 175, 20);
 		formRelatorios.getContentPane().add(cboTipoRelat);
 		JLabel lblNewLabel = new JLabel("Selecione o tipo de relat\u00F3rio");
-		lblNewLabel.setBounds(13, 193, 167, 14);
+		lblNewLabel.setBounds(13, 177, 167, 14);
 		formRelatorios.getContentPane().add(lblNewLabel);
+<<<<<<< HEAD
+
+		JLabel lblQuem = new JLabel("Selecione o periodo");
+		lblQuem.setBounds(198, 177, 165, 14);
+=======
 		JLabel lblQuem = new JLabel("Quem?");
 		lblQuem.setBounds(198, 193, 142, 14);
+>>>>>>> b029260c1e1019707f8b7af7780d2a9f0034c007
 		formRelatorios.getContentPane().add(lblQuem);
 		JButton btnExportar = new JButton("Exportar para PDF");
 		btnExportar.setHorizontalAlignment(SwingConstants.LEFT);
@@ -157,17 +164,17 @@ public class FrmRelatorios {
 
 			}
 		});
-		btnExportar.setBounds(822, 202, 200, 57);
+		btnExportar.setBounds(822, 193, 200, 57);
 		formRelatorios.getContentPane().add(btnExportar);
 
 		JDateChooser dateChooserInicio = new JDateChooser();
 		dateChooserInicio.setDateFormatString("dd/MM/yyyy");
-		dateChooserInicio.setBounds(383, 209, 99, 20);
+		dateChooserInicio.setBounds(383, 193, 99, 20);
 		formRelatorios.getContentPane().add(dateChooserInicio);
 
 		JDateChooser dateChooserFim = new JDateChooser();
 		dateChooserFim.setDateFormatString("dd/MM/yyyy");
-		dateChooserFim.setBounds(492, 209, 99, 20);
+		dateChooserFim.setBounds(492, 193, 99, 20);
 		formRelatorios.getContentPane().add(dateChooserFim);
 
 		scroll = new JScrollPane(tabRelat);
@@ -175,11 +182,11 @@ public class FrmRelatorios {
 		formRelatorios.getContentPane().add(scroll);
 
 		JLabel lblInicio = new JLabel("Inicio");
-		lblInicio.setBounds(383, 193, 70, 14);
+		lblInicio.setBounds(383, 177, 70, 14);
 		formRelatorios.getContentPane().add(lblInicio);
 
 		JLabel lblFim = new JLabel("Fim");
-		lblFim.setBounds(492, 193, 70, 14);
+		lblFim.setBounds(492, 177, 70, 14);
 		formRelatorios.getContentPane().add(lblFim);
 		
 		JLabel label = new JLabel("");
@@ -520,6 +527,7 @@ public class FrmRelatorios {
 				if (cboTipoRelat.getSelectedItem().equals("Data")) {
 					cboRelatPessoa.removeAllItems();
 					cboRelatPessoa.setEnabled(false);
+					lblQuem.setText("Selecione o periodo");
 				} else if (cboTipoRelat.getSelectedItem().equals("Funcionario")) {
 					try {
 						arrayPessoa = daoRelatorio.atualizarComboFuncionario(cboRelatPessoa);
@@ -528,6 +536,7 @@ public class FrmRelatorios {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
+					lblQuem.setText("Selecione o Funcionário");
 				} else if (cboTipoRelat.getSelectedItem().equals("Cliente")) {
 					try {
 						arrayPessoa = daoRelatorio.atualizarComboCliente(cboRelatPessoa);
@@ -536,6 +545,7 @@ public class FrmRelatorios {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
+					lblQuem.setText("Selecione o Cliente");
 				} else if (cboTipoRelat.getSelectedItem().equals("Unidade")) { 
 					try {
 						arrayPessoa = daoRelatorio.atualizarComboUnidade(cboRelatPessoa);
@@ -544,7 +554,7 @@ public class FrmRelatorios {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-
+					lblQuem.setText("Selecione a Unidade");
 				}
 				group.clearSelection();
 			}
@@ -566,6 +576,10 @@ public class FrmRelatorios {
 		DaoAgendamento daoAgendamento = new DaoAgendamento();
 		// colorir os atendimentos que estão na fila de espera
 		daoAgendamento.getNewRenderedTable(tabRelat);
+		
+		JLabel lblSelecioneOStatus = new JLabel("Selecione o Status");
+		lblSelecioneOStatus.setBounds(13, 224, 167, 14);
+		formRelatorios.getContentPane().add(lblSelecioneOStatus);
 
 	}
 }

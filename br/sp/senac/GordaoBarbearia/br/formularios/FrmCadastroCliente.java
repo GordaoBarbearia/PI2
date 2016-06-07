@@ -182,7 +182,7 @@ public class FrmCadastroCliente {
 		formCadCli.getContentPane().add(scrollTable);
 		
 		JLabel lblCliente = new JLabel("clique duas vezes sobre o cliente para agendar um hor\u00E1rio");
-		lblCliente.setBounds(163, 102, 325, 14);
+		lblCliente.setBounds(163, 102, 379, 14);
 		formCadCli.getContentPane().add(lblCliente);
 
 		JLabel lblLogoCadCli = new JLabel("");

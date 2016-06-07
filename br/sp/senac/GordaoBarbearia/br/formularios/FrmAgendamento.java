@@ -47,6 +47,7 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import java.awt.Cursor;
+import java.awt.Font;
 
 /**
 * @author NH2
@@ -122,9 +123,10 @@ public class FrmAgendamento {
 		// ---------------------------------------------------------------------------------------
 		// Criando Componentes
 		formAgendamento = new JFrame();
+		formAgendamento.setResizable(false);
 		formAgendamento.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		formAgendamento.setTitle("Gord\u00E3o barbearia - Agendamentos");
-		formAgendamento.setBounds(100, 100, 1143, 661);
+		formAgendamento.setBounds(100, 100, 1134, 713);
 		formAgendamento.getContentPane().setLayout(null);
 
 		tabelaAgendamento = new JTable(0, 2);
@@ -160,7 +162,7 @@ public class FrmAgendamento {
 		tabelaAgendamento.getTableHeader().getColumnModel().getColumn(9).setMaxWidth(0);
 
 		cboFuncionario.setEnabled(false);
-		cboFuncionario.setBounds(138, 246, 101, 20);
+		cboFuncionario.setBounds(150, 295, 101, 20);
 		formAgendamento.getContentPane().add(cboFuncionario);
 
 		MaskFormatter maskCpf = new MaskFormatter("###.###.###-##");
@@ -263,36 +265,36 @@ public class FrmAgendamento {
 				}
 			}
 		});
-		cboUnidade.setBounds(10, 244, 112, 20);
+		cboUnidade.setBounds(10, 293, 112, 20);
 		formAgendamento.getContentPane().add(cboUnidade);
 
 		cboStatus.setEnabled(false);
 		cboStatus.setEditable(true);
-		cboStatus.setBounds(159, 291, 123, 20);
+		cboStatus.setBounds(149, 340, 123, 20);
 		formAgendamento.getContentPane().add(cboStatus);
 
 		cboServico.setEnabled(false);
-		cboServico.setBounds(260, 246, 101, 20);
+		cboServico.setBounds(273, 295, 101, 20);
 		formAgendamento.getContentPane().add(cboServico);
 		// txtCpf.setText(frmPrincipal.consultaCpf.toString());
 		txtCpf.setColumns(10);
-		txtCpf.setBounds(10, 200, 108, 20);
+		txtCpf.setBounds(10, 249, 108, 20);
 		formAgendamento.getContentPane().add(txtCpf);
 
-		JLabel lblCpf = new JLabel("CPF");
-		lblCpf.setBounds(10, 185, 46, 14);
+		JLabel lblCpf = new JLabel("CPF do cliente");
+		lblCpf.setBounds(10, 234, 101, 14);
 		formAgendamento.getContentPane().add(lblCpf);
 
 		scroll = new JScrollPane(tabelaAgendamento);
-		scroll.setBounds(402, 259, 715, 337);
+		scroll.setBounds(402, 308, 715, 337);
 		formAgendamento.getContentPane().add(scroll);
 
-		calendar.setBounds(10, 371, 370, 223);
+		calendar.setBounds(10, 420, 370, 223);
 		formAgendamento.getContentPane().add(calendar);
 
 		txtCliente = new JTextField();
 		txtCliente.setEditable(false);
-		txtCliente.setBounds(138, 200, 108, 20);
+		txtCliente.setBounds(148, 249, 108, 20);
 		formAgendamento.getContentPane().add(txtCliente);
 		txtCliente.setColumns(10);
 
@@ -303,29 +305,30 @@ public class FrmAgendamento {
 		txtHorarioInicio.setEnabled(false);
 		txtHorarioInicio.setFocusLostBehavior(JFormattedTextField.COMMIT);
 		txtHorarioInicio.setColumns(10);
-		txtHorarioInicio.setBounds(11, 290, 50, 20);
+		txtHorarioInicio.setBounds(11, 339, 50, 20);
 		formAgendamento.getContentPane().add(txtHorarioInicio);
 
 		txtHorarioFim = new JFormattedTextField(maskHora1);
 		txtHorarioFim.setEnabled(false);
 		txtHorarioFim.setFocusLostBehavior(JFormattedTextField.COMMIT);
 		txtHorarioFim.setColumns(10);
-		txtHorarioFim.setBounds(89, 291, 50, 20);
+		txtHorarioFim.setBounds(71, 340, 50, 20);
 		formAgendamento.getContentPane().add(txtHorarioFim);
 
 		btnSalvar.setEnabled(false);
-		btnSalvar.setBounds(212, 337, 89, 23);
+		btnSalvar.setBounds(212, 386, 89, 23);
 		formAgendamento.getContentPane().add(btnSalvar);
 
-		btnCancelar.setBounds(10, 337, 89, 23);
+		btnCancelar.setBounds(10, 386, 89, 23);
 		formAgendamento.getContentPane().add(btnCancelar);
 
 		btnEditar.setEnabled(false);
-		btnEditar.setBounds(109, 337, 97, 23);
+		btnEditar.setBounds(109, 386, 97, 23);
 		formAgendamento.getContentPane().add(btnEditar);
 
-		JButton btnNewButton = new JButton("");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton pesqCli = new JButton("");
+		pesqCli.setToolTipText("Selecionar cliente");
+		pesqCli.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					FrmCadastroCliente frmCadastroCliente = new FrmCadastroCliente();
@@ -337,37 +340,42 @@ public class FrmAgendamento {
 				}
 			}
 		});
-		btnNewButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-		btnNewButton.setIcon(new ImageIcon(FrmAgendamento.class.getResource("/image/procurar.png")));
-		btnNewButton.setBounds(250, 198, 46, 23);
-		formAgendamento.getContentPane().add(btnNewButton);
+		pesqCli.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		pesqCli.setIcon(new ImageIcon(FrmAgendamento.class.getResource("/image/procurar.png")));
+		pesqCli.setBounds(271, 247, 103, 23);
+		formAgendamento.getContentPane().add(pesqCli);
+		
+		JLabel lblDigiteOCpf = new JLabel("Digite o CPF do cliente e pressione ENTER, ou clique na Lupa para pesquisar por nome");
+		lblDigiteOCpf.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lblDigiteOCpf.setBounds(10, 176, 497, 14);
+		formAgendamento.getContentPane().add(lblDigiteOCpf);
 
 		JLabel lblServicos = new JLabel("Servi\u00E7os");
-		lblServicos.setBounds(260, 231, 81, 14);
+		lblServicos.setBounds(273, 280, 81, 14);
 		formAgendamento.getContentPane().add(lblServicos);
 
 		JLabel lblHorrioSaida = new JLabel("Fim");
-		lblHorrioSaida.setBounds(89, 276, 46, 14);
+		lblHorrioSaida.setBounds(71, 325, 46, 14);
 		formAgendamento.getContentPane().add(lblHorrioSaida);
 
 		JLabel lblStatus = new JLabel("Status");
-		lblStatus.setBounds(159, 276, 81, 14);
+		lblStatus.setBounds(149, 325, 81, 14);
 		formAgendamento.getContentPane().add(lblStatus);
 
 		JLabel lblUnidade = new JLabel("Unidade");
-		lblUnidade.setBounds(10, 229, 112, 14);
+		lblUnidade.setBounds(10, 278, 112, 14);
 		formAgendamento.getContentPane().add(lblUnidade);
 
-		JLabel lblCliente = new JLabel("Cliente");
-		lblCliente.setBounds(138, 185, 46, 14);
+		JLabel lblCliente = new JLabel("Nome do cliente");
+		lblCliente.setBounds(148, 234, 103, 14);
 		formAgendamento.getContentPane().add(lblCliente);
 
 		JLabel lblHorrio = new JLabel("Inicio");
-		lblHorrio.setBounds(11, 275, 60, 14);
+		lblHorrio.setBounds(11, 324, 60, 14);
 		formAgendamento.getContentPane().add(lblHorrio);
 
 		JLabel lblFuncionrio = new JLabel("Funcion\u00E1rio");
-		lblFuncionrio.setBounds(138, 231, 81, 14);
+		lblFuncionrio.setBounds(150, 280, 81, 14);
 		formAgendamento.getContentPane().add(lblFuncionrio);
 
 		JLabel lblLogo = new JLabel("");
@@ -376,8 +384,9 @@ public class FrmAgendamento {
 		formAgendamento.getContentPane().add(lblLogo);
 
 		JLabel lblFundo = new JLabel("");
+		lblFundo.setToolTipText("");
 		lblFundo.setIcon(new ImageIcon(FrmAgendamento.class.getResource("/image/Fundo_MarcaDagua_2000x1200.fw.png")));
-		lblFundo.setBounds(0, -4, 1127, 606);
+		lblFundo.setBounds(-7, -4, 1144, 667);
 		formAgendamento.getContentPane().add(lblFundo);
 
 		menuBarPrincipal = new JMenuBar();
