@@ -267,7 +267,7 @@ public class FrmRelatorios {
 						}
 					}
 				} else {
-					JOptionPane.showMessageDialog(null, "PREENCHA O CAMPO DATA INICIO E DATA FIM", "Gordão Barbearia",
+					JOptionPane.showMessageDialog(null, "Preencha os campos data inicio e data fim", "Gordão Barbearia",
 							JOptionPane.INFORMATION_MESSAGE);
 					group.clearSelection();
 				}
@@ -329,7 +329,7 @@ public class FrmRelatorios {
 					}
 
 				} else {
-					JOptionPane.showMessageDialog(null, "PREENCHA O CAMPO DATA INICIO E DATA FIM", "Gordão Barbearia",
+					JOptionPane.showMessageDialog(null, "Preencha os campos data inicio e data fim", "Gordão Barbearia",
 							JOptionPane.INFORMATION_MESSAGE);
 					group.clearSelection();
 				}
@@ -388,7 +388,7 @@ public class FrmRelatorios {
 						}
 					}
 				} else {
-					JOptionPane.showMessageDialog(null, "PREENCHA O CAMPO DATA INICIO E DATA FIM", "Gordão Barbearia",
+					JOptionPane.showMessageDialog(null, "Preencha os campos data inicio e data fim", "Gordão Barbearia",
 							JOptionPane.INFORMATION_MESSAGE);
 					group.clearSelection();
 				}
@@ -447,7 +447,7 @@ public class FrmRelatorios {
 						}
 					}
 				} else {
-					JOptionPane.showMessageDialog(null, "PREENCHA O CAMPO DATA INICIO E DATA FIM", "Gordão Barbearia",
+					JOptionPane.showMessageDialog(null, "Preencha os campos data inicio e data fim", "Gordão Barbearia",
 							JOptionPane.INFORMATION_MESSAGE);
 					group.clearSelection();
 				}
@@ -506,7 +506,7 @@ public class FrmRelatorios {
 						}
 					}
 				} else {
-					JOptionPane.showMessageDialog(null, "PREENCHA O CAMPO DATA INICIO E DATA FIM", "Gordão Barbearia",
+					JOptionPane.showMessageDialog(null, "Preencha os campos data inicio e data fim", "Gordão Barbearia",
 							JOptionPane.INFORMATION_MESSAGE);
 					group.clearSelection();
 				}

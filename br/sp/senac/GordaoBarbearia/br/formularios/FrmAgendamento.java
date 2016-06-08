@@ -4,9 +4,12 @@ import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import java.sql.SQLException;
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Vector;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -30,6 +33,7 @@ import DAO.DaoAgendamento;
 import DAO.DaoClientes;
 import modelo.Agendamento;
 import modelo.Funcionario;
+import modelo.Funcoes;
 import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
 import com.toedter.calendar.JCalendar;
 import java.awt.event.ItemListener;
@@ -50,8 +54,8 @@ import java.awt.Cursor;
 import java.awt.Font;
 
 /**
-* @author NH2
-*/
+ * @author NH2
+ */
 
 public class FrmAgendamento {
 
@@ -64,13 +68,14 @@ public class FrmAgendamento {
 	private JTextField txtCliente;
 	private JFormattedTextField txtHorarioInicio;
 	private JFormattedTextField txtHorarioFim;
-	static  JFormattedTextField txtCpf;
+	static JFormattedTextField txtCpf;
 	private ArrayList<String> arrayStatus;
 	private ArrayList<String> arrayUnidade;
 	private Vector<Funcionario> vectorFuncionario;
 	private ArrayList<String> arrayServicos;
 	private String idCliente;
 	DaoAgendamento daoAgendamento = new DaoAgendamento();
+	Funcoes funcoes = new Funcoes();
 
 	/**
 	 * Launch the application.
@@ -133,7 +138,7 @@ public class FrmAgendamento {
 		tabelaAgendamento.setBounds(407, 111, 243, 250);
 		tabelaAgendamento.setSurrendersFocusOnKeystroke(true);
 		tabelaAgendamento.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "DATA", "INICIO", "FINAL",
-				"FUNCIONÁRIO", "CLIENTE", "UNIDADE", "SERVIÇO", "STATUS", "ID","" }) {
+				"FUNCIONÁRIO", "CLIENTE", "UNIDADE", "SERVIÇO", "STATUS", "ID", "" }) {
 			public boolean isCellEditable(int row, int col) {
 				return false;
 			}
@@ -344,8 +349,9 @@ public class FrmAgendamento {
 		pesqCli.setIcon(new ImageIcon(FrmAgendamento.class.getResource("/image/procurar.png")));
 		pesqCli.setBounds(271, 247, 103, 23);
 		formAgendamento.getContentPane().add(pesqCli);
-		
-		JLabel lblDigiteOCpf = new JLabel("Digite o CPF do cliente e pressione ENTER, ou clique na Lupa para pesquisar por nome");
+
+		JLabel lblDigiteOCpf = new JLabel(
+				"Digite o CPF do cliente e pressione ENTER, ou clique na Lupa para pesquisar por nome");
 		lblDigiteOCpf.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		lblDigiteOCpf.setBounds(10, 176, 497, 14);
 		formAgendamento.getContentPane().add(lblDigiteOCpf);
@@ -413,12 +419,12 @@ public class FrmAgendamento {
 			}
 		});
 		mnCadastros.add(mntmClientes);
-		
+
 		JMenuItem mntmFuncionarios = new JMenuItem("Funcion\u00E1rios");
 		mntmFuncionarios.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				FrmCadastroFuncionario frmCadastroFuncionario = new FrmCadastroFuncionario();
-				
+
 				frmCadastroFuncionario.formCadFunc.setVisible(true);
 			}
 		});
@@ -447,18 +453,26 @@ public class FrmAgendamento {
 					if (tabelaAgendamento.getSelectedRow() >= 0) {
 						cboFuncionario.removeAllItems();
 						btnEditar.setEnabled(true);
-					/*	txtHorarioInicio.setText((String) tabelaAgendamento.getModel()
-								.getValueAt(tabelaAgendamento.getSelectedRow(), 1));
-						txtHorarioFim.setText((String) tabelaAgendamento.getModel()
-								.getValueAt(tabelaAgendamento.getSelectedRow(), 2));
-						cboFuncionario.addItem((String) tabelaAgendamento.getModel()
-								.getValueAt(tabelaAgendamento.getSelectedRow(), 3));
-						txtCliente.setText((String) tabelaAgendamento.getModel()
-								.getValueAt(tabelaAgendamento.getSelectedRow(), 4));
-						System.out.println((String) tabelaAgendamento.getModel()
-								.getValueAt(tabelaAgendamento.getSelectedRow(), 5));
-						cboServico.addItem((String) tabelaAgendamento.getModel()
-								.getValueAt(tabelaAgendamento.getSelectedRow(), 6));*/
+						/*
+						 * txtHorarioInicio.setText((String)
+						 * tabelaAgendamento.getModel()
+						 * .getValueAt(tabelaAgendamento.getSelectedRow(), 1));
+						 * txtHorarioFim.setText((String)
+						 * tabelaAgendamento.getModel()
+						 * .getValueAt(tabelaAgendamento.getSelectedRow(), 2));
+						 * cboFuncionario.addItem((String)
+						 * tabelaAgendamento.getModel()
+						 * .getValueAt(tabelaAgendamento.getSelectedRow(), 3));
+						 * txtCliente.setText((String)
+						 * tabelaAgendamento.getModel()
+						 * .getValueAt(tabelaAgendamento.getSelectedRow(), 4));
+						 * System.out.println((String)
+						 * tabelaAgendamento.getModel()
+						 * .getValueAt(tabelaAgendamento.getSelectedRow(), 5));
+						 * cboServico.addItem((String)
+						 * tabelaAgendamento.getModel()
+						 * .getValueAt(tabelaAgendamento.getSelectedRow(), 6));
+						 */
 						cboStatus.addItem((String) tabelaAgendamento.getModel()
 								.getValueAt(tabelaAgendamento.getSelectedRow(), 7));
 					}
@@ -469,15 +483,44 @@ public class FrmAgendamento {
 			public void propertyChange(PropertyChangeEvent arg0) {
 				btnEditar.setEnabled(false);
 				tabelaAgendamento.clearSelection();
-				/*cboFuncionario.removeAllItems();
-				cboUnidade.removeAllItems();
-				cboStatus.removeAllItems();
-				cboServico.removeAllItems();
-				txtHorarioInicio.setText("");
-				txtHorarioFim.setText("");
-				txtCpf.setText("");
-				txtCliente.setText("");*/
+				/*
+				 * cboFuncionario.removeAllItems(); cboUnidade.removeAllItems();
+				 * cboStatus.removeAllItems(); cboServico.removeAllItems();
+				 * txtHorarioInicio.setText(""); txtHorarioFim.setText("");
+				 * txtCpf.setText(""); txtCliente.setText("");
+				 */
 
+				try {
+					String dataCalendario = null;
+					SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+					dataCalendario = formatoData.format(calendar.getDate());
+
+					// pegando a data atual do sistema em string e convertendo
+					// para date no formato dia mes ano
+					String dataAtualString = formatoData.format(new Date());
+					Date dataAtual = formatoData.parse(dataAtualString);
+
+					// funcao para converter string em data
+					Date dataSelecionada = funcoes.converterData(dataCalendario);
+
+					// comparando se a data atual é igual ou maior que a data
+					// selecionada no FORM,
+					// para impedir de realizar um agendamento na data passada
+					if (dataAtual.after(dataSelecionada)) {
+						txtCpf.setEnabled(false);
+						pesqCli.setEnabled(false);
+					} else if (dataAtual.equals(dataSelecionada)) {
+						txtCpf.setEnabled(true);
+						pesqCli.setEnabled(true);
+					} else {
+						txtCpf.setEnabled(true);
+						pesqCli.setEnabled(true);
+					}
+
+				} catch (java.text.ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				try {
 					daoAgendamento.atualizarTabela(tabelaAgendamento, calendar);
 				} catch (Exception e) {
@@ -514,22 +557,34 @@ public class FrmAgendamento {
 				txtHorarioFim.setText("");
 				txtCpf.setText("");
 				txtCliente.setText("");
-
 				idCliente = "";
 
 			}
 		});
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (txtHorarioInicio.getText().equals(txtHorarioFim.getText())) {
-					JOptionPane.showMessageDialog(null,
-							"HORÁRIO DE FINAL, NÃO PODE SER IGUAL OU MENOR DO QUE O HORÁRIO DE INICIO",
-							"Gordão Barbearia", JOptionPane.INFORMATION_MESSAGE);
+
+				try {
+					String horaInicioString = txtHorarioInicio.getText();
+					String horaFimString = txtHorarioFim.getText();
+					Time horaInicioTime;
+					horaInicioTime = funcoes.converterHora(horaInicioString);
+					Time horaFimTime = funcoes.converterHora(horaFimString);
+					Time horaAtual = funcoes.horaAtual();
+
+				if (horaInicioTime.equals(horaFimTime)) {
+					JOptionPane.showMessageDialog(null," Favor verificar se horário final não esta igual ao horário de inicio","Gordão Barbearia", JOptionPane.INFORMATION_MESSAGE);
+					txtHorarioFim.setText("");
+				}else if(horaFimTime.before(horaInicioTime)){
+					JOptionPane.showMessageDialog(null,"Favor verificar se horário final não esta menor que horário de inicio","Gordão Barbearia", JOptionPane.INFORMATION_MESSAGE);
+					txtHorarioFim.setText("");
+				}else if(horaInicioTime.before(horaAtual)){
+					JOptionPane.showMessageDialog(null,"Favor verificar se horário de inicio não esta menor que horário atual","Gordão Barbearia", JOptionPane.INFORMATION_MESSAGE);
 					txtHorarioFim.setText("");
 				} else {
 					if (cboFuncionario.getSelectedItem() != null && txtHorarioInicio.getText().trim().length() == 5
 							&& txtHorarioFim.getText().trim().length() == 5) {
-						try {
+
 							int codFuncionario = cboFuncionario.getSelectedIndex();
 							String funcionario = vectorFuncionario.get(codFuncionario).getIdFunc();
 
@@ -565,8 +620,8 @@ public class FrmAgendamento {
 								if (validarHorario) {
 									daoAgendamento.salvarAgendamento(agendamento);
 									daoAgendamento.atualizarTabela(tabelaAgendamento, calendar);
-									JOptionPane.showMessageDialog(null, "AGENDADO COM SUCESSO", "Gordão Barbearia",
-									JOptionPane.INFORMATION_MESSAGE);
+									JOptionPane.showMessageDialog(null, "Agendado com sucesso!", "Gordão Barbearia",
+											JOptionPane.INFORMATION_MESSAGE);
 									cboFuncionario.setEnabled(false);
 									cboServico.setEnabled(false);
 									cboStatus.setEnabled(false);
@@ -586,21 +641,22 @@ public class FrmAgendamento {
 									idCliente = "";
 									tabelaAgendamento.setEnabled(true);
 								} else {
-									JOptionPane.showMessageDialog(null, "HORÁRIO INDISPONÍVEL", "Gordão Barbearia",
+									JOptionPane.showMessageDialog(null, "Horário indisponível", "Gordão Barbearia",
 											JOptionPane.INFORMATION_MESSAGE);
 								}
 							} else {
-								JOptionPane.showMessageDialog(null, "HORÁRIO FORA DO ATENDIMENTO DO FUNCIONÁRIO",
+								JOptionPane.showMessageDialog(null, "Horário fora do atendimento do funcionário",
 										"Gordão Barbearia", JOptionPane.INFORMATION_MESSAGE);
 							}
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+
 					} else {
-						JOptionPane.showMessageDialog(null, "PREENCHA TODOS OS CAMPOS", "Gordão Barbearia",
+						JOptionPane.showMessageDialog(null, "Preencha todos os campos", "Gordão Barbearia",
 								JOptionPane.INFORMATION_MESSAGE);
 					}
+				}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		});
@@ -612,20 +668,20 @@ public class FrmAgendamento {
 					tabelaAgendamento.setEnabled(false);
 					try {
 						arrayStatus = daoAgendamento.atualiazaComboStatus(cboStatus);
-						//daoAgendamento.atualiazaComboUnidade(cboUnidade);
-						//daoAgendamento.atualizarComboServicos(cboServico);
+						// daoAgendamento.atualiazaComboUnidade(cboUnidade);
+						// daoAgendamento.atualizarComboServicos(cboServico);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					cboStatus.setEnabled(true);
 					btnCancelar.setEnabled(true);
-					/*cboFuncionario.setEnabled(true);
-					cboServico.setEnabled(true);
-					cboUnidade.setEnabled(true);
-					txtHorarioInicio.setEnabled(true);
-					txtHorarioFim.setEnabled(true);
-					*/
+					/*
+					 * cboFuncionario.setEnabled(true);
+					 * cboServico.setEnabled(true); cboUnidade.setEnabled(true);
+					 * txtHorarioInicio.setEnabled(true);
+					 * txtHorarioFim.setEnabled(true);
+					 */
 
 				} else {
 					int codStatus = cboStatus.getSelectedIndex();
@@ -634,72 +690,76 @@ public class FrmAgendamento {
 							.getValueAt(tabelaAgendamento.getSelectedRow(), 1);
 					String horaFim = (String) tabelaAgendamento.getModel()
 							.getValueAt(tabelaAgendamento.getSelectedRow(), 2);
-	
+
 					String dataCalendario = null;
 					SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
 					dataCalendario = formatoData.format(calendar.getDate());
 					boolean validarHorario = true;
 					if (nomeStatus.equalsIgnoreCase("AGENDADO")) {
-						
+
 						String funcionario = (String) tabelaAgendamento.getModel()
 								.getValueAt(tabelaAgendamento.getSelectedRow(), 9);
 						try {
-							validarHorario = daoAgendamento.verificarDisponibilidade(funcionario, dataCalendario, horaInicio, horaFim);
+							validarHorario = daoAgendamento.verificarDisponibilidade(funcionario, dataCalendario,
+									horaInicio, horaFim);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
 					if (validarHorario) {
-					try {
-						daoAgendamento.atualiazaComboStatus(cboStatus);
-						/*daoAgendamento.atualiazaComboUnidade(cboUnidade);
-						daoAgendamento.atualizarComboServicos(cboServico);*/
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					int statusAgend = Integer.parseInt(arrayStatus.get(codStatus));
-					btnEditar.setText("Editar");
-					cboStatus.setEnabled(false);
-					tabelaAgendamento.setEnabled(true);
-					btnCancelar.setEnabled(false);
-					int idAgend = Integer.parseInt(((String) tabelaAgendamento.getModel()
-							.getValueAt(tabelaAgendamento.getSelectedRow(), 8)));
-					System.out.println(idAgend);
-					
-					boolean updateAgend = false;
-					try {
-						updateAgend = daoAgendamento.atualizarStatus(idAgend, statusAgend);
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					if (updateAgend) {
-						JOptionPane.showMessageDialog(null, "STATUS ATUALIZADO COM SUCESSO", "Gordão Barbearia",
-								JOptionPane.INFORMATION_MESSAGE);
-						btnEditar.setEnabled(false);
+						try {
+							daoAgendamento.atualiazaComboStatus(cboStatus);
+							/*
+							 * daoAgendamento.atualiazaComboUnidade(cboUnidade);
+							 * daoAgendamento.atualizarComboServicos(cboServico)
+							 * ;
+							 */
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						int statusAgend = Integer.parseInt(arrayStatus.get(codStatus));
+						btnEditar.setText("Editar");
+						cboStatus.setEnabled(false);
+						tabelaAgendamento.setEnabled(true);
+						btnCancelar.setEnabled(false);
+						int idAgend = Integer.parseInt(((String) tabelaAgendamento.getModel()
+								.getValueAt(tabelaAgendamento.getSelectedRow(), 8)));
+						System.out.println(idAgend);
+
+						boolean updateAgend = false;
+						try {
+							updateAgend = daoAgendamento.atualizarStatus(idAgend, statusAgend);
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						if (updateAgend) {
+							JOptionPane.showMessageDialog(null, "Status atualizado com sucesso", "Gordão Barbearia",
+									JOptionPane.INFORMATION_MESSAGE);
+							btnEditar.setEnabled(false);
+						} else {
+							JOptionPane.showMessageDialog(null, "Status não atualizado", "Gordão Barbearia",
+									JOptionPane.ERROR_MESSAGE);
+						}
+						try {
+							daoAgendamento.atualizarTabela(tabelaAgendamento, calendar);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+						/*
+						 * cboFuncionario.setEnabled(false);
+						 * cboServico.setEnabled(false);
+						 * cboUnidade.setEnabled(false);
+						 * txtHorarioInicio.setEnabled(false);
+						 * txtHorarioFim.setEnabled(false);
+						 */
 					} else {
-						JOptionPane.showMessageDialog(null, "STATUS NÃO ATUALIZADO", "Gordão Barbearia",
-								JOptionPane.ERROR_MESSAGE);
-					}
-					try {
-						daoAgendamento.atualizarTabela(tabelaAgendamento, calendar);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-					/*cboFuncionario.setEnabled(false);
-					cboServico.setEnabled(false);
-					cboUnidade.setEnabled(false);
-					txtHorarioInicio.setEnabled(false);
-					txtHorarioFim.setEnabled(false);
-					*/
-				}
-					else {
-						JOptionPane.showMessageDialog(null, "FUNCIONARIO JÁ POSSUI AGENDAMENTO PARA ESSE HORARIO", "Gordão Barbearia",
-								JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Funcionário já possui agendamento para esse horário",
+								"Gordão Barbearia", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}
@@ -717,8 +777,7 @@ public class FrmAgendamento {
 				}
 			}
 		});
-		
-		
+
 		arrayUnidade = daoAgendamento.atualiazaComboUnidade(cboUnidade);
 		// colorir os atendimentos que estão na fila de espera
 		daoAgendamento.getNewRenderedTable(tabelaAgendamento);

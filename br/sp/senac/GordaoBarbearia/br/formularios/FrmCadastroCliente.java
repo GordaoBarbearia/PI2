@@ -256,7 +256,7 @@ public class FrmCadastroCliente {
 								if (validarDulicidade) {
 									boolean editar = daoClientes.editarCliente(cliente, idCliente);
 									if (editar) {
-										JOptionPane.showMessageDialog(null, "ALTERADO COM SUCESSO", "Gordão Barbearia",
+										JOptionPane.showMessageDialog(null, "Alterado com sucesso", "Gordão Barbearia",
 												JOptionPane.INFORMATION_MESSAGE);
 										atualizarTableCliente(tabelaNome);
 										funcoes.bloquearCampos(txtNome, txtCpf, txtTelefone);
@@ -268,17 +268,17 @@ public class FrmCadastroCliente {
 
 									}
 								} else {
-									JOptionPane.showMessageDialog(null, "CPF JÁ CADASTRADO", "Gordão Barbearia",
+									JOptionPane.showMessageDialog(null, "CPF já cadastrado", "Gordão Barbearia",
 											JOptionPane.ERROR_MESSAGE);
 								}
 
 							} else {
-								JOptionPane.showMessageDialog(null, "PREENCHA TODOS OS CAMPOS", "Gordão Barbearia",
+								JOptionPane.showMessageDialog(null, "Preencha todos os campos", "Gordão Barbearia",
 										JOptionPane.ERROR_MESSAGE);
 							}
 
 						} else {
-							JOptionPane.showMessageDialog(null, "CPF DIGITADO INVALIDO", "Gordão Barbearia",
+							JOptionPane.showMessageDialog(null, "CPF digitado inválido", "Gordão Barbearia",
 									JOptionPane.ERROR_MESSAGE);
 						}
 
@@ -348,14 +348,14 @@ public class FrmCadastroCliente {
 							//chama a classe dao para salvar o cliente
 							salvar = daoClientes.salvarCliente(cliente);
 							if (salvar) {
-								JOptionPane.showMessageDialog(null, "CADASTRADO COM SUCESSO", "Gordão Barbearia",JOptionPane.INFORMATION_MESSAGE);
+								JOptionPane.showMessageDialog(null, "Cadastrado com sucesso", "Gordão Barbearia",JOptionPane.INFORMATION_MESSAGE);
 								funcoes.limparCampos(txtNome, txtCpf, txtTelefone);
 								funcoes.bloquearCampos(txtNome, txtCpf, txtTelefone);
 								btnCancelarNovo.setText("Novo");
 								btnsalvar.setEnabled(false);
 								tabelaNome.setEnabled(true);
 							} else {
-								JOptionPane.showMessageDialog(null, "ERRO AO EFETUAR O CADASTRO", "Gordão Barbearia",
+								JOptionPane.showMessageDialog(null, "Erro ao efetuar cadastro", "Gordão Barbearia",
 										JOptionPane.INFORMATION_MESSAGE);
 							}
 						} else {
@@ -363,11 +363,11 @@ public class FrmCadastroCliente {
 									JOptionPane.ERROR_MESSAGE);
 						}
 					} else {
-						JOptionPane.showMessageDialog(null, "PREENCHA TODOS OS CAMPOS", "Gordão Barbearia",
+						JOptionPane.showMessageDialog(null, "Preencha todos os campos", "Gordão Barbearia",
 								JOptionPane.ERROR_MESSAGE);
 					}
 				} else {
-					JOptionPane.showMessageDialog(null, "CPF DIGITADO INVALIDO", "Gordão Barbearia",
+					JOptionPane.showMessageDialog(null, "CPF digitado inválido", "Gordão Barbearia",
 							JOptionPane.ERROR_MESSAGE);
 				}
 				atualizarTableCliente(tabelaNome);

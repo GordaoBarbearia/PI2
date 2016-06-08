@@ -30,6 +30,15 @@ public class Funcoes {
 		Time horaTime = new Time(hora.getTime());		
 		return horaTime;
 	}
+	
+	public Time horaAtual() throws ParseException{		
+		SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm");
+		String horaAtual = formatoHora.format(new Date());
+		Date horaAtualDate = formatoHora.parse(horaAtual);
+		Time hrAtual = new Time(horaAtualDate.getTime());		
+		return hrAtual;
+	}
+	
 
 	public void limparCampos(JTextField txtNome, JFormattedTextField txtCpf, JTextField txtTelefone) {
 		txtNome.setText("");
