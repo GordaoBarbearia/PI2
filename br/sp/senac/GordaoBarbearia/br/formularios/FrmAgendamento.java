@@ -131,7 +131,7 @@ public class FrmAgendamento {
 		formAgendamento.setTitle("Gord\u00E3o barbearia - Agendamentos");
 		formAgendamento.setBounds(100, 100, 1134, 713);
 		formAgendamento.getContentPane().setLayout(null);
-
+		// criando tabela de agendamentos
 		tabelaAgendamento = new JTable(0, 2);
 		tabelaAgendamento.setBounds(407, 111, 243, 250);
 		tabelaAgendamento.setSurrendersFocusOnKeystroke(true);
@@ -207,7 +207,7 @@ public class FrmAgendamento {
 					// informa
 					// que não possui cadastro para aquele cliente
 					if (pesquisaCliente.size() > 0) {
-
+						
 						txtCliente.setText(pesquisaCliente.get(1).toString());
 						idCliente = pesquisaCliente.get(0).toString();
 						btnSalvar.setEnabled(true);
@@ -223,7 +223,8 @@ public class FrmAgendamento {
 						arrayServicos = daoAgendamento.atualizarComboServicos(cboServico);
 						cboStatus.setSelectedIndex(0);
 						btnCancelar.setEnabled(true);
-
+						
+						// verifica que o cliente nao é cadastrado, e pede se deseja cadastrar 
 					} else {
 						int confirmacao = JOptionPane.showConfirmDialog(null,
 								"CLIENTE NÃO CADASTRADO, DESEJA CADASTRA-LO?", "Gordão Barbearia",
@@ -249,6 +250,8 @@ public class FrmAgendamento {
 			}
 		});
 		cboUnidade.addItemListener(new ItemListener() {
+			
+			// seleciona a unidade e para fazer o preenchimento dos funcionarios
 			public void itemStateChanged(ItemEvent arg0) {
 				try {
 					if (cboUnidade.getSelectedItem() != null) {
@@ -279,7 +282,6 @@ public class FrmAgendamento {
 		cboServico.setEnabled(false);
 		cboServico.setBounds(273, 295, 101, 20);
 		formAgendamento.getContentPane().add(cboServico);
-		// txtCpf.setText(frmPrincipal.consultaCpf.toString());
 		txtCpf.setColumns(10);
 		txtCpf.setBounds(10, 249, 108, 20);
 		formAgendamento.getContentPane().add(txtCpf);
@@ -330,6 +332,8 @@ public class FrmAgendamento {
 		formAgendamento.getContentPane().add(btnEditar);
 
 		JButton pesqCli = new JButton("");
+		
+		
 		pesqCli.setToolTipText("Selecionar cliente");
 		pesqCli.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -398,7 +402,8 @@ public class FrmAgendamento {
 
 		mnCadastros = new JMenu("Cadastros");
 		menuBarPrincipal.add(mnCadastros);
-
+		
+		// leva o usuario, da tela de agendamentos para a tela de clientes
 		mntmClientes = new JMenuItem("Clientes");
 		mntmClientes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -451,26 +456,6 @@ public class FrmAgendamento {
 					if (tabelaAgendamento.getSelectedRow() >= 0) {
 						cboFuncionario.removeAllItems();
 						btnEditar.setEnabled(true);
-						/*
-						 * txtHorarioInicio.setText((String)
-						 * tabelaAgendamento.getModel()
-						 * .getValueAt(tabelaAgendamento.getSelectedRow(), 1));
-						 * txtHorarioFim.setText((String)
-						 * tabelaAgendamento.getModel()
-						 * .getValueAt(tabelaAgendamento.getSelectedRow(), 2));
-						 * cboFuncionario.addItem((String)
-						 * tabelaAgendamento.getModel()
-						 * .getValueAt(tabelaAgendamento.getSelectedRow(), 3));
-						 * txtCliente.setText((String)
-						 * tabelaAgendamento.getModel()
-						 * .getValueAt(tabelaAgendamento.getSelectedRow(), 4));
-						 * System.out.println((String)
-						 * tabelaAgendamento.getModel()
-						 * .getValueAt(tabelaAgendamento.getSelectedRow(), 5));
-						 * cboServico.addItem((String)
-						 * tabelaAgendamento.getModel()
-						 * .getValueAt(tabelaAgendamento.getSelectedRow(), 6));
-						 */
 						cboStatus.addItem((String) tabelaAgendamento.getModel()
 								.getValueAt(tabelaAgendamento.getSelectedRow(), 7));
 					}
@@ -581,7 +566,7 @@ public class FrmAgendamento {
 					// funcao para converter string em data
 					Date dataSelecionada = funcoes.converterData(dataCalendario);
 
-
+					
 				if (horaInicioTime.equals(horaFimTime)) {
 					JOptionPane.showMessageDialog(null," Favor verificar se horário final não esta igual ao horário de inicio","Gordão Barbearia", JOptionPane.INFORMATION_MESSAGE);
 					txtHorarioFim.setText("");
@@ -667,6 +652,8 @@ public class FrmAgendamento {
 				}
 			}
 		});
+		
+		// editar agendamento, btnEditar troca o texto
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
@@ -675,20 +662,13 @@ public class FrmAgendamento {
 					tabelaAgendamento.setEnabled(false);
 					try {
 						arrayStatus = daoAgendamento.atualiazaComboStatus(cboStatus);
-						// daoAgendamento.atualiazaComboUnidade(cboUnidade);
-						// daoAgendamento.atualizarComboServicos(cboServico);
+
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					cboStatus.setEnabled(true);
 					btnCancelar.setEnabled(true);
-					/*
-					 * cboFuncionario.setEnabled(true);
-					 * cboServico.setEnabled(true); cboUnidade.setEnabled(true);
-					 * txtHorarioInicio.setEnabled(true);
-					 * txtHorarioFim.setEnabled(true);
-					 */
 
 				} else {
 					int codStatus = cboStatus.getSelectedIndex();
@@ -717,11 +697,6 @@ public class FrmAgendamento {
 					if (validarHorario) {
 						try {
 							daoAgendamento.atualiazaComboStatus(cboStatus);
-							/*
-							 * daoAgendamento.atualiazaComboUnidade(cboUnidade);
-							 * daoAgendamento.atualizarComboServicos(cboServico)
-							 * ;
-							 */
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -757,13 +732,6 @@ public class FrmAgendamento {
 							e.printStackTrace();
 						}
 
-						/*
-						 * cboFuncionario.setEnabled(false);
-						 * cboServico.setEnabled(false);
-						 * cboUnidade.setEnabled(false);
-						 * txtHorarioInicio.setEnabled(false);
-						 * txtHorarioFim.setEnabled(false);
-						 */
 					} else {
 						JOptionPane.showMessageDialog(null, "Funcionário já possui agendamento para esse horário",
 								"Gordão Barbearia", JOptionPane.ERROR_MESSAGE);

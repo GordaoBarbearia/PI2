@@ -24,18 +24,6 @@ public class Agendamento {
 		this.horaInicioAgendmento = horaInicioAgendmento;
 		this.horaFimAgendamento = horaFimAgendamento;
 	}
-	/*
-	public Agendamento(String idAgendamento, String idFuncionario, String idCliente, String idStatus, String idServico,
-			String dataAgendamento, String horaInicioAgendmento, String horaFimAgendamento) {
-			
-		this.idFuncionario = idFuncionario;
-		this.idCliente = idCliente;
-		this.idStatus = idStatus;
-		this.idServico = idServico;
-		this.dataAgendamento = dataAgendamento;
-		this.horaInicioAgendmento = horaInicioAgendmento;
-		this.horaFimAgendamento = horaFimAgendamento;
-	}*/
 
 	public String getIdFuncionario() {
 		return idFuncionario;

@@ -99,7 +99,7 @@ public class DaoClientes {
 			model.removeRow(0);
 		}
 		conectar();
-		String sql = "SELECT * FROM TB_CLIENTE";
+		String sql = "SELECT ID_CLIENTE, NOME_CLI,TELEFONE_CLI,CPF_CLI FROM TB_CLIENTE ORDER BY NOME_CLI ";
 		ResultSet result = statement.executeQuery(sql);
 		while (result.next()) {
 

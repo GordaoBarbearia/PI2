@@ -140,6 +140,7 @@ public class FrmCadastroCliente {
 		tabelaNome = new JTable(0, 0);
 		tabelaNome.addMouseListener(new MouseAdapter() {
 			@Override
+			// se clicar duas vezes no cliente, abre o formulario de agendamento com o CPF ja preenchido
 			public void mouseClicked(MouseEvent clique) {
 				
 				if (clique.getClickCount() == 2) {					
@@ -157,6 +158,9 @@ public class FrmCadastroCliente {
 				}
 			}
 		});
+		
+		// definições da tabela
+		
 		tabelaNome.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tabelaNome.setBounds(407, 111, 243, 250);
 		tabelaNome.setSurrendersFocusOnKeystroke(true);
@@ -165,7 +169,7 @@ public class FrmCadastroCliente {
 				return false;
 			}
 		});
-
+		
 		tabelaNome.getTableHeader().setReorderingAllowed(false);
 		tabelaNome.getColumnModel().getColumn(0).setResizable(false);
 		tabelaNome.getColumnModel().getColumn(1).setResizable(false);
@@ -200,6 +204,8 @@ public class FrmCadastroCliente {
 			@Override
 			public void valueChanged(ListSelectionEvent arg0) {
 				// TODO Auto-generated method stub
+				// quando seleciona um cliente ele é preenchido no txt, todos os dados
+				
 				btnEditar.setEnabled(true);
 				DefaultTableModel model = (DefaultTableModel) tabelaNome.getModel();
 
@@ -220,6 +226,8 @@ public class FrmCadastroCliente {
 
 			}
 		});
+		
+		
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
@@ -246,13 +254,15 @@ public class FrmCadastroCliente {
 						boolean validarCampos = funcoes.validarCampos(txtNome, txtCpf, txtTelefone);
 						ValidaCpf validaCpf = new ValidaCpf();
 						boolean validarCpf = validaCpf.isCPF(cpfCli);
-
+						
+						
+						// validar cpf, para verificar se é valido
 						if (validarCpf) {
 							if (validarCampos) {
 								if (!testeCpf.equals(cpfCli)) {
 									validarDulicidade = validarDuplicidade(cpfCli);
 								}
-
+						// validar duplicidade: verificar se tem algum cliente cadastrado, com cpf igual
 								if (validarDulicidade) {
 									boolean editar = daoClientes.editarCliente(cliente, idCliente);
 									if (editar) {
@@ -289,6 +299,7 @@ public class FrmCadastroCliente {
 				}
 			}
 		});
+			// cancelar o cadastro de cliente que esta sendo realizado
 		btnCancelarNovo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Funcoes funcoes = new Funcoes();

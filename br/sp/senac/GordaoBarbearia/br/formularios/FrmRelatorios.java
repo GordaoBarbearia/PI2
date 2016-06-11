@@ -131,7 +131,7 @@ public class FrmRelatorios {
 		formRelatorios.getContentPane().add(lblNewLabel);
 
 
-
+		// botao para exportar para CPF
 		JButton btnExportar = new JButton("Exportar para PDF");
 		btnExportar.setHorizontalAlignment(SwingConstants.LEFT);
 		btnExportar.setIcon(new ImageIcon(FrmRelatorios.class.getResource("/image/icone-pdf.ico")));
@@ -227,7 +227,7 @@ public class FrmRelatorios {
 					SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
 					String dataInicio = formatoData.format(dateChooserInicio.getDate());
 					String dataFim = formatoData.format(dateChooserFim.getDate());
-
+					
 					if (cboTipoRelat.getSelectedItem().equals("Data")) {
 						try {
 							vetorRel = daoRelatorio.atualizarTabelaTodos(tabRelat, dataInicio, dataFim);
@@ -337,6 +337,7 @@ public class FrmRelatorios {
 				}
 			}
 		});
+		// pega somente os selecionados
 		rdbtnCancelados.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
@@ -396,6 +397,7 @@ public class FrmRelatorios {
 				}
 			}
 		});
+		// seleciona somente os agendados
 		rdbtnAgendados.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
@@ -455,6 +457,7 @@ public class FrmRelatorios {
 				}
 			}
 		});
+		// pega somente os atendidos
 		rdbtnAtendidos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
