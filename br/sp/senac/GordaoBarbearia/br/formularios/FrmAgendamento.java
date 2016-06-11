@@ -95,7 +95,6 @@ public class FrmAgendamento {
 
 	/**
 	 * Create the application.
-	 * 
 	 * @throws ParseException
 	 * @throws Exception
 	 */
