@@ -733,7 +733,7 @@ public class FrmAgendamento {
 						btnCancelar.setEnabled(false);
 						int idAgend = Integer.parseInt(((String) tabelaAgendamento.getModel()
 								.getValueAt(tabelaAgendamento.getSelectedRow(), 8)));
-						System.out.println(idAgend);
+						
 
 						boolean updateAgend = false;
 						try {

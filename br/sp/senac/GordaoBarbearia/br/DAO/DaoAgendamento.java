@@ -190,7 +190,6 @@ public class DaoAgendamento {
 
 		ResultSet rs = statement.executeQuery(sql);
 
-		// System.out.println(rs.getString(8));
 		while (rs.next()) {
 			model.addRow(new String[] { rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
 					rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10) });
@@ -245,9 +244,6 @@ public class DaoAgendamento {
 			Time horaI = funcoes.converterHora(rs.getString(1));
 			Time horaF = funcoes.converterHora(rs.getString(2));
 
-			System.out.println("hora banco inicio: " + horaI);
-			System.out.println("hora banco fim: " + horaF);
-
 			if (horaInicioTime.equals(horaI) || horaFimTime.equals(horaF)) {
 				con.close();
 				return false;
@@ -267,9 +263,6 @@ public class DaoAgendamento {
 
 	public boolean verificarHorarioFunc(String horaInicio, String horaFim, String horaFuncIni, String horaFuncFim)
 			throws ParseException, SQLException {
-
-		System.out.println("se Inicio A " + horaInicio + " for antes de " + horaFuncIni + " ou inicio A for depois de "
-				+ horaFuncFim + " não pode");
 
 		Funcoes funcoes = new Funcoes();
 		Time horaInicioTime = funcoes.converterHora(horaInicio);

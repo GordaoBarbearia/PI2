@@ -142,6 +142,8 @@ public class FrmRelatorios {
 				
 				int linhas = model.getRowCount();
 				
+				
+				// verifica se tem dados para gerar o PDF
 				if(linhas>0){
 					ExportarPdf exportarPdf = new ExportarPdf();
 					try {

@@ -60,7 +60,6 @@ public class DaoClientes {
 			// verificando se a pesquisa possui algum resultado, se Sim ele
 			// fecha a conexão e retorna TRUE
 			if (resultset.next()) {
-				System.out.println(resultset.getString(1).toString());
 				pesquisa.add(resultset.getString(1).toString());
 				pesquisa.add(resultset.getString(2).toString());
 				con.close();
