@@ -185,7 +185,7 @@ public class DaoAgendamento {
 		Time horaFimTime = funcoes.converterHora(horaFim);
 		conectar();
 		String sql = "SELECT HORA_INICIO_AGEND, HORA_FIM_AGEND, ID_STATUS FROM TB_AGENDAMENTO WHERE " + "ID_FUNC = '"
-				+ idFuncionario + "' AND DATA_AGENDAMENTO = '" + data + "' AND ID_STATUS <> '3' AND ID_STATUS <> '2' ";
+				+ idFuncionario + "' AND DATA_AGENDAMENTO = '" + data + "' AND ID_STATUS <> '3' AND ID_STATUS <> '2' AND ID_STATUS <> '4'";
 		ResultSet rs = statement.executeQuery(sql);
 		while (rs.next()) {
 			Time horaI = funcoes.converterHora(rs.getString(1));
