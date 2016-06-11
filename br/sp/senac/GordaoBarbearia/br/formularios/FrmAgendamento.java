@@ -483,12 +483,6 @@ public class FrmAgendamento {
 			public void propertyChange(PropertyChangeEvent arg0) {
 				btnEditar.setEnabled(false);
 				tabelaAgendamento.clearSelection();
-				/*
-				 * cboFuncionario.removeAllItems(); cboUnidade.removeAllItems();
-				 * cboStatus.removeAllItems(); cboServico.removeAllItems();
-				 * txtHorarioInicio.setText(""); txtHorarioFim.setText("");
-				 * txtCpf.setText(""); txtCliente.setText("");
-				 */
 
 				try {
 					String dataCalendario = null;
@@ -509,12 +503,15 @@ public class FrmAgendamento {
 					if (dataAtual.after(dataSelecionada)) {
 						txtCpf.setEnabled(false);
 						pesqCli.setEnabled(false);
+						btnSalvar.setEnabled(false);
 					} else if (dataAtual.equals(dataSelecionada)) {
 						txtCpf.setEnabled(true);
 						pesqCli.setEnabled(true);
+						//btnSalvar.setEnabled(true);
 					} else {
 						txtCpf.setEnabled(true);
 						pesqCli.setEnabled(true);
+						//btnSalvar.setEnabled(true);
 					}
 
 				} catch (java.text.ParseException e1) {
@@ -565,12 +562,27 @@ public class FrmAgendamento {
 			public void actionPerformed(ActionEvent arg0) {
 
 				try {
+					if (cboFuncionario.getSelectedItem() != null && txtHorarioInicio.getText().trim().length() == 5
+							&& txtHorarioFim.getText().trim().length() == 5) {
 					String horaInicioString = txtHorarioInicio.getText();
 					String horaFimString = txtHorarioFim.getText();
 					Time horaInicioTime;
 					horaInicioTime = funcoes.converterHora(horaInicioString);
 					Time horaFimTime = funcoes.converterHora(horaFimString);
 					Time horaAtual = funcoes.horaAtual();
+					
+					String dataCalendario = null;
+					SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+					dataCalendario = formatoData.format(calendar.getDate());
+
+					// pegando a data atual do sistema em string e convertendo
+					// para date no formato dia mes ano
+					String dataAtualString = formatoData.format(new Date());
+					Date dataAtual = formatoData.parse(dataAtualString);
+
+					// funcao para converter string em data
+					Date dataSelecionada = funcoes.converterData(dataCalendario);
+
 
 				if (horaInicioTime.equals(horaFimTime)) {
 					JOptionPane.showMessageDialog(null," Favor verificar se horário final não esta igual ao horário de inicio","Gordão Barbearia", JOptionPane.INFORMATION_MESSAGE);
@@ -578,12 +590,11 @@ public class FrmAgendamento {
 				}else if(horaFimTime.before(horaInicioTime)){
 					JOptionPane.showMessageDialog(null,"Favor verificar se horário final não esta menor que horário de inicio","Gordão Barbearia", JOptionPane.INFORMATION_MESSAGE);
 					txtHorarioFim.setText("");
-				}else if(horaInicioTime.before(horaAtual)){
+				}else if(horaInicioTime.before(horaAtual) && dataSelecionada.equals(dataAtual) ){
 					JOptionPane.showMessageDialog(null,"Favor verificar se horário de inicio não esta menor que horário atual","Gordão Barbearia", JOptionPane.INFORMATION_MESSAGE);
 					txtHorarioFim.setText("");
 				} else {
-					if (cboFuncionario.getSelectedItem() != null && txtHorarioInicio.getText().trim().length() == 5
-							&& txtHorarioFim.getText().trim().length() == 5) {
+
 
 							int codFuncionario = cboFuncionario.getSelectedIndex();
 							String funcionario = vectorFuncionario.get(codFuncionario).getIdFunc();
@@ -596,10 +607,6 @@ public class FrmAgendamento {
 
 							int codStatus = cboStatus.getSelectedIndex();
 							String status = arrayStatus.get(codStatus);
-
-							String dataCalendario = null;
-							SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
-							dataCalendario = formatoData.format(calendar.getDate());
 
 							Agendamento agendamento = new Agendamento(funcionario, idCliente, status, servicos,
 									dataCalendario, horaInicio, horaFim);
@@ -649,14 +656,16 @@ public class FrmAgendamento {
 										"Gordão Barbearia", JOptionPane.INFORMATION_MESSAGE);
 							}
 
+
+				}
 					} else {
 						JOptionPane.showMessageDialog(null, "Preencha todos os campos", "Gordão Barbearia",
 								JOptionPane.INFORMATION_MESSAGE);
 					}
-				}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+
 				}
 			}
 		});
